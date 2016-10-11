@@ -7,7 +7,7 @@
             "request": "launch",
             "preLaunchTask": "composeForDebug",
             "cwd": "/app",
-            "program": "/app/TodoApi4.dll",
+            "program": "/app/Clivis.dll",
             "sourceFileMap": {
                 "/app": "${workspaceRoot}"
             },

@@ -1,9 +1,9 @@
 using Xunit;
-using TodoApi.Controllers;
+using Clivis.Controllers;
 using System.Collections.Generic;
-using TodoApi.Models;
+using Clivis.Models;
 
-namespace test
+namespace Clivis
 {
     // see example explanation on xUnit.net website:
     // https://xunit.github.io/docs/getting-started-dotnet-core.html

@@ -9,5 +9,5 @@ RUN curl -SL https://raw.githubusercontent.com/Microsoft/MIEngine/getclrdbg-rele
 WORKDIR /app
 ENV ASPNETCORE_URLS http://*:5050
 EXPOSE 5050
-ENTRYPOINT ["/bin/bash", "-c", "if [ -z \"$REMOTE_DEBUGGING\" ]; then dotnet TodoApi.dll; else sleep infinity; fi"]
+ENTRYPOINT ["/bin/bash", "-c", "if [ -z \"$REMOTE_DEBUGGING\" ]; then dotnet Clivis.dll; else sleep infinity; fi"]
 COPY . /app

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using TodoApi.Models;
+using Clivis.Models;
 
-namespace TodoApi.Controllers
+namespace Clivis.Controllers
 {
     [Route("api/[controller]")]
     public class TodoController : Controller

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace TodoApi.Models
+namespace Clivis.Models
 {
     public interface ITodoRepository
     {

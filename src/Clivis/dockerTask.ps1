@@ -6,7 +6,7 @@ Runs docker-compose.
 .PARAMETER Build
 Builds a Docker image.
 .PARAMETER Clean
-Removes the image todoapi and kills all containers based on that image.
+Removes the image Clivis and kills all containers based on that image.
 .PARAMETER ComposeForDebug
 Builds the image and runs docker-compose.
 .PARAMETER StartDebugging
@@ -37,9 +37,9 @@ Param(
     [String]$Environment = "Debug"
 )
 
-$imageName="todoapi"
-$projectName="todoapi"
-$serviceName="todoapi"
+$imageName="clivis"
+$projectName="clivis"
+$serviceName="clivis"
 $containerName="${projectName}_${serviceName}_1"
 $publicPort=5050
 $url="http://localhost:$publicPort"

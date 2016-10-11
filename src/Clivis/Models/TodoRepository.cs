@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 
-namespace TodoApi.Models
+namespace Clivis.Models
 {
     public class TodoRepository : ITodoRepository
     {

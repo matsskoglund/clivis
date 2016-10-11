@@ -1,4 +1,4 @@
-namespace TodoApi.Models
+namespace Clivis.Models
 {
     public class TodoItem
     {

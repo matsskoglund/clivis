@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using TodoApi.Models;
+using Clivis.Models;
 
-namespace TodoApi
+namespace Clivis
 {
     public class Startup
     {

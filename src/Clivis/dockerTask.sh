@@ -1,6 +1,6 @@
-imageName="todoapi"
-projectName="todoapi"
-serviceName="todoapi"
+imageName="clivis"
+projectName="clivis"
+serviceName="clivis"
 containerName="${projectName}_${serviceName}_1"
 publicPort=5050
 url="http://localhost:$publicPort"

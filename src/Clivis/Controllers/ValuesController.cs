@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 //using Temperatures;
 
-namespace TodoApi.Controllers
+namespace Clivis.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller
