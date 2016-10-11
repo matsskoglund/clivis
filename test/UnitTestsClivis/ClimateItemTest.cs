@@ -12,9 +12,10 @@ namespace UnitTestClivis
         private readonly ClimateItem _climateItem;
         public ClimateItemTest()
         {
-           ClimateItem item = new ClimateItem();           
-           
+            _climateItem = new ClimateItem();           
+           _climateItem.Name ="Namn";
         }
+
          [Fact]
         public void ClimateItem_NotNull()
         {
