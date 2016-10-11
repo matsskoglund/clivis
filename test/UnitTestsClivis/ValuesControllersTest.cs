@@ -2,7 +2,7 @@ using Xunit;
 using Clivis.Controllers;
 using System.Collections.Generic;
 
-namespace Clivis
+namespace UnitTestClivis
 {
     // see example explanation on xUnit.net website:
     // https://xunit.github.io/docs/getting-started-dotnet-core.html

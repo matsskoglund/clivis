@@ -7,22 +7,22 @@ namespace Clivis.Controllers
     [Route("api/[controller]")]
     public class TodoController : Controller
     {
-        public TodoController(ITodoRepository todoItems)
+        public TodoController(IClimateRepository climateItems)
         {
-            TodoItems = todoItems;
+            ClimateItems = climateItems;
         }
-        public ITodoRepository TodoItems { get; set; }
+        public IClimateRepository ClimateItems { get; set; }
 
         [HttpGet]
-        public IEnumerable<TodoItem> GetAll()
+        public IEnumerable<ClimateItem> GetAll()
         {
-            return TodoItems.GetAll();
+            return ClimateItems.GetAll();
         }
 
         [HttpGet("{id}", Name = "GetTodo")]
         public IActionResult GetById(string id)
         {
-            var item = TodoItems.Find(id);
+            var item = ClimateItems.Find(id);
             if (item == null)
             {
                 return NotFound();

@@ -31,7 +31,7 @@ namespace Clivis
             // Add framework services.
             services.AddMvc();
 
-            services.AddSingleton<ITodoRepository, TodoRepository>();
+            services.AddSingleton<IClimateRepository, ClimateRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
