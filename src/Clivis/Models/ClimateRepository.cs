@@ -11,7 +11,7 @@ namespace Clivis.Models
 
         public ClimateRepository()
         {
-            Add(new ClimateItem { Name = "Item1" });
+            Add(new ClimateItem { Name = "Item1", Key = "Nyckel" });
         }
 
         public IEnumerable<ClimateItem> GetAll()
@@ -21,7 +21,7 @@ namespace Clivis.Models
 
         public void Add(ClimateItem item)
         {
-            item.Key = "Nyckel";
+            
             _items[item.Key] = item;
         }
 

@@ -26,7 +26,7 @@ namespace UnitTestClivis
         [Fact]
         public void ClimateItem_NameIsSet()
         {
-            Assert.Equal("Namn",_climateItem.Name);
+            Assert.Equal("Namne",_climateItem.Name);
             
         }
 
