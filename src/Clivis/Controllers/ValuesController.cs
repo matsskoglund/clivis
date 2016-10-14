@@ -17,7 +17,7 @@ namespace Clivis.Controllers
         public IEnumerable<string> Get()
         {
 
-            return new string[] { "Mats", "Skoglund" };
+            return new string[] { "Matte", "Skoglund" };
 
         }
 
