@@ -45,7 +45,7 @@ namespace UnitTestClivis
         }
 
         [Fact]
-        public void ClimateRepository_UpdatedItemIsChanged()
+        public void ClimateRepository_ExistingItemUpdatedItemIsChanged()
         {
             // Create and add a new item that should be changed
             ClimateItem item = new ClimateItem();
