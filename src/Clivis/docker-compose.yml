@@ -1,8 +1,8 @@
 version: '2'
 
 services:
-  todoapi:
-    image: clivis
+  clivis:
+    image: matsskoglund/clivis
     build:
       context: .
       dockerfile: Dockerfile
