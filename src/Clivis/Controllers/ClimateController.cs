@@ -5,9 +5,9 @@ using Clivis.Models;
 namespace Clivis.Controllers
 {
     [Route("api/[controller]")]
-    public class TodoController : Controller
+    public class ClimateController : Controller
     {
-        public TodoController(IClimateRepository climateItems)
+        public ClimateController(IClimateRepository climateItems)
         {
             ClimateItems = climateItems;
         }

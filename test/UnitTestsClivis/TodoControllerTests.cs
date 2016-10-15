@@ -9,11 +9,11 @@ namespace UnitTestClivis
     // https://xunit.github.io/docs/getting-started-dotnet-core.html
     public class TodoControllersTest
     {
-        private readonly TodoController _climateController;
+        private readonly ClimateController _climateController;
         public TodoControllersTest()
         {
             IClimateRepository repo = new ClimateRepository();            
-            _climateController = new TodoController(repo);
+            _climateController = new ClimateController(repo);
         }
          [Fact]
         public void TodoController_NotNull()

@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Clivis;
 
-namespace Tests
+namespace IntTestClivis
 {
 
 
@@ -29,7 +29,7 @@ namespace Tests
         public async Task GetAll()
         {
             // Act
-            var response = await _client.GetAsync("/api/ToDo");
+            var response = await _client.GetAsync("/api/Climate");
             response.EnsureSuccessStatusCode();
 
             var responseString = await response.Content.ReadAsStringAsync();
@@ -43,7 +43,7 @@ namespace Tests
         public async Task GetItem()
         {
             // Act
-            var response = await _client.GetAsync("/api/ToDo/Nyckel");
+            var response = await _client.GetAsync("/api/Climate/Nyckel");
             response.EnsureSuccessStatusCode();
 
             var responseString = await response.Content.ReadAsStringAsync();

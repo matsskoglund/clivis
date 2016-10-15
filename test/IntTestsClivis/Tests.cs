@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Clivis;
 
-namespace Tests
+namespace IntTestClivis
 {
 
 
@@ -26,7 +26,7 @@ namespace Tests
         }   
 
         [Fact]
-        public async Task ReturnHelloWorld()
+        public async Task ReturnMatsSkoglund()
         {
             // Act
             var response = await _client.GetAsync("/api/values");
@@ -35,7 +35,7 @@ namespace Tests
             var responseString = await response.Content.ReadAsStringAsync();
 
             // Assert
-            Assert.Equal("[\"Matte\",\"Skoglund\"]",
+            Assert.Equal("[\"Mats\",\"Skoglund\"]",
             responseString);
         }
     
