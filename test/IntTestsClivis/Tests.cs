@@ -9,7 +9,6 @@ using Clivis;
 namespace IntTestClivis
 {
 
-
     public class Tests
     {
 
@@ -23,21 +22,22 @@ namespace IntTestClivis
             .UseStartup<Startup>());
             _client = _server.CreateClient();
 
-        }   
+        }
 
         [Fact]
-        public async Task ReturnMatsSkoglund()
+        public async Task ReturnFoundItem()
         {
             // Act
-            var response = await _client.GetAsync("/api/values");
+            var response = await _client.GetAsync("/api/climate");
             response.EnsureSuccessStatusCode();
 
             var responseString = await response.Content.ReadAsStringAsync();
 
             // Assert
-            Assert.Equal("[\"Mats\",\"Skoglund\"]",
+            Assert.Equal("[{\"key\":\"Nyckel\",\"name\":\"Item1\",\"isComplete\":false}]",
             responseString);
         }
+
     
     }
 }

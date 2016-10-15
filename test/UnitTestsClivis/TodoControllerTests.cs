@@ -7,31 +7,32 @@ namespace UnitTestClivis
 {
     // see example explanation on xUnit.net website:
     // https://xunit.github.io/docs/getting-started-dotnet-core.html
-    public class TodoControllersTest
+    public class ClimateControllerTests
     {
         private readonly ClimateController _climateController;
-        public TodoControllersTest()
+        public ClimateControllerTests()
         {
             IClimateRepository repo = new ClimateRepository();            
             _climateController = new ClimateController(repo);
         }
          [Fact]
-        public void TodoController_NotNull()
+        public void ClimateController_NotNull()
         {
             Assert.NotNull(_climateController);
         }
 
         [Fact]
-        public void TodoController_Index()
+        public void ClimateController_Index()
         {
             IEnumerable<ClimateItem> res = _climateController.GetAll();
             Assert.NotNull(res);
         }
 
-        [Fact]
-        public void ValuesController_GetId_Returns_NotNull()
+        [Theory]
+        [InlineData("Nyckel")]
+        public void ClimateController_GetId_Returns_NotNull(string key)
         {
-            string res = _climateController.GetById("Nyckel").ToString();
+            string res = _climateController.GetById(key).ToString();
                         
             Assert.NotNull(res);
         }

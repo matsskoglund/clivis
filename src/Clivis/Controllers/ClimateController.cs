@@ -7,11 +7,14 @@ namespace Clivis.Controllers
     [Route("api/[controller]")]
     public class ClimateController : Controller
     {
+        // Repository for the Climate Items
+        public IClimateRepository ClimateItems { get; set; }
+
         public ClimateController(IClimateRepository climateItems)
         {
             ClimateItems = climateItems;
         }
-        public IClimateRepository ClimateItems { get; set; }
+ 
 
         [HttpGet]
         public IEnumerable<ClimateItem> GetAll()
@@ -19,7 +22,7 @@ namespace Clivis.Controllers
             return ClimateItems.GetAll();
         }
 
-        [HttpGet("{id}", Name = "GetTodo")]
+        [HttpGet("{id}", Name = "GetClimate")]
         public IActionResult GetById(string id)
         {
             var item = ClimateItems.Find(id);
