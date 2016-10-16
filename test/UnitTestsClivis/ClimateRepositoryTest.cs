@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Clivis.Models;
 using System.Linq;
 
-namespace UnitTestClivis
+namespace ClivisTests
 {
     // see example explanation on xUnit.net website:
     // https://xunit.github.io/docs/getting-started-dotnet-core.html
@@ -14,7 +14,8 @@ namespace UnitTestClivis
         public ClimateRepositoryTest()
         {
             _climateRepo = new ClimateRepository();     
-            ClimateItem item = new ClimateItem();
+            ClimateItem item = new ClimateItem { SourceName = "Item1", Key = "Nyckel" };
+            _climateRepo.Add(item);
        }
 
          [Fact]
@@ -34,7 +35,7 @@ namespace UnitTestClivis
         public void ClimateRepository_ExistingItemIsFound()
         {
             ClimateItem item = _climateRepo.Find("Nyckel");
-            Assert.Equal("Item1", item.Name);
+            Assert.Equal("Item1", item.SourceName);
         }
 
         [Fact]
@@ -50,15 +51,15 @@ namespace UnitTestClivis
             // Create and add a new item that should be changed
             ClimateItem item = new ClimateItem();
             item.Key = "ChangeKey";
-            item.Name = "ToBeChanged";      
+            item.SourceName = "ToBeChanged";      
             _climateRepo.Add(item);
 
             // Make sure the item is in the repo
             ClimateItem existingItem = _climateRepo.Find("ChangeKey");
-            Assert.Equal("ToBeChanged", existingItem.Name);
+            Assert.Equal("ToBeChanged", existingItem.SourceName);
 
             // Change the item
-            item.Name = "Changed";
+            item.SourceName = "Changed";
 
             // Update the item in the repo
             _climateRepo.Update(item);
@@ -67,7 +68,7 @@ namespace UnitTestClivis
             ClimateItem afterItem =  _climateRepo.Find("ChangeKey");
             
             // Check that the item name with the key has changed
-            Assert.Equal("Changed",item.Name);
+            Assert.Equal("Changed",item.SourceName);
             Assert.Equal("ChangeKey",item.Key);
 
             // Cleanup, remove the item and make sure it is gone
@@ -80,11 +81,11 @@ namespace UnitTestClivis
         {
             ClimateItem item = new ClimateItem();
             item.Key = "RemoveKey";
-            item.Name = "ToBeRemoved";      
+            item.SourceName = "ToBeRemoved";      
            _climateRepo.Add(item);
  
             item = _climateRepo.Remove("RemoveKey");
-            Assert.Equal("ToBeRemoved",item.Name);
+            Assert.Equal("ToBeRemoved",item.SourceName);
             item = _climateRepo.Find("ToBeRemoved");
             Assert.Null(item);
         }

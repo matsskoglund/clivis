@@ -32,5 +32,17 @@ namespace Clivis.Controllers
             }
             return new ObjectResult(item);
         }
+
+        // POST api/values
+        [HttpPost]
+        public IActionResult Create([FromBody]ClimateItem item)
+        {
+            if (item == null)
+            {
+                return BadRequest();
+            }
+            ClimateItems.Add(item);
+            return CreatedAtRoute("AddClimate", new { id = item.Key }, item);
+        }
     }
 }

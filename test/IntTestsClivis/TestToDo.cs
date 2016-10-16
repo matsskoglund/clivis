@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Clivis;
 
-namespace IntTestClivis
+namespace ClivisTests
 {
 
 
@@ -35,7 +35,7 @@ namespace IntTestClivis
             var responseString = await response.Content.ReadAsStringAsync();
 
             // Assert
-            Assert.StartsWith("[{\"key\":\"Nyckel\",\"name\":\"Item1\",\"isComplete",
+            Assert.StartsWith("[{\"key\":\"Nyckel\",\"sourceName\":\"Item1\",\"outdoor",
             responseString);
         }
     
@@ -49,7 +49,7 @@ namespace IntTestClivis
             var responseString = await response.Content.ReadAsStringAsync();
 
             // Assert
-            Assert.StartsWith("{\"key\":\"Nyckel\",\"name\":\"Item1\",\"isComplete",
+            Assert.StartsWith("{\"key\":\"Nyckel\",\"sourceName\":\"Item1\",\"outdoor",
             responseString);
         }
 

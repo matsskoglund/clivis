@@ -3,7 +3,7 @@ using Clivis.Controllers;
 using System.Collections.Generic;
 using Clivis.Models;
 
-namespace UnitTestClivis
+namespace ClivisTests
 {
     // see example explanation on xUnit.net website:
     // https://xunit.github.io/docs/getting-started-dotnet-core.html
@@ -13,8 +13,10 @@ namespace UnitTestClivis
         public ClimateItemTest()
         {
             _climateItem = new ClimateItem();           
-           _climateItem.Name ="Namn";
-           _climateItem.Key = "Nyckel";
+           _climateItem.SourceName ="Heatpump";
+            _climateItem.OutdoorTemp = "7";
+            _climateItem.IndoorTemp = "22";
+            _climateItem.Key = "Nyckel";
         }
 
          [Fact]
@@ -24,9 +26,9 @@ namespace UnitTestClivis
         }
 
         [Fact]
-        public void ClimateItem_NameIsSet()
+        public void ClimateItem_SourceNameIsSet()
         {
-            Assert.Equal("Namn",_climateItem.Name);
+            Assert.Equal("Heatpump",_climateItem.SourceName);
             
         }
 
@@ -35,6 +37,18 @@ namespace UnitTestClivis
         {
             Assert.Equal("Nyckel",_climateItem.Key);
             
+        }
+        [Fact]
+        public void ClimateItem_OutdoorTempIsSet()
+        {
+            Assert.Equal("7", _climateItem.OutdoorTemp);
+
+        }
+        [Fact]
+        public void ClimateItem_IndoorTempIsSet()
+        {
+            Assert.Equal("22", _climateItem.IndoorTemp);
+
         }
     }
 }
