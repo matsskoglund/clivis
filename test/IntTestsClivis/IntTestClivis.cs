@@ -59,7 +59,7 @@ namespace ClivisTests
         {
             // Act
 
-            StringContent queryString = new StringContent("[{\"key\":\"Nyckel\",\"sourceName\":\"Item1\",\"outdoorTemp\":null,\"indoorTemp\":null}]", Encoding.Unicode, "application/json");
+            StringContent queryString = new StringContent("{\"key\":\"Nyckel\",\"sourceName\":\"Item1\",\"outdoorTemp\":null,\"indoorTemp\":null}", Encoding.Unicode, "application/json");
             
             var response = await _client.PostAsync("/api/Climate/", queryString);
             response.EnsureSuccessStatusCode();

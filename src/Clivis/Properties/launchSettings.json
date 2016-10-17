@@ -11,15 +11,14 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/values",
+      "launchUrl": "api/climate",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "Clivis": {
       "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "http://localhost:5050/api/values",
+      "launchUrl": "http://localhost:5050/api/climate",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

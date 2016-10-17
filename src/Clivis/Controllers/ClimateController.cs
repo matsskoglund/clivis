@@ -42,7 +42,7 @@ namespace Clivis.Controllers
                 return BadRequest();
             }
             ClimateItems.Add(item);
-            return CreatedAtRoute("AddClimate", new { id = item.Key }, item);
+            return CreatedAtRoute("GetClimate", new { id = item.Key }, item);
         }
     }
 }
