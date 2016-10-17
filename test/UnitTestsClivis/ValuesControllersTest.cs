@@ -13,6 +13,7 @@ namespace ClivisTests
         {
             _valuesController = new ValuesController();
         }
+
          [Fact]
         public void ValuesController_NotNull()
         {

@@ -33,7 +33,7 @@ namespace Clivis.Controllers
             return new ObjectResult(item);
         }
 
-        // POST api/values
+        // POST api/climate
         [HttpPost]
         public IActionResult Create([FromBody]ClimateItem item)
         {
