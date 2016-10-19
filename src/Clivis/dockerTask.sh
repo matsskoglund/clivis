@@ -23,7 +23,7 @@ cleanAll () {
   else
     docker-compose -f $composeFileName -p $projectName down --rmi all
 
-    # Remove any dangling images (from previous builds)
+# Remove any dangling images (from previous builds)
     danglingImages=$(docker images -q --filter 'dangling=true')
     if [[ ! -z $danglingImages ]]; then
       docker rmi -f $danglingImages
@@ -50,7 +50,9 @@ buildImage () {
    # dotnet publish -f $framework -r $runtimeID -c $ENVIRONMENT -o $pubFolder
 
     echo "Building the image $imageName ($ENVIRONMENT)."
-    docker-compose -f "$composeFileName" -p $projectName build
+    #docker-compose -f "$composeFileName" -p $projectName build
+    docker-compose -f "docker-compose.yml" -p $projectName build
+
   fi
 }
 
