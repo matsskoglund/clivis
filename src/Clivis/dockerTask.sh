@@ -46,7 +46,7 @@ buildImage () {
     echo "$ENVIRONMENT is not a valid parameter. File '$composeFileName' does not exist."
   else
     echo "Building the project ($ENVIRONMENT)."
-    pubFolder="bin/$ENVIRONMENT/$framework/publish"
+  #  pubFolder="bin/$ENVIRONMENT/$framework/publish"
    # dotnet publish -f $framework -r $runtimeID -c $ENVIRONMENT -o $pubFolder
 
     echo "Building the image $imageName ($ENVIRONMENT)."
