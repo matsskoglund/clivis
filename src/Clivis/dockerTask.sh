@@ -50,7 +50,7 @@ buildImage () {
    # dotnet publish -f $framework -r $runtimeID -c $ENVIRONMENT -o $pubFolder
 
     echo "Building the image $imageName ($ENVIRONMENT)."
-    docker-compose -f "$pubFolder/$composeFileName" -p $projectName build
+    docker-compose -f "$composeFileName" -p $projectName build
   fi
 }
 
