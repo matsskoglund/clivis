@@ -49,7 +49,6 @@ namespace ClivisTests
          public void ClimateValue_ValueTypeIsSet()
          {
              Assert.Equal("Indoor", _climateValue.ValueType);
-
          }
     }
 }

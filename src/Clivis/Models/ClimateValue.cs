@@ -14,5 +14,7 @@ namespace Clivis.Models
         public string ClimateItemKey { get ; set; }
 
         public DateTime TimeStamp { get; set;  } 
+
+        public string Key { get; set;  }
     }
 }
