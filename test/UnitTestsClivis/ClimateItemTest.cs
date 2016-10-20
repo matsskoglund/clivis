@@ -41,7 +41,7 @@ namespace ClivisTests
         [Fact]
         public void ClimateItem_OutdoorTempIsSet()
         {
-            Assert.Equal("7", _climateItem.OutdoorTemp);
+            Assert.Equal("6", _climateItem.OutdoorTemp);
 
         }
         [Fact]
