@@ -32,7 +32,7 @@ namespace ClivisTests
         [Fact]
         public void ClimateController_Create()
         {
-            Microsoft.AspNetCore.Mvc.CreatedAtRouteResult res = (Microsoft.AspNetCore.Mvc.CreatedAtRouteResult)_climateController.Create(new ClimateItem { Key = "Nyckel2", SourceName = "WeatherStation", OutdoorTemp = "5", IndoorTemp = "22"});
+            Microsoft.AspNetCore.Mvc.CreatedAtRouteResult res = (Microsoft.AspNetCore.Mvc.CreatedAtRouteResult)_climateController.Create(new ClimateItem { Key = "Nyckel2", SourceName = "WeatherStation"});
             
             Assert.Equal(201, res.StatusCode);
         }

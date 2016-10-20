@@ -14,8 +14,8 @@ namespace ClivisTests
         {
             _climateItem = new ClimateItem();           
            _climateItem.SourceName ="Heatpump";
-            _climateItem.OutdoorTemp = "6";
-            _climateItem.IndoorTemp = "22";
+ //           _climateItem.OutdoorTemp = "6";
+//            _climateItem.IndoorTemp = "22";
             _climateItem.Key = "Nyckel";
         }
 
@@ -38,7 +38,7 @@ namespace ClivisTests
             Assert.Equal("Nyckel",_climateItem.Key);
             
         }
-        [Fact]
+       /* [Fact]
         public void ClimateItem_OutdoorTempIsSet()
         {
             Assert.Equal("6", _climateItem.OutdoorTemp);
@@ -49,6 +49,6 @@ namespace ClivisTests
         {
             Assert.Equal("22", _climateItem.IndoorTemp);
 
-        }
+        }*/
     }
 }
