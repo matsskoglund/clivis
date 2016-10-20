@@ -14,7 +14,7 @@ namespace ClivisTests
         {
             _climateItem = new ClimateItem();           
            _climateItem.SourceName ="Heatpump";
-            _climateItem.OutdoorTemp = "7";
+            _climateItem.OutdoorTemp = "6";
             _climateItem.IndoorTemp = "22";
             _climateItem.Key = "Nyckel";
         }
