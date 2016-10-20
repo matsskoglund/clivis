@@ -11,7 +11,7 @@ namespace Clivis.Models
 
         public ClimateRepository()
         {
-            Add(new ClimateItem { SourceName = "Item1", Key = "Nyckel" });
+            Add(new ClimateItem { SourceName = "Weatherstation", Key = "Netatmo", IndoorTemp = "22", OutdoorTemp="6" });
         }
 
         public IEnumerable<ClimateItem> GetAll()
