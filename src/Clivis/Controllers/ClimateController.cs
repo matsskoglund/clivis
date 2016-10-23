@@ -26,6 +26,7 @@ namespace Clivis.Controllers
             //string accessToken = 
 
           
+          string res =  null; 
             ClimateItem item = new ClimateItem();
             item.Key = "tjena";
            item.SourceName = res;
