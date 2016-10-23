@@ -25,11 +25,11 @@ namespace Clivis.Controllers
         {
             //string accessToken = 
 
-            string res = AuthenticateOATH(null,null,null,null);
+          
             
             ClimateItem item = new ClimateItem();
             item.Key = "tjena";
-            item.SourceName = res;
+           // item.SourceName = res;
             ClimateItems.Add(item);
             return ClimateItems.GetAll();
 
@@ -47,6 +47,7 @@ namespace Clivis.Controllers
         private string AuthenticateOATH(string clientUsername, string clientPassword, string clientID, string clientSecret)
         {
             HttpResponseMessage response = null;
+            string ret = null;
             try
             {
                 ErrorOATHMessage = "";
@@ -66,15 +67,16 @@ namespace Clivis.Controllers
                     };
 
                     var content = new FormUrlEncodedContent(pairs);
-                   
-                    response = client.PostAsync("https://api.netatmo.net/oauth2/token", content).Result;
+
+                    var resp = client.PostAsync("https://api.netatmo.net/oauth2/token", content).Result.Content;
+              //      dynamic data = JsonConvert.DeserializeObject(resp.ToString());
                 }
                 catch (Exception e)
                 {
                     ErrorOATHMessage = e.Message;
                 }
 
-                string responseDecoded = response.ToString();
+                //string responseDecoded = resp.ToString();
                 string expiresIn = "";
                 string refreshToken = "";
 
@@ -93,7 +95,7 @@ namespace Clivis.Controllers
                 {
                    // lvDebug.Items.Add(ErrorOATHMessage);
                 }
-                return responseDecoded;
+                return null;
             }
             catch (Exception e)
             {
