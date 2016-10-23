@@ -26,10 +26,9 @@ namespace Clivis.Controllers
             //string accessToken = 
 
           
-            
             ClimateItem item = new ClimateItem();
             item.Key = "tjena";
-           // item.SourceName = res;
+           item.SourceName = res;
             ClimateItems.Add(item);
             return ClimateItems.GetAll();
 
@@ -46,62 +45,29 @@ namespace Clivis.Controllers
 
         private string AuthenticateOATH(string clientUsername, string clientPassword, string clientID, string clientSecret)
         {
-            HttpResponseMessage response = null;
+            
             string ret = null;
-            try
-            {
-                ErrorOATHMessage = "";
+            HttpClient client = new HttpClient();
 
-                try
-                {
-                    HttpClient client = new HttpClient();
-
-                    var pairs = new List<KeyValuePair<string, string>>
-                    {
+            var pairs = new List<KeyValuePair<string, string>>
+             {
                         new KeyValuePair<string, string>("grant_type", "password" ),
                         new KeyValuePair<string, string>("client_id", clientID),
                         new KeyValuePair<string, string>( "client_secret", clientSecret),
                         new KeyValuePair<string, string>("username", clientUsername),
                         new KeyValuePair<string, string>( "password", clientPassword),
-                        new KeyValuePair<string, string>( "scope", "read_station read_thermostat write_thermostat")
-                    };
+                        new KeyValuePair<string, string>( "scope", "read_station")
+            };
 
-                    var content = new FormUrlEncodedContent(pairs);
-
-                    var resp = client.PostAsync("https://api.netatmo.net/oauth2/token", content).Result.Content;
-              //      dynamic data = JsonConvert.DeserializeObject(resp.ToString());
-                }
-                catch (Exception e)
-                {
-                    ErrorOATHMessage = e.Message;
-                }
-
-                //string responseDecoded = resp.ToString();
-                string expiresIn = "";
-                string refreshToken = "";
-
-                //dynamic data = JsonConvert.DeserializeObject(responseDecoded);
-               // AccessToken = data.access_token;
-               // expiresIn = data.expires_in;
-               // refreshToken = data.refresh_token;
-
-          /*      lvDebug.Items.Add("Access Token: " + AccessToken);
-                lvDebug.Items.Add("Expires in: " + expiresIn);
-                lvDebug.Items.Add("Refresh Token: " + refreshToken);
-                tbAccessToken.Text = AccessToken;
-                */
-
-                if (string.IsNullOrEmpty(ErrorOATHMessage) == false)
-                {
-                   // lvDebug.Items.Add(ErrorOATHMessage);
-                }
-                return null;
-            }
-            catch (Exception e)
-            {
-               // lvDebug.Items.Add("Error during access token retrieval: " + e.Message);
-            }
-            return "fel";
+            var outcontent = new FormUrlEncodedContent(pairs);
+            var resp =  client.PostAsync("https://api.netatmo.net/oauth2/token", outcontent).Result;
+            string jsonData = "";
+            byte[] data;
+            data =  resp.Content.ReadAsByteArrayAsync().Result;                           
+            jsonData = System.Text.Encoding.UTF8.GetString(data, 0, data.Length - 1);       
+                      
+            return jsonData;
+                    
         }
 
         [HttpGet("{id}", Name = "GetClimate")]
