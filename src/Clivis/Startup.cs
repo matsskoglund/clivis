@@ -19,8 +19,13 @@ namespace Clivis
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables()
-                .AddUserSecrets();          
+                .AddEnvironmentVariables();
+
+            if(env.IsDevelopment())
+            {
+                 builder.AddUserSecrets();
+            }
+               
                 Configuration = builder.Build();
         }
 
@@ -34,9 +39,9 @@ namespace Clivis
             services.AddMvc();
 
             services.AddSingleton<IClimateRepository, ClimateRepository>(); 
-            services.AddSingleton<IConfiguration>(Configuration);    
+            //services.AddSingleton<IConfiguration>(Configuration);    
 
-            //services.Configure<AppKeyConfig>(Configuration.GetSection("AppKeys"));
+            services.Configure<AppKeyConfig>(Configuration.GetSection("AppKeys"));
             
         }
 
