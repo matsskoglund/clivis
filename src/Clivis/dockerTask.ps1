@@ -15,7 +15,7 @@ Finds the running container and starts the debugger inside of it.
 The enviorment to build for (Debug or Release), defaults to Debug
 .EXAMPLE
 C:\PS> .\dockerTask.ps1 -Build
-Build a Docker image named todoapi
+Build a Docker image named clivis
 #>
 
 Param(

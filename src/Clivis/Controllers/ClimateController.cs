@@ -6,18 +6,27 @@ using System.Collections.Specialized;
 using Newtonsoft.Json;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Clivis.Controllers
 {
     [Route("api/[controller]")]
     public class ClimateController : Controller
     {
+        public AppKeyConfig AppConfigs { get; }
+
         // Repository for the Climate Items
         public IClimateRepository ClimateItems { get; set; }
 
-        public ClimateController(IClimateRepository climateItems)
+//        public ClimateController(IClimateRepository climateItems)
+//        {
+//            ClimateItems = climateItems;
+//        }
+
+        public ClimateController(IOptions<AppKeyConfig> appkeys, IClimateRepository climateItems)
         {
             ClimateItems = climateItems;
+            AppConfigs = appkeys.Value;
         }
  
 
@@ -25,17 +34,17 @@ namespace Clivis.Controllers
         public IEnumerable<ClimateItem> GetAll()
         {
             //string accessToken = 
-            /*
-            string userName = Startup.Configuration["NetatmoUserName"];
-            string pass = Configuration["NetatmoPassWord"];
-            string clientId = Configuration["NetatmoClientID"];
-            string clientSecret = Configuration["NetatmoClientSecret"];
+            
+            string userName = this.AppConfigs.NetatmoUserName;
+            string pass = this.AppConfigs.NetatmoUserName;
+            string clientId = this.AppConfigs.NetatmoClientId;
+            string clientSecret = this.AppConfigs.NetatmoClientSecret;
             string ret = AuthenticateOATH(userName, pass, clientId, clientSecret);
-          */
-          string res =  null; 
+          
+         
             ClimateItem item = new ClimateItem();
-            item.Key = "tjena";
-           item.SourceName = res;
+            item.Key = "mats";
+            item.SourceName = ret;
             ClimateItems.Add(item);
             return ClimateItems.GetAll();
 

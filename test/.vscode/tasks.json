@@ -7,7 +7,7 @@
         {
             "taskName": "build",
             "args": [
-                "src\\TodoApi\\project.json"
+                "src\\Clivis\\project.json"
             ],
             "isBuildCommand": true,
             "problemMatcher": "$msCompile"
