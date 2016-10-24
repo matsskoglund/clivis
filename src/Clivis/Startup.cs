@@ -19,9 +19,12 @@ namespace Clivis
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables()
-                .AddUserSecrets();
-            Configuration = builder.Build();
+                .AddEnvironmentVariables();
+                if (env.IsDevelopment())
+                {
+                    builder.AddUserSecrets();
+                }            
+                Configuration = builder.Build();
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -33,8 +36,11 @@ namespace Clivis
             // Add framework services.
             services.AddMvc();
 
-            services.AddSingleton<IClimateRepository, ClimateRepository>();     
-            services.AddSingleton<IConfigurationRoot>(Configuration);    
+            services.AddSingleton<IClimateRepository, ClimateRepository>(); 
+            //services.AddSingleton<IConfiguration>(Configuration);    
+
+            services.Configure<AppKeyConfig>(Configuration.GetSection("AppKeys"));
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

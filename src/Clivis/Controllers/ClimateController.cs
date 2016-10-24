@@ -34,16 +34,15 @@ namespace Clivis.Controllers
         public IEnumerable<ClimateItem> GetAll()
         {
             //string accessToken = 
-            
-            string userName = this.AppConfigs.NetatmoUserName;
-            string pass = this.AppConfigs.NetatmoUserName;
+            string userName = AppConfigs.NetatmoUserName;
+            string pass = AppConfigs.NetatmoPassword;
             string clientId = this.AppConfigs.NetatmoClientId;
             string clientSecret = this.AppConfigs.NetatmoClientSecret;
             string ret = AuthenticateOATH(userName, pass, clientId, clientSecret);
           
          
             ClimateItem item = new ClimateItem();
-            item.Key = "mats";
+            item.Key = pass;
             item.SourceName = ret;
             ClimateItems.Add(item);
             return ClimateItems.GetAll();
