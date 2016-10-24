@@ -5,6 +5,7 @@ using System;
 using System.Collections.Specialized;
 using Newtonsoft.Json;
 using System.Net.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace Clivis.Controllers
 {
@@ -24,8 +25,13 @@ namespace Clivis.Controllers
         public IEnumerable<ClimateItem> GetAll()
         {
             //string accessToken = 
-
-          
+            /*
+            string userName = Startup.Configuration["NetatmoUserName"];
+            string pass = Configuration["NetatmoPassWord"];
+            string clientId = Configuration["NetatmoClientID"];
+            string clientSecret = Configuration["NetatmoClientSecret"];
+            string ret = AuthenticateOATH(userName, pass, clientId, clientSecret);
+          */
           string res =  null; 
             ClimateItem item = new ClimateItem();
             item.Key = "tjena";
