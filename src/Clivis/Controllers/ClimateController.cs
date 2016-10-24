@@ -18,31 +18,32 @@ namespace Clivis.Controllers
         // Repository for the Climate Items
         public IClimateRepository ClimateItems { get; set; }
 
-//        public ClimateController(IClimateRepository climateItems)
-//        {
-//            ClimateItems = climateItems;
-//        }
-
-        public ClimateController(IOptions<AppKeyConfig> appkeys, IClimateRepository climateItems)
+        public ClimateController(IClimateRepository climateItems)
         {
             ClimateItems = climateItems;
-            AppConfigs = appkeys.Value;
         }
+
+     //   public ClimateController(IOptions<AppKeyConfig> appkeys, IClimateRepository climateItems)
+     //   {
+     //       ClimateItems = climateItems;
+     //       AppConfigs = appkeys.Value;
+     //   }
  
 
         [HttpGet]
         public IEnumerable<ClimateItem> GetAll()
         {
             //string accessToken = 
-            string userName = AppConfigs.NetatmoUserName;
-            string pass = AppConfigs.NetatmoPassword;
+            /*string userName = this.AppConfigs.NetatmoUserName;
+            string pass = this.AppConfigs.NetatmoPassword;
             string clientId = this.AppConfigs.NetatmoClientId;
             string clientSecret = this.AppConfigs.NetatmoClientSecret;
-            string ret = AuthenticateOATH(userName, pass, clientId, clientSecret);
-          
+            */
+            //string ret = AuthenticateOATH(userName, pass, clientId, clientSecret);
+          string ret = AuthenticateOATH("mats@abolint.se", "3jZdn912", "", "");
          
             ClimateItem item = new ClimateItem();
-            item.Key = pass;
+            item.Key = "pass";
             item.SourceName = ret;
             ClimateItems.Add(item);
             return ClimateItems.GetAll();
