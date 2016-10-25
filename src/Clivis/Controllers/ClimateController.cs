@@ -152,6 +152,9 @@ namespace Clivis.Controllers
             string clientSecret = this.AppConfigs.NetatmoClientSecret;
             */
             //string ret = AuthenticateOATH(userName, pass, clientId, clientSecret);
+            IClimateSource netatmo = new Netatmo();
+            netatmo.init();
+
             string ret = "";
             NetatmoAuth auth = null;
             ClimateItem item = new ClimateItem();
