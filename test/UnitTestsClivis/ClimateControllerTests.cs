@@ -3,6 +3,8 @@ using Clivis.Controllers;
 using System.Collections.Generic;
 using Clivis.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 
 namespace ClivisTests
 {
@@ -13,8 +15,11 @@ namespace ClivisTests
         private readonly ClimateController _climateController;
         public ClimateControllerTests()
         {
-            IClimateRepository repo = new ClimateRepository();            
-            _climateController = new ClimateController(repo);
+            IClimateRepository repo = new ClimateRepository();
+           // var builder = new ConfigurationBuilder();
+           // builder.AddUserSecrets();
+
+            _climateController = new ClimateController(repo,null);
         }
          [Fact]
         public void ClimateController_NotNull()
