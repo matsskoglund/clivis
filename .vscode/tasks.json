@@ -11,6 +11,15 @@
             ],
             "isBuildCommand": true,
             "problemMatcher": "$msCompile"
+        },
+          {
+            "taskName": "test",
+            "command":"dotnet test",
+            "args": [
+                "${workspaceRoot}/test/UnitTestsClivis/project.json"
+            ],
+            "isShellCommand": true,
+            "problemMatcher": "$msCompile"
         }
     ]
 }
