@@ -81,10 +81,7 @@ namespace Clivis.Models.Netatmo
         }
 
         private void login(AppKeyConfig AppConfigs)
-        {
-            //AppKeyConfig AppConfigs = new AppKeyConfig();
-
-                        
+        {                                    
             //Login  
             var pairs = new List<KeyValuePair<string, string>>
             {

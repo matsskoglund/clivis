@@ -23,10 +23,9 @@ namespace Clivis.Controllers
         // Repository for the Climate Items
         public IClimateRepository ClimateItems { get; set; }
 
-        public ClimateController(IClimateRepository climateItems, IOptions<AppKeyConfig> configs)
+          public ClimateController(IClimateRepository climateItems, IOptions<AppKeyConfig> configs)
         {
-            AppConfigs = configs.Value;
-            
+            AppConfigs = configs.Value;            
             ClimateItems = climateItems;
         }
         

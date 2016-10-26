@@ -21,10 +21,7 @@ namespace Clivis
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
 
-            if(env.IsDevelopment())
-            {
                  builder.AddUserSecrets();
-            }
                
                 Configuration = builder.Build();
         }
@@ -34,14 +31,20 @@ namespace Clivis
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<AppKeyConfig>(Configuration.GetSection("AppKeys"));
+            services.AddOptions();
+            services.Configure<AppKeyConfig>(configs =>
+              {
+                  configs.NetatmoUserName = Configuration["NetatmoUserName"];
+                  configs.NetatmoPassword = Configuration["NetatmoPassword"];
+                  configs.NetatmoClientId = Configuration["NetatmoClientId"];
+                  configs.NetatmoClientSecret = Configuration["NetatmoClientSecret"];
+
+              });
+
             // Add framework services.
             services.AddMvc();
 
             services.AddSingleton<IClimateRepository, ClimateRepository>(); 
-            //services.AddSingleton<IConfiguration>(Configuration);    
-
-            services.Configure<AppKeyConfig>(Configuration.GetSection("AppKeys"));
             
         }
 

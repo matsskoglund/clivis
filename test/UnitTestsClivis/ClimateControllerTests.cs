@@ -8,18 +8,31 @@ using Microsoft.Extensions.Configuration;
 
 namespace ClivisTests
 {
+    
+
     // see example explanation on xUnit.net website:
     // https://xunit.github.io/docs/getting-started-dotnet-core.html
     public class ClimateControllerTests
     {
+        public IConfigurationRoot Configuration { get; }
         private readonly ClimateController _climateController;
         public ClimateControllerTests()
         {
             IClimateRepository repo = new ClimateRepository();
-           // var builder = new ConfigurationBuilder();
-           // builder.AddUserSecrets();
+             ConfigurationBuilder builder = new ConfigurationBuilder();
+             builder.AddUserSecrets();
+            
+           
+            Configuration = builder.Build();
+            IOptions<AppKeyConfig> options = Options.Create(new AppKeyConfig()
+            {    
+                NetatmoUserName = Configuration["NetatmoUserName"],
+                NetatmoPassword = Configuration["NetatmoPassword"],
+                NetatmoClientId = Configuration["NetatmoClientId"],
+                NetatmoClientSecret = Configuration["NetatmoClientSecret"]
+             });
 
-            _climateController = new ClimateController(repo,null);
+            _climateController = new ClimateController(repo, options);
         }
          [Fact]
         public void ClimateController_NotNull()
