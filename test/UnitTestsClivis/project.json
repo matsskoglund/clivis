@@ -9,9 +9,9 @@
         "Clivis": {
             "target": "project"
         },
-         "OpenCover": "4.6.519",
-    "OpenCoverToCoberturaConverter": "0.2.4",
-    "ReportGenerator": "2.4.5",
+      "OpenCover": "4.6.519",
+      "OpenCoverToCoberturaConverter": "0.2.4",
+      "ReportGenerator": "2.4.5",
     "Microsoft.Extensions.Configuration.UserSecrets":"1.0.0"
     },
     
@@ -26,10 +26,10 @@
         }
     },
     "buildOptions": {
-        "copyToOutput": {
-            "include": [ "xunit.runner.json" ]
+      "copyToOutput": {
+        "include": [ "xunit.runner.json", "project.json" ]                 
         }
-    },
+      },
     "tooling": {
         "defaultNamespace": "test"
     }
