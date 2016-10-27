@@ -43,7 +43,24 @@ namespace Clivis.Controllers
 
             return ClimateItems.GetAll();
         }
-        
+
+        [HttpPost("Netatmo")]
+        public IEnumerable<ClimateItem> GetAllWithLogin([FromBody] AppKeyConfig configs)
+        {
+            IClimateSource netatmo = new NetatmoUnit();
+             //AppKeyConfig configs = new AppKeyConfig { NetatmoUserName = username, NetatmoPassword = password, NetatmoClientId=clientId, NetatmoClientSecret=clientSecret };
+
+            netatmo.init(configs);
+            //netatmo.init(AppConfigs);
+            string indoor = netatmo.inDoorTemperature;
+            string outdoor = netatmo.outDoorTemperature;
+
+            ClimateItem item = ClimateItems.Find("Netatmo");
+            item.SourceName = indoor;
+
+            return ClimateItems.GetAll();
+        }
+
         [HttpGet("{id}", Name = "GetClimate")]
         public IActionResult GetById(string id)
         {
