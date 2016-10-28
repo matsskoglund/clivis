@@ -27,7 +27,7 @@ namespace Clivis
                 catch (System.Exception)
                 {
                     // This need to be fixed
-                    throw;
+                    
                 }
                
                 Configuration = builder.Build();
