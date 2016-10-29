@@ -1,6 +1,7 @@
 using Xunit;
 using Clivis.Controllers;
 using System.Collections.Generic;
+using Moq;
 
 namespace ClivisTests
 {
@@ -30,6 +31,7 @@ namespace ClivisTests
         [Fact]
         public void ValuesController_GetId_5_Returns()
         {
+            Mock<string> namn = new Mock<string>();
             string res = _valuesController.Get(5);
                         
             Assert.NotNull(res);

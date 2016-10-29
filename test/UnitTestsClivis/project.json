@@ -17,12 +17,13 @@
     
     "frameworks": {
         "netcoreapp1.0": {
-            "dependencies": {
-                "Microsoft.NETCore.App": {
-                    "type": "platform",
-                    "version": "1.0.1"
-                }                
-            }
+          "dependencies": {
+            "Microsoft.NETCore.App": {
+              "type": "platform",
+              "version": "1.0.1"
+            },
+            "moq": "4.6.38-alpha"
+          }
         }
     },
     "buildOptions": {
