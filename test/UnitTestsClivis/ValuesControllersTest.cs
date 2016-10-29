@@ -31,7 +31,7 @@ namespace ClivisTests
         [Fact]
         public void ValuesController_GetId_5_Returns()
         {
-            Mock<string> namn = new Mock<string>();
+           
             string res = _valuesController.Get(5);
                         
             Assert.NotNull(res);
