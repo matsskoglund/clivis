@@ -80,11 +80,12 @@ namespace ClivisTests
 
         [Theory]
         [InlineData("Nyckel")]
-        public void ClimateController_GetId_Returns_NotNull(string key)
+        public void ClimateController_GetId_For_Non_Existing_Id_Returns_404(string key)
         {
-            string res = _climateController.GetById(key).ToString();
-                        
-            Assert.NotNull(res);
+            
+            StatusCodeResult res = (StatusCodeResult)_climateController.GetById(key);
+
+            Assert.Equal(404, res.StatusCode);
         }
 
 
