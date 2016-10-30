@@ -55,6 +55,11 @@ namespace Clivis.Controllers
             return item;
         }
 
+        private ClimateItem GetNetatmoValues()
+        {
+            return null;
+        }
+
         [HttpGet("{source}", Name = "GetClimate")]
         public IActionResult GetById(string source)
         {

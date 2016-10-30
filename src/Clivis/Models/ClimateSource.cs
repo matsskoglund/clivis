@@ -96,7 +96,7 @@ namespace Clivis.Models.Netatmo
             HttpClient client = new HttpClient();
             var outcontent = new FormUrlEncodedContent(pairs);
             var response = client.PostAsync("https://api.netatmo.net/oauth2/token", outcontent).Result;
-
+            Console.Write(response.ToString());
             string contentResult = response.Content.ReadAsStringAsync().Result;
 
             netatmoAuth = JsonConvert.DeserializeObject<NetatmoAuth>(contentResult);
@@ -113,9 +113,11 @@ namespace Clivis.Models.Netatmo
                 string url = "http://api.netatmo.net/api/devicelist?access_token=" + netatmoAuth.access_token;
                 var resp = client.GetAsync(url).Result;
                 response = resp.Content.ReadAsStringAsync().Result;
+                Console.Write(response.ToString());
             }
             catch (Exception e)
             {
+                Console.Write(netatmoAuth.access_token);
             }
 
 
