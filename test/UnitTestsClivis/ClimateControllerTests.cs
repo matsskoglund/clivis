@@ -5,6 +5,7 @@ using Clivis.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Configuration;
+using Moq;
 
 namespace ClivisTests
 {
@@ -18,10 +19,21 @@ namespace ClivisTests
         private readonly ClimateController _climateController;
         public ClimateControllerTests()
         {
-            IClimateRepository repo = new ClimateRepository();
+            // Mock the repo
+            //            IClimateRepository repo = new ClimateRepository();
+            Mock<IClimateRepository> repoMock = new Mock<IClimateRepository>();
+            Dictionary<string, ClimateItem> list = new Dictionary<string,ClimateItem>();
+            
+            list.Add("Netatmo",new ClimateItem { SourceName = "Weatherstation", Key = "Netatmo" });
+            list.Add("Nibe",new ClimateItem { SourceName = "Heatpump", Key = "Nibe" });                
+
+            repoMock.Setup(x => x.GetAll()).Returns(list.Values);
+        
+
              ConfigurationBuilder builder = new ConfigurationBuilder();
              builder.AddUserSecrets();
             
+
            
             Configuration = builder.Build();
             IOptions<AppKeyConfig> options = Options.Create(new AppKeyConfig()
@@ -32,7 +44,7 @@ namespace ClivisTests
                 NetatmoClientSecret = Configuration["NetatmoClientSecret"]
              });
 
-            _climateController = new ClimateController(repo, options);
+            _climateController = new ClimateController(repoMock.Object, options);
         }
          [Fact]
         public void ClimateController_NotNull()

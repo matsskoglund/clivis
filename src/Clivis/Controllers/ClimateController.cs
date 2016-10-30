@@ -39,7 +39,8 @@ namespace Clivis.Controllers
             string outdoor = netatmo.outDoorTemperature;
 
             ClimateItem item = ClimateItems.Find("Netatmo");
-            item.SourceName = indoor;            
+            if(item != null)
+                item.SourceName = indoor;            
 
             return ClimateItems.GetAll();
         }
