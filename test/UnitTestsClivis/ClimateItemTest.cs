@@ -2,6 +2,7 @@ using Xunit;
 using Clivis.Controllers;
 using System.Collections.Generic;
 using Clivis.Models;
+using System;
 
 namespace ClivisTests
 {
@@ -10,11 +11,14 @@ namespace ClivisTests
     public class ClimateItemTest
     {
         private readonly ClimateItem _climateItem;
+        private DateTime timeStamp = DateTime.Now;
+
         public ClimateItemTest()
         {
-            _climateItem = new ClimateItem();           
-           _climateItem.SourceName ="Heatpump"; 
-            _climateItem.Key = "Nyckel";
+            _climateItem = new ClimateItem();
+            _climateItem.TimeStamp = timeStamp;
+            _climateItem.OutdoorValue = "4.5";
+            _climateItem.IndoorValue = "22.3";
         }
 
          [Fact]
@@ -24,17 +28,25 @@ namespace ClivisTests
         }
 
         [Fact]
-        public void ClimateItem_SourceNameIsSet()
+        public void ClimateItem_OutdoorValueIsSet()
         {
-            Assert.Equal("Heatpump",_climateItem.SourceName);
+            Assert.Equal("4.5",_climateItem.OutdoorValue);
             
         }
 
         [Fact]
-        public void ClimateItem_KeyIsSet()
+        public void ClimateItem_IndoorValueIsSet()
         {
-            Assert.Equal("Nyckel",_climateItem.Key);
+            Assert.Equal("22.3",_climateItem.IndoorValue);
             
-        }       
+        }
+
+
+        [Fact]
+        public void ClimateItem_TimeStampIsSet()
+        {
+            Assert.Equal(timeStamp, _climateItem.TimeStamp);
+
+        }
     }
 }

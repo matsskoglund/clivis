@@ -11,8 +11,8 @@ namespace Clivis.Models
 
         public ClimateRepository()
         {
-            Add(new ClimateItem { SourceName = "Weatherstation", Key = "Netatmo"});
-            Add(new ClimateItem { SourceName = "Heatpump", Key = "Nibe"});
+            Add(new ClimateItem { TimeStamp = DateTime.Now, IndoorValue = "22.0", OutdoorValue="10.5"});
+            Add(new ClimateItem { TimeStamp = DateTime.Now, IndoorValue = "22.0", OutdoorValue = "10.5" });
         }
 
         public IEnumerable<ClimateItem> GetAll()
@@ -22,8 +22,8 @@ namespace Clivis.Models
 
         public void Add(ClimateItem item)
         {
-            
-            _items[item.Key] = item;
+
+            _items[item.TimeStamp.ToString()] = item;
         }
 
         public ClimateItem Find(string key)
@@ -42,7 +42,7 @@ namespace Clivis.Models
 
         public void Update(ClimateItem item)
         {
-            _items[item.Key] = item;
+            _items[item.TimeStamp.ToString()] = item;
         }
     }
 }

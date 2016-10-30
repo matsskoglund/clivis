@@ -1,10 +1,12 @@
+using System;
+
 namespace Clivis.Models
 {
     public class ClimateItem
     {
-        public string Key { get; set; }
-        public string SourceName { get; set; }
-        
-                
+        public DateTime TimeStamp { get; set; }
+        public string OutdoorValue { get; set; }
+        public string IndoorValue { get; set; }
+       
     }
 }

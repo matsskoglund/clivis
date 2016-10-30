@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Configuration;
 using Moq;
+using System;
 
 namespace ClivisTests
 {
@@ -24,8 +25,9 @@ namespace ClivisTests
             Mock<IClimateRepository> repoMock = new Mock<IClimateRepository>();
             Dictionary<string, ClimateItem> list = new Dictionary<string,ClimateItem>();
             
-            list.Add("Netatmo",new ClimateItem { SourceName = "Weatherstation", Key = "Netatmo" });
-            list.Add("Nibe",new ClimateItem { SourceName = "Heatpump", Key = "Nibe" });                
+            list.Add("one", new ClimateItem { TimeStamp = DateTime.Now, IndoorValue = "22.0", OutdoorValue = "10.5" });
+            
+            list.Add("two", new ClimateItem { TimeStamp = DateTime.Now, IndoorValue = "22.0", OutdoorValue = "10.5" });
 
             repoMock.Setup(x => x.GetAll()).Returns(list.Values);
         
@@ -55,14 +57,14 @@ namespace ClivisTests
         [Fact]
         public void ClimateController_Index()
         {
-            IEnumerable<ClimateItem> res = _climateController.GetAll();
+            ClimateItem res = _climateController.GetClimate();
             Assert.NotNull(res);
         }
 
         [Fact]
         public void ClimateController_Create()
         {
-            Microsoft.AspNetCore.Mvc.CreatedAtRouteResult res = (Microsoft.AspNetCore.Mvc.CreatedAtRouteResult)_climateController.Create(new ClimateItem { Key = "Nyckel2", SourceName = "WeatherStation"});
+            Microsoft.AspNetCore.Mvc.CreatedAtRouteResult res = (Microsoft.AspNetCore.Mvc.CreatedAtRouteResult)_climateController.Create(new ClimateItem { TimeStamp=DateTime.Now, IndoorValue="18.6",OutdoorValue="21.2"});
             
             Assert.Equal(201, res.StatusCode);
         }
@@ -80,12 +82,12 @@ namespace ClivisTests
 
         [Theory]
         [InlineData("Nyckel")]
-        public void ClimateController_GetId_For_Non_Existing_Id_Returns_404(string key)
+        public void ClimateController_GetId_For_Non_Existing_Id_Returns_Null(string key)
         {
             
-            StatusCodeResult res = (StatusCodeResult)_climateController.GetById(key);
+            ObjectResult res = (ObjectResult)_climateController.GetById(key);
 
-            Assert.Equal(404, res.StatusCode);
+            Assert.Null(res.StatusCode);
         }
 
 

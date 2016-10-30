@@ -3,6 +3,7 @@ using Clivis.Controllers;
 using System.Collections.Generic;
 using Clivis.Models;
 using System.Linq;
+using System;
 
 namespace ClivisTests
 {
@@ -10,11 +11,12 @@ namespace ClivisTests
     // https://xunit.github.io/docs/getting-started-dotnet-core.html
     public class ClimateRepositoryTest
     {
+        private DateTime timeStamp = DateTime.Now;
         private readonly ClimateRepository _climateRepo;
         public ClimateRepositoryTest()
         {
             _climateRepo = new ClimateRepository();     
-            ClimateItem item = new ClimateItem { SourceName = "Item1", Key = "Nyckel" };
+            ClimateItem item = new ClimateItem { TimeStamp = timeStamp, IndoorValue = "20.4", OutdoorValue = "11.6" };
             _climateRepo.Add(item);
        }
 
@@ -34,8 +36,8 @@ namespace ClivisTests
         [Fact]
         public void ClimateRepository_ExistingItemIsFound()
         {
-            ClimateItem item = _climateRepo.Find("Nyckel");
-            Assert.Equal("Item1", item.SourceName);
+            ClimateItem item = _climateRepo.Find(timeStamp.ToString());
+            Assert.Equal("20.4", item.IndoorValue);
         }
 
         [Fact]
@@ -50,43 +52,46 @@ namespace ClivisTests
         {
             // Create and add a new item that should be changed
             ClimateItem item = new ClimateItem();
-            item.Key = "ChangeKey";
-            item.SourceName = "ToBeChanged";      
+            DateTime newKey = DateTime.Now;
+            item.TimeStamp = DateTime.Now;
+            item.IndoorValue = "11.9";
+            item.OutdoorValue = "5.3";
             _climateRepo.Add(item);
 
             // Make sure the item is in the repo
-            ClimateItem existingItem = _climateRepo.Find("ChangeKey");
-            Assert.Equal("ToBeChanged", existingItem.SourceName);
+            ClimateItem existingItem = _climateRepo.Find(newKey.ToString());
+            Assert.Equal("11.9", existingItem.IndoorValue);
 
             // Change the item
-            item.SourceName = "Changed";
+            item.IndoorValue = "28.3";
 
             // Update the item in the repo
             _climateRepo.Update(item);
 
             // Get the item from the repo
-            ClimateItem afterItem =  _climateRepo.Find("ChangeKey");
+            ClimateItem afterItem =  _climateRepo.Find(newKey.ToString());
             
             // Check that the item name with the key has changed
-            Assert.Equal("Changed",item.SourceName);
-            Assert.Equal("ChangeKey",item.Key);
+            Assert.Equal("28.3", item.IndoorValue);
+            Assert.Equal(newKey.ToString(),item.TimeStamp.ToString());
 
             // Cleanup, remove the item and make sure it is gone
-            item = _climateRepo.Remove("ChangeKey");
-            Assert.Null(_climateRepo.Find("ChangeKey"));
+            item = _climateRepo.Remove(newKey.ToString());
+            Assert.Null(_climateRepo.Find(newKey.ToString()));
         }
 
       [Fact]
         public void ClimateRepository_RemovedItemIsGone()
         {
             ClimateItem item = new ClimateItem();
-            item.Key = "RemoveKey";
-            item.SourceName = "ToBeRemoved";      
+            DateTime timeStamp = DateTime.Now;
+            item.TimeStamp = timeStamp;
+            item.IndoorValue = "19.0";      
            _climateRepo.Add(item);
  
-            item = _climateRepo.Remove("RemoveKey");
-            Assert.Equal("ToBeRemoved",item.SourceName);
-            item = _climateRepo.Find("ToBeRemoved");
+            item = _climateRepo.Remove(timeStamp.ToString());
+            Assert.Equal("19.0",item.IndoorValue);
+            item = _climateRepo.Find(timeStamp.ToString());
             Assert.Null(item);
         }
 

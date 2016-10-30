@@ -11,9 +11,7 @@ using Microsoft.Extensions.Options;
 
 namespace Clivis.Controllers
 {
-
     
-
     [Route("api/[controller]")]
     public class ClimateController : Controller
     {
@@ -31,45 +29,36 @@ namespace Clivis.Controllers
         
 
         [HttpGet]
-        public IEnumerable<ClimateItem> GetAll()
+        public ClimateItem GetClimate()
+        {
+
+            ClimateItem item = new ClimateItem() { IndoorValue = null, OutdoorValue = null, TimeStamp = DateTime.Now };
+
+
+            return item;
+        }
+
+        private void UpdateNetatmo(AppKeyConfig configs)
         {
             IClimateSource netatmo = new NetatmoUnit();
             netatmo.init(AppConfigs);
             string indoor = netatmo.inDoorTemperature;
             string outdoor = netatmo.outDoorTemperature;
-
-            ClimateItem item = ClimateItems.Find("Netatmo");
-            if(item != null)
-                item.SourceName = indoor;            
-
-            return ClimateItems.GetAll();
         }
 
         [HttpPost("Netatmo")]
-        public IEnumerable<ClimateItem> GetAllWithLogin([FromBody] AppKeyConfig configs)
+        public ClimateItem GetClimateWithLogin([FromBody] AppKeyConfig configs)
         {
-            IClimateSource netatmo = new NetatmoUnit();
-             //AppKeyConfig configs = new AppKeyConfig { NetatmoUserName = username, NetatmoPassword = password, NetatmoClientId=clientId, NetatmoClientSecret=clientSecret };
+            ClimateItem item = new ClimateItem() { IndoorValue = null, OutdoorValue = null, TimeStamp = DateTime.Now };
+            UpdateNetatmo(configs);
 
-            netatmo.init(configs);
-            //netatmo.init(AppConfigs);
-            string indoor = netatmo.inDoorTemperature;
-            string outdoor = netatmo.outDoorTemperature;
-
-            ClimateItem item = ClimateItems.Find("Netatmo");
-            item.SourceName = indoor;
-
-            return ClimateItems.GetAll();
+            return item;
         }
 
-        [HttpGet("{id}", Name = "GetClimate")]
-        public IActionResult GetById(string id)
+        [HttpGet("{source}", Name = "GetClimate")]
+        public IActionResult GetById(string source)
         {
-            var item = ClimateItems.Find(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
+            ClimateItem item = new ClimateItem() { TimeStamp = DateTime.Now, IndoorValue = "22.5", OutdoorValue = "6.4" };
             return new ObjectResult(item);
         }
 
@@ -82,7 +71,7 @@ namespace Clivis.Controllers
                 return BadRequest();
             }
             ClimateItems.Add(item);
-            return CreatedAtRoute("GetClimate", new { id = item.Key }, item);
+            return CreatedAtRoute("GetClimate", new { timeStamp = item.TimeStamp }, item);
         }
     }
 }
