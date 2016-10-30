@@ -49,8 +49,8 @@ namespace Clivis.Controllers
         [HttpPost("Netatmo")]
         public ClimateItem GetClimateWithLogin([FromBody] AppKeyConfig configs)
         {
-            
 
+            UpdateNetatmo(configs);
             ClimateItem item = ClimateItems.Latest(configs);
             return item;
         }
