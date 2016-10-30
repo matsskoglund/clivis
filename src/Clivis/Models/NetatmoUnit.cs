@@ -14,10 +14,10 @@ namespace Clivis.Models.Netatmo
         public string userName { get; set; }
         public string passWord { get; set; }
 
-        private string deviceId { get; set; }
+        private string deviceId { get; set; } = "70:ee:50:04:79:2a";
 
-        private string moduleId { get; set; }
-        
+        private string moduleId { get; set; } = "02:00:00:05:51:92";
+
 
         private NetatmoAuth netatmoAuth = new NetatmoAuth();
        
@@ -100,7 +100,7 @@ namespace Clivis.Models.Netatmo
             HttpClient client = new HttpClient();
             var outcontent = new FormUrlEncodedContent(pairs);
             var response = client.PostAsync("https://api.netatmo.net/oauth2/token", outcontent).Result;
-            Console.Write(response.ToString());
+            
             string contentResult = response.Content.ReadAsStringAsync().Result;
 
             netatmoAuth = JsonConvert.DeserializeObject<NetatmoAuth>(contentResult);
@@ -133,6 +133,17 @@ namespace Clivis.Models.Netatmo
             var latitude = data.body.devices[0].place.location[0];
             var longitude = data.body.devices[0].place.location[1];
             var timezone = data.body.devices[0].place.timezone;            */
+        }
+
+        public ClimateItem latestReading(AppKeyConfig AppConfigs)
+        {
+            login(AppConfigs);
+           // setDeviceAndModuleID();
+            ClimateItem reading = new ClimateItem();
+            reading.IndoorValue = this.inDoorTemperature;
+            reading.OutdoorValue = this.outDoorTemperature;
+            reading.TimeStamp = DateTime.Now;
+            return reading;
         }
     }
 }

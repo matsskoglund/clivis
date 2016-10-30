@@ -11,6 +11,6 @@ namespace Clivis.Models.Netatmo
         public string refresh_token { get; set; }
         public List<string> scope { get; set; }
         public int expires_in { get; set; }
-        public int expire_in { get; set; }
+        public int expire_in { get; set; }        
     }
 }

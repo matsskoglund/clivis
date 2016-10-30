@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using Clivis.Models.Netatmo;
 
 namespace Clivis.Models
 {
@@ -47,7 +48,9 @@ namespace Clivis.Models
 
         public ClimateItem Latest(AppKeyConfig config)
         {
-            return new ClimateItem() { TimeStamp = DateTime.Now, IndoorValue = "22.0", OutdoorValue = "10.5" };
+            NetatmoUnit unit = new NetatmoUnit();
+            ClimateItem item = unit.latestReading(config);
+            return item;
         }
     }
 }

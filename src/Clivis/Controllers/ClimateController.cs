@@ -16,7 +16,7 @@ namespace Clivis.Controllers
     public class ClimateController : Controller
     {
         public AppKeyConfig AppConfigs { get; }
-        //private AppKeyConfig AppConfigs = new AppKeyConfig();
+        
 
         // Repository for the Climate Items
         public IClimateRepository ClimateItems { get; set; }
@@ -42,15 +42,13 @@ namespace Clivis.Controllers
         {
             IClimateSource netatmo = new NetatmoUnit();
             netatmo.init(AppConfigs);
-            string indoor = netatmo.inDoorTemperature;
-            string outdoor = netatmo.outDoorTemperature;
+            //string indoor = netatmo.inDoorTemperature;
+            //string outdoor = netatmo.outDoorTemperature;
         }
 
         [HttpPost("Netatmo")]
         public ClimateItem GetClimateWithLogin([FromBody] AppKeyConfig configs)
         {
-
-            UpdateNetatmo(configs);
             ClimateItem item = ClimateItems.Latest(configs);
             return item;
         }

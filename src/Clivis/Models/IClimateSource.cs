@@ -12,7 +12,6 @@ namespace Clivis.Models
         string userName { get; set; }
         string passWord { get; set; }
         void init(AppKeyConfig config);
-        string outDoorTemperature { get; }
-        string inDoorTemperature { get; }
+        ClimateItem latestReading(AppKeyConfig AppConfigs);
     }
 }
