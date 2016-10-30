@@ -14,9 +14,9 @@ namespace Clivis.Models.Netatmo
         public string userName { get; set; }
         public string passWord { get; set; }
 
-        private string deviceId { get; set; } = "70:ee:50:04:79:2a";
+        private string deviceId { get; set; }
 
-        private string moduleId { get; set; } = "02:00:00:05:51:92";
+        private string moduleId { get; set; }
 
 
         private NetatmoAuth netatmoAuth = new NetatmoAuth();
@@ -133,7 +133,7 @@ namespace Clivis.Models.Netatmo
         public ClimateItem latestReading(AppKeyConfig AppConfigs)
         {
             login(AppConfigs);
-           // setDeviceAndModuleID();
+            setDeviceAndModuleID();
             ClimateItem reading = new ClimateItem();
             reading.IndoorValue = this.inDoorTemperature;
             reading.OutdoorValue = this.outDoorTemperature;
