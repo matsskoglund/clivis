@@ -92,11 +92,6 @@ namespace Clivis.Models.Netatmo
                     new KeyValuePair<string, string>( "password", AppConfigs.NetatmoPassword),
                     new KeyValuePair<string, string>( "scope", "read_station")
             };
-            Console.WriteLine("Trying to login with");
-            Console.WriteLine("Id"+AppConfigs.NetatmoClientId);
-            Console.WriteLine(AppConfigs.NetatmoClientSecret);
-            Console.WriteLine(AppConfigs.NetatmoUserName);
-            Console.WriteLine("pw" + AppConfigs.NetatmoPassword);
             HttpClient client = new HttpClient();
             var outcontent = new FormUrlEncodedContent(pairs);
             var response = client.PostAsync("https://api.netatmo.net/oauth2/token", outcontent).Result;
@@ -117,7 +112,7 @@ namespace Clivis.Models.Netatmo
                 string url = "http://api.netatmo.net/api/devicelist?access_token=" + netatmoAuth.access_token;
                 var resp = client.GetAsync(url).Result;
                 response = resp.Content.ReadAsStringAsync().Result;
-                Console.Write(response.ToString());
+                
             }
             catch (Exception e)
             {

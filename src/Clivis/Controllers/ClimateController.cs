@@ -37,14 +37,7 @@ namespace Clivis.Controllers
 
             return item;
         }
-
-        private void UpdateNetatmo(AppKeyConfig configs)
-        {
-            IClimateSource netatmo = new NetatmoUnit();
-            netatmo.init(AppConfigs);
-            //string indoor = netatmo.inDoorTemperature;
-            //string outdoor = netatmo.outDoorTemperature;
-        }
+        
 
         [HttpPost("Netatmo")]
         public ClimateItem GetClimateWithLogin([FromBody] AppKeyConfig configs)
