@@ -92,11 +92,11 @@ namespace Clivis.Models.Netatmo
                     new KeyValuePair<string, string>( "password", AppConfigs.NetatmoPassword),
                     new KeyValuePair<string, string>( "scope", "read_station")
             };
-            Console.Write("Trying to login with");
-            Console.Write(AppConfigs.NetatmoClientId);
-            Console.Write(AppConfigs.NetatmoClientSecret);
-            Console.Write(AppConfigs.NetatmoUserName);
-            Console.Write(AppConfigs.NetatmoPassword);
+            Console.WriteLine("Trying to login with");
+            Console.WriteLine("Id"+AppConfigs.NetatmoClientId);
+            Console.WriteLine(AppConfigs.NetatmoClientSecret);
+            Console.WriteLine(AppConfigs.NetatmoUserName);
+            Console.WriteLine("pw" + AppConfigs.NetatmoPassword);
             HttpClient client = new HttpClient();
             var outcontent = new FormUrlEncodedContent(pairs);
             var response = client.PostAsync("https://api.netatmo.net/oauth2/token", outcontent).Result;

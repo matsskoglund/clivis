@@ -9,5 +9,6 @@ namespace Clivis.Models
         ClimateItem Find(string key);
         ClimateItem Remove(string key);
         void Update(ClimateItem item);
+        ClimateItem Latest(AppKeyConfig config);
     }
 }

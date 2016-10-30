@@ -44,5 +44,10 @@ namespace Clivis.Models
         {
             _items[item.TimeStamp.ToString()] = item;
         }
+
+        public ClimateItem Latest(AppKeyConfig config)
+        {
+            return new ClimateItem() { TimeStamp = DateTime.Now, IndoorValue = "22.0", OutdoorValue = "10.5" };
+        }
     }
 }

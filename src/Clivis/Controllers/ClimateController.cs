@@ -49,9 +49,9 @@ namespace Clivis.Controllers
         [HttpPost("Netatmo")]
         public ClimateItem GetClimateWithLogin([FromBody] AppKeyConfig configs)
         {
-            ClimateItem item = new ClimateItem() { IndoorValue = "23.6", OutdoorValue = "6.4", TimeStamp = DateTime.Now };
-            UpdateNetatmo(configs);
+            
 
+            ClimateItem item = ClimateItems.Latest(configs);
             return item;
         }
 
