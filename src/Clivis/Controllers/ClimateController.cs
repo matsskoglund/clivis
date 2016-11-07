@@ -54,6 +54,25 @@ namespace Clivis.Controllers
         [HttpGet("{source}", Name = "GetClimate")]
         public IActionResult GetById(string source)
         {
+            var queryString = Request.QueryString;
+            if(source.Equals("Nibe"))
+            {
+                var pairs = new List<KeyValuePair<string, string>>
+                {
+                        new KeyValuePair<string, string>("grant_type", "password" ),
+                        new KeyValuePair<string, string>("client_id", AppConfigs.NetatmoClientId),
+                        new KeyValuePair<string, string>( "client_secret", AppConfigs.NetatmoClientSecret),
+                        new KeyValuePair<string, string>("username", AppConfigs.NetatmoUserName),
+                        new KeyValuePair<string, string>( "password", AppConfigs.NetatmoPassword),
+                        new KeyValuePair<string, string>( "scope", "read_station")
+                };
+                HttpClient client = new HttpClient();
+                var outcontent = new FormUrlEncodedContent(pairs);
+                var response = client.PostAsync("https://api.netatmo.net/oauth2/token", outcontent).Result;
+
+                string contentResult = response.Content.ReadAsStringAsync().Result;                
+                NetatmoAuth netatmoAuth = JsonConvert.DeserializeObject<NetatmoAuth>(contentResult);
+            }
             ClimateItem item = new ClimateItem() { TimeStamp = DateTime.Now, IndoorValue = "22.5", OutdoorValue = "6.4" };
             return new ObjectResult(item);
         }
