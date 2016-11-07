@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Clivis.Models;
 using Clivis.Models.Netatmo;
+using Clivis.Models.Nibe;
 using System;
 using System.Collections.Specialized;
 using Newtonsoft.Json;
@@ -54,6 +55,8 @@ namespace Clivis.Controllers
         [HttpGet("{source}", Name = "GetClimate")]
         public IActionResult GetById(string source)
         {
+            NibeUnit nibe = new NibeUnit();
+            nibe.init(AppConfigs);
             ClimateItem item = new ClimateItem() { TimeStamp = DateTime.Now, IndoorValue = "22.5", OutdoorValue = "6.4" };
             return new ObjectResult(item);
         }
