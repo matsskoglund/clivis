@@ -7,7 +7,7 @@ namespace Clivis.Models
 {
     public interface IClimateSource
     {
-        string clientID { get; set; }
+        string clientId { get; set; }
         string secret { get; set; }
         string userName { get; set; }
         string passWord { get; set; }
