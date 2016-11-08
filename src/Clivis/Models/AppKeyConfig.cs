@@ -2,9 +2,12 @@ namespace Clivis.Models
 {
     public class AppKeyConfig
     {
-        public string NetatmoUserName { get; set; }
-        public string NetatmoPassword { get; set; }
-        public string NetatmoClientId { get; set; }
-        public string NetatmoClientSecret { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public string ClientId { get; set; }
+        public string ClientSecret { get; set; }
+        public string RedirectURI { get; set; }
+
+        
     }
 }

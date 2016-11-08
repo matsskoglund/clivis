@@ -41,10 +41,10 @@ namespace Clivis
             services.AddOptions();
             services.Configure<AppKeyConfig>(configs =>
               {
-                  configs.NetatmoUserName = Configuration["NetatmoUserName"];
-                  configs.NetatmoPassword = Configuration["NetatmoPassword"];
-                  configs.NetatmoClientId = Configuration["NetatmoClientId"];
-                  configs.NetatmoClientSecret = Configuration["NetatmoClientSecret"];
+                  configs.UserName = Configuration["NetatmoUserName"];
+                  configs.Password = Configuration["NetatmoPassword"];
+                  configs.ClientId = Configuration["NetatmoClientId"];
+                  configs.ClientSecret = Configuration["NetatmoClientSecret"];
 
               });
 

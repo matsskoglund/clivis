@@ -40,10 +40,10 @@ namespace ClivisTests
             Configuration = builder.Build();
             IOptions<AppKeyConfig> options = Options.Create(new AppKeyConfig()
             {    
-                NetatmoUserName = Configuration["NetatmoUserName"],
-                NetatmoPassword = Configuration["NetatmoPassword"],
-                NetatmoClientId = Configuration["NetatmoClientId"],
-                NetatmoClientSecret = Configuration["NetatmoClientSecret"]
+                UserName = Configuration["NetatmoUserName"],
+                Password = Configuration["NetatmoPassword"],
+                ClientId = Configuration["NetatmoClientId"],
+                ClientSecret = Configuration["NetatmoClientSecret"]
              });
 
             _climateController = new ClimateController(repoMock.Object, options);

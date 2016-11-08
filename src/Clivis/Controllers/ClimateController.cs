@@ -17,7 +17,8 @@ namespace Clivis.Controllers
     public class ClimateController : Controller
     {
         public AppKeyConfig AppConfigs { get; }
-        
+
+        private NibeUnit nibe = new NibeUnit();
 
         // Repository for the Climate Items
         public IClimateRepository ClimateItems { get; set; }
@@ -47,6 +48,18 @@ namespace Clivis.Controllers
             return item;
         }
 
+        [HttpPost("Nibe")]
+        public ClimateItem GeNibeWithLogin([FromBody] AppKeyConfig configs)
+        {
+           // nibe.code = code;
+
+            nibe.init(configs);
+
+            ClimateItem latest = nibe.latestReading(configs);
+
+            return latest;
+        }
+
         private ClimateItem GetNetatmoValues()
         {
             return null;
@@ -55,9 +68,39 @@ namespace Clivis.Controllers
         [HttpGet("{source}", Name = "GetClimate")]
         public IActionResult GetById(string source)
         {
+            
+            if (source.Equals("NibeLogin"))
+            {
+//                NibeUnit nibe = new NibeUnit();
+                nibe.init(AppConfigs);
+                nibe.latestReading(AppConfigs);
+
+            }
+            if (source.Equals("NibeAuth"))
+            {
+  //              NibeUnit nibe = new NibeUnit();
+                nibe.init(AppConfigs);
+                nibe.latestReading(AppConfigs);
+
+            }
             ClimateItem item = new ClimateItem() { TimeStamp = DateTime.Now, IndoorValue = "22.5", OutdoorValue = "6.4" };
-            return new ObjectResult(item);
+                return new ObjectResult(item);
         }
+
+   /*     [HttpGet("{code}", Name = "NibeLogin")]
+       public IActionResult NibeLogin(string code, [FromQuery]string state)
+        {
+           
+            
+     //       NibeUnit nibe = new NibeUnit();
+            nibe.code = code;
+
+            nibe.init(AppConfigs);
+
+            ClimateItem latest = nibe.latestReading(AppConfigs);
+            
+            return new ObjectResult(latest);
+        }*/
 
         // POST api/climate
         [HttpPost]

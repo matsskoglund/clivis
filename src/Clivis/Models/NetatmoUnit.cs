@@ -86,10 +86,10 @@ namespace Clivis.Models.Netatmo
             var pairs = new List<KeyValuePair<string, string>>
             {
                     new KeyValuePair<string, string>("grant_type", "password" ),
-                    new KeyValuePair<string, string>("client_id", AppConfigs.NetatmoClientId),
-                    new KeyValuePair<string, string>( "client_secret", AppConfigs.NetatmoClientSecret),
-                    new KeyValuePair<string, string>("username", AppConfigs.NetatmoUserName),
-                    new KeyValuePair<string, string>( "password", AppConfigs.NetatmoPassword),
+                    new KeyValuePair<string, string>("client_id", AppConfigs.ClientId),
+                    new KeyValuePair<string, string>( "client_secret", AppConfigs.ClientSecret),
+                    new KeyValuePair<string, string>("username", AppConfigs.UserName),
+                    new KeyValuePair<string, string>( "password", AppConfigs.Password),
                     new KeyValuePair<string, string>( "scope", "read_station")
             };
             HttpClient client = new HttpClient();
@@ -123,14 +123,9 @@ namespace Clivis.Models.Netatmo
             dynamic data = JsonConvert.DeserializeObject(response);
             deviceId = data.body.devices[0]._id;
             moduleId = data.body.modules[0]._id;
-/*            var altitude = data.body.devices[0].place.altitude;
-            var country = data.body.devices[0].place.country;
-            var latitude = data.body.devices[0].place.location[0];
-            var longitude = data.body.devices[0].place.location[1];
-            var timezone = data.body.devices[0].place.timezone;            */
         }
 
-        public ClimateItem latestReading(AppKeyConfig AppConfigs)
+        public ClimateItem CurrentReading(AppKeyConfig AppConfigs)
         {
             login(AppConfigs);
             setDeviceAndModuleID();

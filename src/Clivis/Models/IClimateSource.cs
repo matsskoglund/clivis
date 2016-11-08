@@ -12,6 +12,7 @@ namespace Clivis.Models
         string userName { get; set; }
         string passWord { get; set; }
         void init(AppKeyConfig config);
-        ClimateItem latestReading(AppKeyConfig AppConfigs);
+        ClimateItem CurrentReading(AppKeyConfig AppConfigs);
+        
     }
 }

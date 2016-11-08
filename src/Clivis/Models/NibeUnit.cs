@@ -1,7 +1,9 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace Clivis.Models.Nibe
 {
@@ -16,80 +18,47 @@ namespace Clivis.Models.Nibe
 
         private string systemId { get; set; }
 
-        private string code { get; set; }
-        
+        public string code { get; set; }
+
         public string redirect_uri { get; set; }
         private NibeAuth nibeAuth = new NibeAuth();
-       
+
         public void init(AppKeyConfig config)
-        {
-            login();
-           // setDeviceAndModuleID();
+        {         
+            Refresh(config);
         }
 
-       /* public string outDoorTemperature {
-            get
-            {            
-                try
-                {
-                    HttpClient client = new HttpClient();
-                    string url = "https://api.nibeuplink.com" + nibeAuth.access_token + "&device_id=" + deviceId + "&module_id=" + moduleId + "&type=Temperature&limit=1&date_end=last&scale=30min";
-
-                    var resp = client.GetAsync(url).Result;
-                    var response = resp.Content.ReadAsStringAsync().Result;
-
-                    dynamic data = JsonConvert.DeserializeObject(response);
-
-                    string temperature = data.body[0].value[0][0]; // temperature
-
-                    return temperature;
-
-                }
-                catch (Exception e)
-                {
-
-                }            
-
-            return null;
-            }
-        }
-
-        public string inDoorTemperature
+        private string inDoorTemperature;
+        public string InDoorTemperature
         {
             get
             {
-               try
-                    {
-                        HttpClient client = new HttpClient();
-                        string url = "http://api.netatmo.net/api/getmeasure?access_token=" + nibeAuth.access_token + "&device_id=" + deviceId + "&type=Temperature&limit=1&date_end=last&scale=30min";                     
+                return inDoorTemperature;
 
-                        var resp = client.GetAsync(url).Result;
-                        string response = resp.Content.ReadAsStringAsync().Result;
-                        dynamic data = JsonConvert.DeserializeObject(response);
-                        
-                        string temperature = data.body[0].value[0][0]; // temperature
+            }
 
-                        return temperature;
-                }
-                catch (Exception e)
-                {
+        }
 
-                }
-
-                return null;
+        private string outDoorTemperature;
+        public string OutDoorTemperature
+        {
+            get
+            {
+                return outDoorTemperature;
+                
             }
         }
-*/
-        private void login()
+
+        private void login(AppKeyConfig AppConfig)
         {                                    
             //Login  
             var pairs = new List<KeyValuePair<string, string>>
             {
                     new KeyValuePair<string, string>("grant_type", "authorization_code" ),
-                    new KeyValuePair<string, string>("client_id", clientId),
-                    new KeyValuePair<string, string>( "client_secret", secret),
-                    new KeyValuePair<string, string>("code", code),
-                    new KeyValuePair<string, string>( "redirect_uri", redirect_uri),
+                    new KeyValuePair<string, string>("client_id", AppConfig.ClientId),
+                    new KeyValuePair<string, string>( "client_secret", AppConfig.ClientSecret),
+                    new KeyValuePair<string, string>("code", this.code),
+                    new KeyValuePair<string, string>( "redirect_uri", AppConfig.RedirectURI),
                     new KeyValuePair<string, string>( "scope", "READSYSTEM")
             };
 
@@ -99,39 +68,83 @@ namespace Clivis.Models.Nibe
             var response = client.PostAsync("https://api.nibeuplink.com/oauth/token", outcontent).Result;
 
             string contentResult = response.Content.ReadAsStringAsync().Result;
-Console.WriteLine(contentResult);
+
             nibeAuth = JsonConvert.DeserializeObject<NibeAuth>(contentResult);
-          
+            
+            string nibeAuthJson = JsonConvert.SerializeObject(nibeAuth);
+            File.WriteAllText("nibeauth.json", nibeAuthJson);
         }
 
-     /*   private void setDeviceAndModuleID()
+        public void Refresh(AppKeyConfig AppConfig)
         {
-            string response = "";
+            string nibeAuthJson = File.ReadAllText("nibeauth.json");
+            nibeAuth = JsonConvert.DeserializeObject<NibeAuth>(nibeAuthJson);
 
-            try
+            //Login  
+            var pairs = new List<KeyValuePair<string, string>>
             {
-                HttpClient client = new HttpClient();
-                string url = "http://api.netatmo.net/api/devicelist?access_token=" + nibeAuth.access_token;
-                var resp = client.GetAsync(url).Result;
-                response = resp.Content.ReadAsStringAsync().Result;
-            }
-            catch (Exception e)
-            {
-            }
+                    new KeyValuePair<string, string>("grant_type", "refresh_token" ),
+                    new KeyValuePair<string, string>("client_id", AppConfig.ClientId),
+                    new KeyValuePair<string, string>( "client_secret", AppConfig.ClientSecret),
+                    new KeyValuePair<string, string>("refresh_token", nibeAuth.refresh_token)
+            };
+            HttpClient client = new HttpClient();
+            var outcontent = new FormUrlEncodedContent(pairs);
+            Console.WriteLine(pairs.ToString());
+            var response = client.PostAsync("https://api.nibeuplink.com/oauth/token", outcontent).Result;
 
+            string contentResult = response.Content.ReadAsStringAsync().Result;
 
-            dynamic data = JsonConvert.DeserializeObject(response);
-            deviceId = data.body.devices[0]._id;
-            moduleId = data.body.modules[0]._id;
-        }*/
+            nibeAuth = JsonConvert.DeserializeObject<NibeAuth>(contentResult);
+            nibeAuthJson = JsonConvert.SerializeObject(nibeAuth);
+            File.WriteAllText("nibeauth.json", nibeAuthJson);
+        }
+
         public ClimateItem latestReading(AppKeyConfig AppConfigs)
         {
-            login();
-            //setDeviceAndModuleID();
-            ClimateItem reading = new ClimateItem();
-           // reading.IndoorValue = this.inDoorTemperature;
-           // reading.OutdoorValue = this.outDoorTemperature;
+            return CurrentReading(AppConfigs);
+        }
+
+        ClimateItem reading = new ClimateItem();
+        private void getNewReading(AppKeyConfig AppConfig)
+        {
+            var pairs = new List<KeyValuePair<string, string>>
+                {
+                     new KeyValuePair<string, string>("access_token", nibeAuth.access_token ),                     
+                     new KeyValuePair<string, string>("client_id", AppConfig.ClientId),                     
+                     new KeyValuePair<string, string>( "client_secret", AppConfig.ClientSecret),
+                     new KeyValuePair<string, string>("code", this.code),                     
+                     new KeyValuePair<string, string>( "redirect_uri", AppConfig.RedirectURI),
+                     new KeyValuePair<string, string>( "scope", "READSYSTEM")
+                };
+
+            HttpClient client = new HttpClient();
+            var outcontent = new FormUrlEncodedContent(pairs);
+            Console.WriteLine(pairs.ToString());
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", nibeAuth.access_token);
+            var response = client.GetAsync("https://api.nibeuplink.com/api/v1/systems/27401/parameters?parameterIds=outdoor_temperature&parameterIds=indoor_temperature").Result;
+
+            string contentResult = response.Content.ReadAsStringAsync().Result;
+
+            NibeTemp nibeOutdoorTemp = JsonConvert.DeserializeObject<List<NibeTemp>>(contentResult)[0];
+            NibeTemp nibeIndoorTemp = JsonConvert.DeserializeObject<List<NibeTemp>>(contentResult)[1];
+            outDoorTemperature = nibeOutdoorTemp.displayValue.Remove(nibeOutdoorTemp.displayValue.Length - 2);
+            inDoorTemperature = nibeIndoorTemp.displayValue.Remove(nibeIndoorTemp.displayValue.Length - 2);
+
+            
+            reading.IndoorValue = inDoorTemperature;
+            reading.OutdoorValue = outDoorTemperature;
             reading.TimeStamp = DateTime.Now;
+
+        }
+
+
+        public ClimateItem CurrentReading(AppKeyConfig AppConfig)
+        {
+            
+            getNewReading(AppConfig);
+            
             return reading;
         }
     }

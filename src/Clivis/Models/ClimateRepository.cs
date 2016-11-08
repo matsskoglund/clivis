@@ -49,7 +49,7 @@ namespace Clivis.Models
         public ClimateItem Latest(AppKeyConfig config)
         {
             NetatmoUnit unit = new NetatmoUnit();
-            ClimateItem item = unit.latestReading(config);
+            ClimateItem item = unit.CurrentReading(config);
             return item;
         }
     }
