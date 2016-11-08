@@ -41,7 +41,7 @@ namespace ClivisTests
             //Assert.Equal("[{\"key\":\"Netatmo\",\"sourceName\":\"Weatherstation\",\"outdoorTemp\":\"6\",\"indoorTemp\":\"22\"}]",responseString);
             Assert.NotNull(responseString);
         }
-        [Fact]
+  /*      [Fact]
         public async Task GetItem()
         {
             // Act
@@ -53,7 +53,7 @@ namespace ClivisTests
             // Assert
             Assert.NotNull(responseString);
             Assert.Equal("OK",response.StatusCode.ToString() );
-        }
+        }*/
 
         // We should not be able to create items
    /*     [Fact]
