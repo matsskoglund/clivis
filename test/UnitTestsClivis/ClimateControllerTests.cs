@@ -45,8 +45,9 @@ namespace ClivisTests
                 ClientId = Configuration["NetatmoClientId"],
                 ClientSecret = Configuration["NetatmoClientSecret"]
              });
-
-            _climateController = new ClimateController(repoMock.Object, options);
+            Mock<IClimateSource> nibeMock = new Mock<IClimateSource>();
+            
+            _climateController = new ClimateController(repoMock.Object, options, nibeMock.Object);
         }
          [Fact]
         public void ClimateController_NotNull()

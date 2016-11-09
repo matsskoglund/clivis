@@ -28,8 +28,7 @@ namespace Clivis.Models.Nibe
                     // If file exist read it
                     if (File.Exists("code.txt"))
                     {
-                        _code = File.ReadAllText("code.txt");
-                       
+                        _code = File.ReadAllText("code.txt");                      
                     }
                 }
                 return _code;
@@ -46,12 +45,42 @@ namespace Clivis.Models.Nibe
 
         public void init(AppKeyConfig config)
         {
-            login(config);
-            //getNewReading(config);
-            //Refresh(config);
+            // Check to see if we have a code
+            if (code == null)
+                throw new Exception("Code is null");
+                        
+            //Login  
+            var pairs = new List<KeyValuePair<string, string>>
+            {
+                    new KeyValuePair<string, string>("grant_type", "authorization_code" ),
+                    new KeyValuePair<string, string>("client_id", config.ClientId),
+                    new KeyValuePair<string, string>("client_secret", config.ClientSecret),
+                    new KeyValuePair<string, string>("code", this.code),
+                    new KeyValuePair<string, string>( "redirect_uri", config.RedirectURI),
+                    new KeyValuePair<string, string>( "scope", "READSYSTEM")
+            };
+
+            HttpClient client = new HttpClient();
+            var outcontent = new FormUrlEncodedContent(pairs);
+            Console.WriteLine(pairs.ToString());
+            HttpResponseMessage response = client.PostAsync("https://api.nibeuplink.com/oauth/token", outcontent).Result;
+            if (!response.IsSuccessStatusCode)
+            {
+                int statusCode = (int)response.StatusCode;
+                throw new Exception(statusCode + " " + response.ReasonPhrase);
+            }
+            
+
+            string contentResult = response.Content.ReadAsStringAsync().Result;
+
+            nibeAuth = JsonConvert.DeserializeObject<NibeAuth>(contentResult);
+
+            string nibeAuthJson = JsonConvert.SerializeObject(nibeAuth);
+            File.WriteAllText("nibeauth.json", nibeAuthJson);
+
         }
- 
-      
+
+
 
         private string inDoorTemperature;
         public string InDoorTemperature
@@ -74,32 +103,6 @@ namespace Clivis.Models.Nibe
             }
         }
 
-        private void login(AppKeyConfig AppConfig)
-        {                                    
-            //Login  
-            var pairs = new List<KeyValuePair<string, string>>
-            {
-                    new KeyValuePair<string, string>("grant_type", "authorization_code" ),
-                    new KeyValuePair<string, string>("client_id", AppConfig.ClientId),
-                    new KeyValuePair<string, string>("client_secret", AppConfig.ClientSecret),
-                    new KeyValuePair<string, string>("code", this.code),
-                    new KeyValuePair<string, string>( "redirect_uri", AppConfig.RedirectURI),
-                    new KeyValuePair<string, string>( "scope", "READSYSTEM")
-            };
-
-            HttpClient client = new HttpClient();
-            var outcontent = new FormUrlEncodedContent(pairs);
-            Console.WriteLine(pairs.ToString());
-            var response = client.PostAsync("https://api.nibeuplink.com/oauth/token", outcontent).Result;
-
-            string contentResult = response.Content.ReadAsStringAsync().Result;
-
-            nibeAuth = JsonConvert.DeserializeObject<NibeAuth>(contentResult);
-            
-            string nibeAuthJson = JsonConvert.SerializeObject(nibeAuth);
-            File.WriteAllText("nibeauth.json", nibeAuthJson);
-        }
-
         public void Refresh(AppKeyConfig AppConfig)
         {
             string nibeAuthJson = File.ReadAllText("nibeauth.json");
@@ -117,6 +120,11 @@ namespace Clivis.Models.Nibe
             var outcontent = new FormUrlEncodedContent(pairs);
             Console.WriteLine(pairs.ToString());
             var response = client.PostAsync("https://api.nibeuplink.com/oauth/token", outcontent).Result;
+            if (!response.IsSuccessStatusCode)
+            {
+                int statusCode = (int)response.StatusCode;
+                throw new Exception(statusCode + " " + response.ReasonPhrase);
+            }
 
             string contentResult = response.Content.ReadAsStringAsync().Result;
 
@@ -125,51 +133,47 @@ namespace Clivis.Models.Nibe
             File.WriteAllText("nibeauth.json", nibeAuthJson);
         }
 
-        public ClimateItem latestReading(AppKeyConfig AppConfigs)
+       
+        private NibeAuth getNibeAuthJson()
         {
-            return CurrentReading(AppConfigs);
+            if (File.Exists("nibeauth.json"))
+            {
+                string nibeAuthJson = File.ReadAllText("nibeauth.json");
+                nibeAuth = JsonConvert.DeserializeObject<NibeAuth>(nibeAuthJson);
+                return nibeAuth;
+            }
+            else
+                return null;
+
+            
         }
 
         ClimateItem reading = new ClimateItem();
-        private void getNewReading(AppKeyConfig AppConfig)
+        public ClimateItem CurrentReading(AppKeyConfig AppConfig)
         {
-            var pairs = new List<KeyValuePair<string, string>>
-                {
-                     new KeyValuePair<string, string>("access_token", nibeAuth.access_token ),                     
-                     new KeyValuePair<string, string>("client_id", AppConfig.ClientId),                     
-                     new KeyValuePair<string, string>( "client_secret", AppConfig.ClientSecret),
-                     new KeyValuePair<string, string>("code", this.code),                     
-                     new KeyValuePair<string, string>( "redirect_uri", AppConfig.RedirectURI),
-                     new KeyValuePair<string, string>( "scope", "READSYSTEM")
-                };
-
             HttpClient client = new HttpClient();
-            var outcontent = new FormUrlEncodedContent(pairs);
-            Console.WriteLine(pairs.ToString());
+            if (getNibeAuthJson() == null)
+                throw new Exception("Code not found");
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", nibeAuth.access_token);
             var response = client.GetAsync("https://api.nibeuplink.com/api/v1/systems/27401/parameters?parameterIds=outdoor_temperature&parameterIds=indoor_temperature").Result;
+            if (!response.IsSuccessStatusCode)
+            {
+                // If it didn't work, try to refresh the token
+                Refresh(AppConfig);
 
+                int statusCode = (int)response.StatusCode;
+                throw new Exception(statusCode + " " + response.ReasonPhrase);
+            }
             string contentResult = response.Content.ReadAsStringAsync().Result;
 
             NibeTemp nibeOutdoorTemp = JsonConvert.DeserializeObject<List<NibeTemp>>(contentResult)[0];
             NibeTemp nibeIndoorTemp = JsonConvert.DeserializeObject<List<NibeTemp>>(contentResult)[1];
-            outDoorTemperature = nibeOutdoorTemp.displayValue.Remove(nibeOutdoorTemp.displayValue.Length - 2);
-            inDoorTemperature = nibeIndoorTemp.displayValue.Remove(nibeIndoorTemp.displayValue.Length - 2);
 
-            
-            reading.IndoorValue = inDoorTemperature;
-            reading.OutdoorValue = outDoorTemperature;
+            reading.OutdoorValue = nibeOutdoorTemp.displayValue.Remove(nibeOutdoorTemp.displayValue.Length - 2);
+            reading.IndoorValue = nibeIndoorTemp.displayValue.Remove(nibeIndoorTemp.displayValue.Length - 2);
             reading.TimeStamp = DateTime.Now;
 
-        }
-
-
-        public ClimateItem CurrentReading(AppKeyConfig AppConfig)
-        {
-            
-            getNewReading(AppConfig);
-            
             return reading;
         }
     }

@@ -9,6 +9,7 @@ namespace Clivis.Models.Netatmo
 
     public class NetatmoUnit : IClimateSource
     {
+        public string code { get; set; }
         public string clientId { get; set; }
         public string secret { get; set; }
         public string userName { get; set; }

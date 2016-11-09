@@ -18,15 +18,16 @@ namespace Clivis.Controllers
     {
         public AppKeyConfig AppConfigs { get; }
 
-        private NibeUnit nibe = new NibeUnit();
+        private IClimateSource nibe;
 
         // Repository for the Climate Items
         public IClimateRepository ClimateItems { get; set; }
 
-        public ClimateController(IClimateRepository climateItems, IOptions<AppKeyConfig> configs)
+        public ClimateController(IClimateRepository climateItems, IOptions<AppKeyConfig> configs, IClimateSource nibeUnit)
         {
             AppConfigs = configs.Value;            
             ClimateItems = climateItems;
+            nibe = nibeUnit;
         }
 
         // /api/climate
@@ -51,40 +52,21 @@ namespace Clivis.Controllers
                     AppKeyConfig configs = new AppKeyConfig() {ClientId = clientId, ClientSecret=clientSecret,UserName = username, Password = password, RedirectURI = redirect_uri };
                 
                 ClimateItem item = null;
-                if (source.Equals("Nibe"))
-                {
-    //                NibeUnit nibe = new NibeUnit();
+                if (source.Equals("NibeLogin"))
                     nibe.init(configs);
-                    item = nibe.latestReading(configs);
 
+                if (source.Equals("Nibe") || source.Equals("NibeLogin"))
+                {
+                    item = nibe.CurrentReading(configs);
                 }
                 if (source.Equals("Netatmo"))
                 {
-                    //              NibeUnit nibe = new NibeUnit();
                     item = ClimateItems.Latest(configs);
-
-
-
                 }
 
                 return item;
 
-            }
-
-        /*     [HttpGet("{code}", Name = "NibeLogin")]
-            public IActionResult NibeLogin(string code, [FromQuery]string state)
-             {
-
-
-          //       NibeUnit nibe = new NibeUnit();
-                 nibe.code = code;
-
-                 nibe.init(AppConfigs);
-
-                 ClimateItem latest = nibe.latestReading(AppConfigs);
-
-                 return new ObjectResult(latest);
-             }*/
+            }     
 
         // POST api/climate
         [HttpPost]

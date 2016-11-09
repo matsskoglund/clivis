@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Clivis.Models;
+using Clivis.Models.Nibe;
 
 namespace Clivis
 {
@@ -51,7 +52,8 @@ namespace Clivis
             // Add framework services.
             services.AddMvc();
 
-            services.AddSingleton<IClimateRepository, ClimateRepository>(); 
+            services.AddSingleton<IClimateRepository, ClimateRepository>();
+            services.AddSingleton<IClimateSource, NibeUnit>();
             
         }
 
@@ -60,7 +62,10 @@ namespace Clivis
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
             app.UseMvc();
         }
     }
