@@ -31,8 +31,6 @@ namespace Clivis.Models.Netatmo
         public string outDoorTemperature {
             get
             {            
-                try
-                {
                     HttpClient client = new HttpClient();
                     string url = "http://api.netatmo.net/api/getmeasure?access_token=" + netatmoAuth.access_token + "&device_id=" + deviceId + "&module_id=" + moduleId + "&type=Temperature&limit=1&date_end=last&scale=30min";
 
@@ -45,13 +43,6 @@ namespace Clivis.Models.Netatmo
 
                     return temperature;
 
-                }
-                catch (Exception e)
-                {
-
-                }            
-
-            return null;
             }
         }
 
@@ -59,8 +50,7 @@ namespace Clivis.Models.Netatmo
         {
             get
             {
-               try
-                    {
+              
                         HttpClient client = new HttpClient();
                         string url = "http://api.netatmo.net/api/getmeasure?access_token=" + netatmoAuth.access_token + "&device_id=" + deviceId + "&type=Temperature&limit=1&date_end=last&scale=30min";                     
 
@@ -71,13 +61,8 @@ namespace Clivis.Models.Netatmo
                         string temperature = data.body[0].value[0][0]; // temperature
 
                         return temperature;
-                }
-                catch (Exception e)
-                {
-
-                }
-
-                return null;
+              
+               
             }
         }
 
@@ -107,19 +92,12 @@ namespace Clivis.Models.Netatmo
         {
             string response = "";
 
-            try
-            {
                 HttpClient client = new HttpClient();
                 string url = "http://api.netatmo.net/api/devicelist?access_token=" + netatmoAuth.access_token;
                 var resp = client.GetAsync(url).Result;
                 response = resp.Content.ReadAsStringAsync().Result;
                 
-            }
-            catch (Exception e)
-            {
-                Console.Write(netatmoAuth.access_token);
-            }
-
+          
 
             dynamic data = JsonConvert.DeserializeObject(response);
             deviceId = data.body.devices[0]._id;

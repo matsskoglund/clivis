@@ -81,7 +81,7 @@ namespace Clivis.Models.Nibe
         }
 
 
-
+        /*
         private string inDoorTemperature;
         public string InDoorTemperature
         {
@@ -101,7 +101,7 @@ namespace Clivis.Models.Nibe
                 return outDoorTemperature;
                 
             }
-        }
+        }*/
 
         public void Refresh(AppKeyConfig AppConfig)
         {

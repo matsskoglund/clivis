@@ -19,14 +19,10 @@ namespace Clivis.Controllers
         public AppKeyConfig AppConfigs { get; }
 
         private IClimateSource nibe;
-
-        // Repository for the Climate Items
-        public IClimateRepository ClimateItems { get; set; }
-
-        public ClimateController(IClimateRepository climateItems, IOptions<AppKeyConfig> configs, IClimateSource nibeUnit)
+        
+        public ClimateController(IOptions<AppKeyConfig> configs, IClimateSource nibeUnit)
         {
-            AppConfigs = configs.Value;            
-            ClimateItems = climateItems;
+            AppConfigs = configs.Value;                      
             nibe = nibeUnit;
         }
 
@@ -61,23 +57,25 @@ namespace Clivis.Controllers
                 }
                 if (source.Equals("Netatmo"))
                 {
-                    item = ClimateItems.Latest(configs);
-                }
+                    NetatmoUnit netatmo = new NetatmoUnit();
+                
+                    item = netatmo.CurrentReading(configs);
+            }
 
                 return item;
 
             }     
 
         // POST api/climate
-        [HttpPost]
+   /*     [HttpPost]
         public IActionResult Create([FromBody]ClimateItem item)
         {
             if (item == null)
             {
                 return BadRequest();
             }
-            ClimateItems.Add(item);
+            
             return CreatedAtRoute("GetClimate", new { timeStamp = item.TimeStamp }, item);
-        }
+        }*/
     }
 }
