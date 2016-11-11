@@ -11,6 +11,8 @@ namespace Clivis.Models.Nibe
 
     public class NibeUnit : IClimateSource
     {
+        private NibeAuth nibeAuth = new NibeAuth();
+
         public string clientId { get; set; }
         public string secret { get; set; }
         public string userName { get; set; }
@@ -18,6 +20,7 @@ namespace Clivis.Models.Nibe
 
         private string systemId { get; set; }
         public string CodeFilePath { get; set; }
+        public string redirect_uri { get; set; }
 
         private string _code = null;
         public string code {
@@ -41,15 +44,18 @@ namespace Clivis.Models.Nibe
                     return;
 
                 string code = value;
-                FileInfo fi = new FileInfo(CodeFilePath);
-                if (CodeFilePath == null)
+                try
+                {
+                    FileInfo fi = new FileInfo(CodeFilePath);
+                }
+                catch (ArgumentNullException)
+                {
                     throw new InvalidOperationException("The code file is nor set");
+                }
                 File.WriteAllText(CodeFilePath, code);
             }         
         }
 
-        public string redirect_uri { get; set; }
-        private NibeAuth nibeAuth = new NibeAuth();
 
         public NibeUnit()
         {

@@ -42,6 +42,66 @@ namespace UnitTestsClivis
             Assert.False(File.Exists(codeFilePath), "The code file could not be deleted " + new FileInfo(codeFilePath).FullName);
 
         }
+        [Fact]
+        public void NibeUnit_code_setter_CodeIsNullAndNotWrittenToFile()
+        {
+            if (File.Exists(codeFilePath))
+                File.Delete(codeFilePath);
+
+            Assert.False(File.Exists(codeFilePath), "The code file could not be deleted");
+
+            // Set code to null
+            nibeUnit.code = null;
+
+            // No file should have been created
+            Assert.False(File.Exists(codeFilePath));
+            
+            // Assert that the variable is null
+            Assert.Equal(null, nibeUnit.code);
+        }
+
+        [Fact]
+        public void NibeUnit_code_setter_code_Is_Not_Null_And_CodeFilePath_is_null_throws_exception()
+        {
+            string saveCodePath = nibeUnit.CodeFilePath;
+
+
+            nibeUnit.CodeFilePath = null;
+
+            // Throws Exception
+            Exception ex = Assert.Throws<InvalidOperationException>(() => nibeUnit.code = "newcode");
+
+            Assert.Equal("The code file is nor set", ex.Message);
+            // Restore
+            nibeUnit.CodeFilePath = saveCodePath;
+        }
+
+
+        [Fact]
+        public void NibeUnit_code_getter_CodeIsNull_Returned()
+        {
+            NibeUnit unit = new NibeUnit();
+
+        // Assert that the variable is null
+        Assert.Equal(null, unit.code);
+        }
+
+        [Fact]
+        public void NibeUnit_code_getter_CodeIsNotNullAndFileExist_Code_From_File_Returned()
+        {
+            // Create a file with unique content
+            DateTime codestamp = DateTime.Now;
+            File.WriteAllText(codeFilePath, codestamp.ToString());
+
+            // Read code
+            string readCode = nibeUnit.code;
+
+            
+            // Assert that the code is correct
+            Assert.Equal(codestamp.ToString(), nibeUnit.code);
+        }
+
+
 
     }
 }
