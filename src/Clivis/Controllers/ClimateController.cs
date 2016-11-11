@@ -32,7 +32,8 @@ namespace Clivis.Controllers
         [HttpGet]
         public IActionResult GetClimate([FromQuery] string code, [FromQuery] string state)
         {
-             nibe.code = code;            
+            nibe.CodeFilePath = "code.txt";
+            nibe.code = code;            
             return new EmptyResult();
         }
         

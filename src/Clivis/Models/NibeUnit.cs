@@ -17,6 +17,7 @@ namespace Clivis.Models.Nibe
         public string passWord { get; set; }
 
         private string systemId { get; set; }
+        public string CodeFilePath { get; set; }
 
         private string _code = null;
         public string code {
@@ -26,22 +27,34 @@ namespace Clivis.Models.Nibe
                 if(_code == null)
                 {
                     // If file exist read it
-                    if (File.Exists("code.txt"))
+                    if (File.Exists(CodeFilePath))
                     {
-                        _code = File.ReadAllText("code.txt");                      
+                        _code = File.ReadAllText(CodeFilePath);                      
                     }
                 }
+                // Null is returned if the file does not exist
                 return _code;
             }
             set
             {
+                if (value == null)
+                    return;
+
                 string code = value;
-                File.WriteAllText("code.txt", code);
-            }
+                FileInfo fi = new FileInfo(CodeFilePath);
+                if (CodeFilePath == null)
+                    throw new InvalidOperationException("The code file is nor set");
+                File.WriteAllText(CodeFilePath, code);
+            }         
         }
 
         public string redirect_uri { get; set; }
         private NibeAuth nibeAuth = new NibeAuth();
+
+        public NibeUnit()
+        {
+            
+        }
 
         public void init(AppKeyConfig config)
         {
@@ -80,27 +93,7 @@ namespace Clivis.Models.Nibe
         }
 
 
-        /*
-        private string inDoorTemperature;
-        public string InDoorTemperature
-        {
-            get
-            {
-                return inDoorTemperature;
-
-            }
-
-        }
-
-        private string outDoorTemperature;
-        public string OutDoorTemperature
-        {
-            get
-            {
-                return outDoorTemperature;
-                
-            }
-        }*/
+      
 
         public void Refresh(AppKeyConfig AppConfig)
         {
@@ -148,6 +141,8 @@ namespace Clivis.Models.Nibe
         }
 
         ClimateItem reading = new ClimateItem();
+        
+
         public ClimateItem CurrentReading(AppKeyConfig AppConfig)
         {
             HttpClient client = new HttpClient();

@@ -18,6 +18,7 @@ namespace Clivis.Models.Netatmo
         private string deviceId { get; set; }
 
         private string moduleId { get; set; }
+        public string CodeFilePath { get; set;  }
 
 
         private NetatmoAuth netatmoAuth = new NetatmoAuth();
