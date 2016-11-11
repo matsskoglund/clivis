@@ -19,28 +19,26 @@ namespace Clivis.Controllers
         public AppKeyConfig AppConfigs { get; }
 
         private IClimateSource nibe;
-        
-        public ClimateController(IOptions<AppKeyConfig> configs, IClimateSource nibeUnit)
+        private IClimateSource netatmo;
+
+        public ClimateController(IOptions<AppKeyConfig> configs, IClimateSource nibeUnit, IClimateSource netatmoUnit)
         {
             AppConfigs = configs.Value;                      
             nibe = nibeUnit;
+            netatmo = netatmoUnit;
         }
 
         // /api/climate
         [HttpGet]
-        public ClimateItem GetClimate([FromQuery] string code, [FromQuery] string state)
+        public IActionResult GetClimate([FromQuery] string code, [FromQuery] string state)
         {
-            nibe.code = code;
-            
-            ClimateItem item = new ClimateItem() { IndoorValue = null, OutdoorValue = null, TimeStamp = DateTime.Now };
-
-
-            return item;
+             nibe.code = code;            
+            return new EmptyResult();
         }
         
 
-        // /api/Netatmo
-        // /api/Nibe
+            // /api/Netatmo
+            // /api/Nibe
             [HttpGet("{source}")]
             public ClimateItem GetById(string source, string clientId, string clientSecret, string redirect_uri, string username, string password)
             
@@ -56,26 +54,12 @@ namespace Clivis.Controllers
                     item = nibe.CurrentReading(configs);
                 }
                 if (source.Equals("Netatmo"))
-                {
-                    NetatmoUnit netatmo = new NetatmoUnit();
-                
+                {                                    
                     item = netatmo.CurrentReading(configs);
             }
 
                 return item;
 
             }     
-
-        // POST api/climate
-   /*     [HttpPost]
-        public IActionResult Create([FromBody]ClimateItem item)
-        {
-            if (item == null)
-            {
-                return BadRequest();
-            }
-            
-            return CreatedAtRoute("GetClimate", new { timeStamp = item.TimeStamp }, item);
-        }*/
     }
 }

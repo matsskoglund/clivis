@@ -16,6 +16,9 @@ namespace ClivisTests
     // https://xunit.github.io/docs/getting-started-dotnet-core.html
     public class ClimateControllerTests
     {
+        Mock<IClimateSource> nibeMock = new Mock<IClimateSource>();
+        Mock<IClimateSource> netatmoMock = new Mock<IClimateSource>();
+
         public IConfigurationRoot Configuration { get; }
         private readonly ClimateController _climateController;
         public ClimateControllerTests()
@@ -30,11 +33,11 @@ namespace ClivisTests
                 Password = Configuration["NetatmoPassword"],
                 ClientId = Configuration["NetatmoClientId"],
                 ClientSecret = Configuration["NetatmoClientSecret"]
-             });
-            Mock<IClimateSource> nibeMock = new Mock<IClimateSource>();
-            
-            _climateController = new ClimateController(options, nibeMock.Object);
+             });                                
+
+            _climateController = new ClimateController(options, nibeMock.Object, netatmoMock.Object);
         }
+
          [Fact]
         public void ClimateController_NotNull()
         {
@@ -42,23 +45,55 @@ namespace ClivisTests
         }
 
         [Fact]
-        public void ClimateController_Index()
+        public void ClimateController_GetClimateSetsCodeAndReturnNotNull()
         {
-            ClimateItem res = _climateController.GetClimate("code","state");
+            IActionResult res = _climateController.GetClimate("code","state");
+            nibeMock.VerifySet(foo => foo.code = "code");
+
             Assert.NotNull(res);
+            Assert.IsType<EmptyResult>(res);
         }
-    
 
-        [Theory]
-        [InlineData("Nyckel")]
-        public void ClimateController_GetId_For_Non_Existing_Id_Returns_Null(string key)
+        [Fact]
+        public void ClimateController_GetById_WithNibe_As_Source_Calls_CurrentReading_WithConfigs()
         {
+            ClimateItem item = new ClimateItem();
+            nibeMock.Setup<ClimateItem>(x => x.CurrentReading(It.IsAny<AppKeyConfig>())).Returns(item);
             
-            //ObjectResult res = (ObjectResult)_climateController.GetById(key);
 
-            //Assert.Null(res.StatusCode);
+            ClimateItem res = _climateController.GetById("Nibe", "clientid", "clientSecret", "redirect_uri", "username", "password");
+            nibeMock.Verify(x => x.CurrentReading(It.IsAny<AppKeyConfig>()), Times.AtLeastOnce());
+            Assert.Equal(item, res);
         }
 
+        [Fact]
+        public void ClimateController_GetById_WithNibeLogin_As_Source_Calls_init_WithConfigs()
+        {
+            ClimateItem item = new ClimateItem();
+            nibeMock.Setup(x => x.init(It.IsAny<AppKeyConfig>()));
 
+
+            ClimateItem res = _climateController.GetById("NibeLogin", "clientid", "clientSecret", "redirect_uri", "username", "password");
+            nibeMock.Verify(x => x.init(It.IsAny<AppKeyConfig>()), Times.AtLeastOnce());            
+        }
+
+        [Fact]
+        public void ClimateController_GetById_With_Netatmo_As_Source_Calls_CurrentReading_WithConfigs()
+        {
+            ClimateItem item = new ClimateItem();
+            netatmoMock.Setup<ClimateItem>(x => x.CurrentReading(It.IsAny<AppKeyConfig>())).Returns(item);
+
+
+            ClimateItem res = _climateController.GetById("Netatmo", "clientid", "clientSecret", "redirect_uri", "username", "password");
+            netatmoMock.Verify(x => x.CurrentReading(It.IsAny<AppKeyConfig>()), Times.AtLeastOnce());
+            Assert.Equal(item, res);
+        }
+
+        [Fact]
+        public void ClimateController_GetById_With_Wrong_SourceName_Returns_null()
+        {           
+            ClimateItem res = _climateController.GetById("Nonexisting", "clientid", "clientSecret", "redirect_uri", "username", "password");            
+            Assert.Null(res);
+        }
     }
 }

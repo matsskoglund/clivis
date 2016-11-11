@@ -77,7 +77,6 @@ namespace Clivis.Models.Nibe
 
             string nibeAuthJson = JsonConvert.SerializeObject(nibeAuth);
             File.WriteAllText("nibeauth.json", nibeAuthJson);
-
         }
 
 
