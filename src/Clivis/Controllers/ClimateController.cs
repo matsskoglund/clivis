@@ -38,29 +38,26 @@ namespace Clivis.Controllers
         }
         
 
-            // /api/Netatmo
-            // /api/Nibe
-            [HttpGet("{source}")]
-            public ClimateItem GetById(string source, string clientId, string clientSecret, string redirect_uri, string username, string password)
-            
-            {
-                    AppKeyConfig configs = new AppKeyConfig() {ClientId = clientId, ClientSecret=clientSecret,UserName = username, Password = password, RedirectURI = redirect_uri };
+        // /api/Netatmo
+        // /api/Nibe
+        [HttpGet("{source}")]
+        public ClimateItem GetById(string source, string clientId, string clientSecret, string redirect_uri, string username, string password)            
+        {
+            AppKeyConfig configs = new AppKeyConfig() {ClientId = clientId, ClientSecret=clientSecret,UserName = username, Password = password, RedirectURI = redirect_uri };
                 
-                ClimateItem item = null;
-                if (source.Equals("NibeLogin"))
-                    nibe.init(configs);
-
-                if (source.Equals("Nibe") || source.Equals("NibeLogin"))
-                {
-                    item = nibe.CurrentReading(configs);
-                }
-                if (source.Equals("Netatmo"))
-                {                                    
-                    item = netatmo.CurrentReading(configs);
+            ClimateItem item = null;
+            if (source.Equals("NibeLogin"))
+                nibe.init(configs);
+            if (source.Equals("Nibe") || source.Equals("NibeLogin"))
+            {
+                item = nibe.CurrentReading(configs);
+            }
+            if (source.Equals("Netatmo"))
+            {                                    
+                item = netatmo.CurrentReading(configs);
             }
 
-                return item;
-
-            }     
+            return item;
+        }     
     }
 }

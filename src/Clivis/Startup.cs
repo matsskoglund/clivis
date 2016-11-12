@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Clivis.Models;
 using Clivis.Models.Nibe;
+using Clivis.Models.Netatmo;
 
 namespace Clivis
 {
@@ -51,10 +52,10 @@ namespace Clivis
 
             // Add framework services.
             services.AddMvc();
-
-            services.AddSingleton<IClimateRepository, ClimateRepository>();
-            services.AddSingleton<IClimateSource, NibeUnit>();
             
+            services.AddSingleton<IClimateSource, NibeUnit>();
+            services.AddSingleton<IClimateSource, NetatmoUnit>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
