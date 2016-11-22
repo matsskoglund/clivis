@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using System.Collections.Concurrent;
 
 namespace Clivis.Controllers
 {
@@ -18,14 +19,15 @@ namespace Clivis.Controllers
     {
         public AppKeyConfig AppConfigs { get; }
 
-        private IClimateSource nibe;
-        private IClimateSource netatmo;
+        public IClimateSource nibe { get; }
+        public IClimateSource netatmo { get; }
 
-        public ClimateController(IOptions<AppKeyConfig> configs, IClimateSource nibeUnit, IClimateSource netatmoUnit)
+        public ClimateController(IOptions<AppKeyConfig> configs, IDictionary<string, IClimateSource> climateSources)
         {
+
             AppConfigs = configs.Value;                      
-            nibe = nibeUnit;
-            netatmo = netatmoUnit;
+            nibe = climateSources["Nibe"];
+            netatmo = climateSources["Netatmo"];
         }
 
         // /api/climate
@@ -36,8 +38,14 @@ namespace Clivis.Controllers
             nibe.code = code;            
             return new EmptyResult();
         }
-        
 
+        // /api/climate/{source}/start
+   /*     [HttpGet("{source}")]
+        public IActionResult Index(string source)
+        {
+            return new EmptyResult();
+        }
+        */
         // /api/Netatmo
         // /api/Nibe
         [HttpGet("{source}")]

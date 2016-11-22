@@ -7,6 +7,9 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using System;
+using Clivis.Models.Netatmo;
+using Clivis.Models.Nibe;
+using System.Collections.Concurrent;
 
 namespace ClivisTests
 {
@@ -33,15 +36,41 @@ namespace ClivisTests
                 Password = Configuration["NetatmoPassword"],
                 ClientId = Configuration["NetatmoClientId"],
                 ClientSecret = Configuration["NetatmoClientSecret"]
-             });                                
-
-            _climateController = new ClimateController(options, nibeMock.Object, netatmoMock.Object);
+             });
+            ConcurrentDictionary<string, IClimateSource> sources = new ConcurrentDictionary<string, IClimateSource>();
+            sources["Nibe"] = nibeMock.Object;
+            sources["Netatmo"] = netatmoMock.Object;
+            _climateController = new ClimateController(options, sources);
         }
 
          [Fact]
         public void ClimateController_NotNull()
         {
             Assert.NotNull(_climateController);
+        }
+
+        [Fact]
+        public void ClimateController_IClimateSources_are_of_correct_type()
+        {
+            ConfigurationBuilder builder = new ConfigurationBuilder();
+            builder.AddUserSecrets();
+
+            IConfigurationRoot Configuration = builder.Build();
+            IOptions<AppKeyConfig> options = Options.Create(new AppKeyConfig()
+            {
+                UserName = Configuration["NetatmoUserName"],
+                Password = Configuration["NetatmoPassword"],
+                ClientId = Configuration["NetatmoClientId"],
+                ClientSecret = Configuration["NetatmoClientSecret"]
+            });
+
+            ConcurrentDictionary<string, IClimateSource> sources = new ConcurrentDictionary<string, IClimateSource>();
+            sources["Nibe"] = new NibeUnit();
+            sources["Netatmo"] = new NetatmoUnit();
+            ClimateController climateController = new ClimateController(options, sources);
+
+            Assert.IsType<NetatmoUnit>(climateController.netatmo);
+            Assert.IsType<NibeUnit>(climateController.nibe);
         }
 
         [Fact]
