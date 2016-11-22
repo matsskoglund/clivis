@@ -65,7 +65,6 @@ namespace UnitTestsClivis
         {
             string saveCodePath = nibeUnit.CodeFilePath;
 
-
             nibeUnit.CodeFilePath = null;
 
             // Throws Exception

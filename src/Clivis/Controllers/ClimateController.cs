@@ -34,8 +34,11 @@ namespace Clivis.Controllers
         [HttpGet]
         public IActionResult GetClimate([FromQuery] string code, [FromQuery] string state)
         {
-            nibe.CodeFilePath = "code.txt";
-            nibe.code = code;            
+            if (code != null)
+            {
+                nibe.CodeFilePath = "code.txt";
+                nibe.code = code;
+            }          
             return new EmptyResult();
         }
 
@@ -58,14 +61,45 @@ namespace Clivis.Controllers
                 nibe.init(configs);
             if (source.Equals("Nibe") || source.Equals("NibeLogin"))
             {
-                item = nibe.CurrentReading(configs);
+                try
+                {
+                    item = nibe.CurrentReading(configs);
+                }
+                catch (Exception)
+                {
+                    return new ClimateItem() { IndoorValue = null, OutdoorValue = null, TimeStamp = DateTime.Now };
+                }
             }
             if (source.Equals("Netatmo"))
             {                                    
                 item = netatmo.CurrentReading(configs);
             }
+            if(source.Equals("Reading"))
+            {
+                ClimateItem netatmoItem = netatmo.CurrentReading(configs);
+                ClimateItem nibeItem = null;
+                try
+                {
+                    nibeItem = nibe.CurrentReading(configs);
+                }catch(Exception)
+                {
+                    nibeItem = null;
+                }
+
+                item = ClimateItem.ClimateMeanValues(netatmoItem, nibeItem);
+
+            }
 
             return item;
-        }     
+        }
+
+
+        [HttpGet("[controller]/[action]")] // Matches '/Climate/Latest'
+        public IActionResult Latest()
+        {
+            return new EmptyResult();
+        }
+
+
     }
 }
