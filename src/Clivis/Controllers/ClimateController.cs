@@ -42,15 +42,9 @@ namespace Clivis.Controllers
             return new EmptyResult();
         }
 
-        // /api/climate/{source}/start
-   /*     [HttpGet("{source}")]
-        public IActionResult Index(string source)
-        {
-            return new EmptyResult();
-        }
-        */
-        // /api/Netatmo
-        // /api/Nibe
+ 
+        // /api/climate/Netatmo
+        // /api/climate/Nibe
         [HttpGet("{source}")]
         public ClimateItem GetById(string source, string clientId, string clientSecret, string redirect_uri, string username, string password)            
         {
