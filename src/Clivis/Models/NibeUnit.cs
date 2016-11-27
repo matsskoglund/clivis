@@ -72,16 +72,16 @@ namespace Clivis.Models.Nibe
             var pairs = new List<KeyValuePair<string, string>>
             {
                     new KeyValuePair<string, string>("grant_type", "authorization_code" ),
-                    new KeyValuePair<string, string>("client_id", config.ClientId),
-                    new KeyValuePair<string, string>("client_secret", config.ClientSecret),
+                    new KeyValuePair<string, string>("client_id", config.NibeClientId),
+                    new KeyValuePair<string, string>("client_secret", config.NibeClientSecret),
                     new KeyValuePair<string, string>("code", this.code),
-                    new KeyValuePair<string, string>( "redirect_uri", config.RedirectURI),
+                    new KeyValuePair<string, string>( "redirect_uri", config.NibeRedirectURI),
                     new KeyValuePair<string, string>( "scope", "READSYSTEM")
             };
 
             HttpClient client = new HttpClient();
             var outcontent = new FormUrlEncodedContent(pairs);
-            Console.WriteLine(pairs.ToString());
+            
             HttpResponseMessage response = client.PostAsync("https://api.nibeuplink.com/oauth/token", outcontent).Result;
             if (!response.IsSuccessStatusCode)
             {
@@ -99,9 +99,8 @@ namespace Clivis.Models.Nibe
         }
 
 
-      
-
-        public void Refresh(AppKeyConfig AppConfig)
+   
+        public NibeAuth Refresh(AppKeyConfig AppConfig)
         {
             string nibeAuthJson = File.ReadAllText("nibeauth.json");
             nibeAuth = JsonConvert.DeserializeObject<NibeAuth>(nibeAuthJson);
@@ -110,25 +109,31 @@ namespace Clivis.Models.Nibe
             var pairs = new List<KeyValuePair<string, string>>
             {
                     new KeyValuePair<string, string>("grant_type", "refresh_token" ),
-                    new KeyValuePair<string, string>("client_id", AppConfig.ClientId),
-                    new KeyValuePair<string, string>( "client_secret", AppConfig.ClientSecret),
+                    new KeyValuePair<string, string>("client_id", AppConfig.NibeClientId),
+                    new KeyValuePair<string, string>( "client_secret", AppConfig.NibeClientSecret),
                     new KeyValuePair<string, string>("refresh_token", nibeAuth.refresh_token)
             };
             HttpClient client = new HttpClient();
             var outcontent = new FormUrlEncodedContent(pairs);
-            Console.WriteLine(pairs.ToString());
+
             var response = client.PostAsync("https://api.nibeuplink.com/oauth/token", outcontent).Result;
+
+            // If we could not refresh
             if (!response.IsSuccessStatusCode)
             {
                 int statusCode = (int)response.StatusCode;
-                throw new Exception(statusCode + " " + response.ReasonPhrase);
+                return null;
             }
 
+            // Replace the access and refresh token in the file with the new values
             string contentResult = response.Content.ReadAsStringAsync().Result;
 
             nibeAuth = JsonConvert.DeserializeObject<NibeAuth>(contentResult);
             nibeAuthJson = JsonConvert.SerializeObject(nibeAuth);
             File.WriteAllText("nibeauth.json", nibeAuthJson);
+
+            // Success, a new access and refresh token is in the file
+            return nibeAuth;
         }
 
        
@@ -141,29 +146,19 @@ namespace Clivis.Models.Nibe
                 return nibeAuth;
             }
             else
-                return null;
-
-            
+                return null;            
         }
 
-        ClimateItem reading = new ClimateItem();
-        
-
-        public ClimateItem CurrentReading(AppKeyConfig AppConfig)
+        public ClimateItem GetReadingWithAccessCode(string accessCode)
         {
             HttpClient client = new HttpClient();
-            if (getNibeAuthJson() == null)
-                throw new Exception("Code not found");
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", nibeAuth.access_token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessCode);
             var response = client.GetAsync("https://api.nibeuplink.com/api/v1/systems/27401/parameters?parameterIds=outdoor_temperature&parameterIds=indoor_temperature").Result;
             if (!response.IsSuccessStatusCode)
             {
-                // If it didn't work, try to refresh the token
-                Refresh(AppConfig);
-
-                int statusCode = (int)response.StatusCode;
-                throw new Exception(statusCode + " " + response.ReasonPhrase);
+                // If it didn't work, return null
+                return null;
             }
             string contentResult = response.Content.ReadAsStringAsync().Result;
 
@@ -175,6 +170,37 @@ namespace Clivis.Models.Nibe
             reading.TimeStamp = DateTime.Now;
 
             return reading;
+        }
+
+        ClimateItem reading = new ClimateItem();
+  
+        public ClimateItem CurrentReading(AppKeyConfig AppConfig)
+        {
+            ClimateItem item = null;
+
+            // Get the access and refresh tokens if they exist, if they don't exist we cannot proceceed and return null 
+            NibeAuth auth = getNibeAuthJson();
+
+            if (auth == null)
+                return null;
+
+            // Access and refresh token exist,  try to access using the access token
+            item = GetReadingWithAccessCode(auth.access_token);
+
+            // If we get null back, it didn't work and we try to refresh with the refresh token
+            if (item == null)
+
+                // If it didn't work to get a new access token we bail out and return null
+                auth = Refresh(AppConfig);
+            if (auth == null)
+                return null;
+
+            // It worked to get a new access token, try agin to get data using the new access token
+            item = GetReadingWithAccessCode(auth.access_token);
+
+            // If get an item back we return it, it we get null back we can't still access data and return null        
+            return item;
+
         }
     }
 }

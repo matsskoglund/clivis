@@ -73,8 +73,8 @@ namespace Clivis.Models.Netatmo
             var pairs = new List<KeyValuePair<string, string>>
             {
                     new KeyValuePair<string, string>("grant_type", "password" ),
-                    new KeyValuePair<string, string>("client_id", AppConfigs.ClientId),
-                    new KeyValuePair<string, string>( "client_secret", AppConfigs.ClientSecret),
+                    new KeyValuePair<string, string>("client_id", AppConfigs.NetatmoClientId),
+                    new KeyValuePair<string, string>( "client_secret", AppConfigs.NetatmoClientSecret),
                     new KeyValuePair<string, string>("username", AppConfigs.UserName),
                     new KeyValuePair<string, string>( "password", AppConfigs.Password),
                     new KeyValuePair<string, string>( "scope", "read_station")
@@ -101,8 +101,14 @@ namespace Clivis.Models.Netatmo
           
 
             dynamic data = JsonConvert.DeserializeObject(response);
-            deviceId = data.body.devices[0]._id;
-            moduleId = data.body.modules[0]._id;
+            try
+            {
+                deviceId = data.body.devices[0]._id;
+                moduleId = data.body.modules[0]._id;
+            }catch(Exception)
+            {
+
+            }
         }
 
         public ClimateItem CurrentReading(AppKeyConfig AppConfigs)
