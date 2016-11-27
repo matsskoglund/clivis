@@ -10,6 +10,7 @@ using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using System.Collections.Concurrent;
+using Microsoft.AspNetCore.Http;
 
 namespace Clivis.Controllers
 {
@@ -34,72 +35,48 @@ namespace Clivis.Controllers
         [HttpGet]
         public IActionResult GetClimate([FromQuery] string code, [FromQuery] string state)
         {
+            HostString host = new HostString("localhost", 5050);
+            if (Request != null)
+                host = Request.Host;
             if (code != null)
             {
                 nibe.CodeFilePath = "code.txt";
                 nibe.code = code;
-            }          
-            return new EmptyResult();
+                nibe.init(AppConfigs);                               
+            }
+            return Redirect("http://" + host + "/api/climate/Nibe");
         }
 
-        // /api/climate/{source}/start
-   /*     [HttpGet("{source}")]
-        public IActionResult Index(string source)
-        {
-            return new EmptyResult();
-        }
-        */
-        // /api/Netatmo
-        // /api/Nibe
+ 
+        // /api/climate/Netatmo
+        // /api/climate/Nibe
         [HttpGet("{source}")]
-        public ClimateItem GetById(string source, string clientId, string clientSecret, string redirect_uri, string username, string password)            
+        public IActionResult GetById(string source)            
         {
-            AppKeyConfig configs = new AppKeyConfig() {ClientId = clientId, ClientSecret=clientSecret,UserName = username, Password = password, RedirectURI = redirect_uri };
-                
             ClimateItem item = null;
-            if (source.Equals("NibeLogin"))
-                nibe.init(configs);
-            if (source.Equals("Nibe") || source.Equals("NibeLogin"))
+            if (source.Equals("Nibe"))
             {
-                try
-                {
-                    item = nibe.CurrentReading(configs);
-                }
-                catch (Exception)
-                {
-                    return new ClimateItem() { IndoorValue = null, OutdoorValue = null, TimeStamp = DateTime.Now };
-                }
+                // Read data from Nibe, if reading works we get data, if not we get null and try to do a login
+                item = nibe.CurrentReading(AppConfigs);
+                if (item == null)                    
+                    return Redirect("https://api.nibeuplink.com/oauth/authorize?response_type=code&client_id=" + AppConfigs.NibeClientId + "&scope=READSYSTEM&redirect_uri=" + AppConfigs.NibeRedirectURI + "&state=12345");
             }
+              
             if (source.Equals("Netatmo"))
             {                                    
-                item = netatmo.CurrentReading(configs);
+               item = netatmo.CurrentReading(AppConfigs);
             }
-            if(source.Equals("Reading"))
+            if (source.Equals("Reading"))
             {
-                ClimateItem netatmoItem = netatmo.CurrentReading(configs);
+                ClimateItem netatmoItem = netatmo.CurrentReading(AppConfigs);
                 ClimateItem nibeItem = null;
-                try
-                {
-                    nibeItem = nibe.CurrentReading(configs);
-                }catch(Exception)
-                {
-                    nibeItem = null;
-                }
+                nibeItem = nibe.CurrentReading(AppConfigs);
+                if (nibeItem == null)
+                    return Redirect("https://api.nibeuplink.com/oauth/authorize?response_type=code&client_id=" + AppConfigs.NibeClientId + "&scope=READSYSTEM&redirect_uri=" + AppConfigs.NibeRedirectURI + "&state=12345");
 
                 item = ClimateItem.ClimateMeanValues(netatmoItem, nibeItem);
-
             }
-
-            return item;
+            return Json(item);            
         }
-
-
-        [HttpGet("[controller]/[action]")] // Matches '/Climate/Latest'
-        public IActionResult Latest()
-        {
-            return new EmptyResult();
-        }
-
-
     }
 }
