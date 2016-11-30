@@ -10,6 +10,7 @@ using System;
 using Clivis.Models.Netatmo;
 using Clivis.Models.Nibe;
 using System.Collections.Concurrent;
+using Newtonsoft.Json;
 
 namespace ClivisTests
 {
@@ -34,8 +35,8 @@ namespace ClivisTests
             {    
                 UserName = Configuration["NetatmoUserName"],
                 Password = Configuration["NetatmoPassword"],
-                ClientId = Configuration["NetatmoClientId"],
-                ClientSecret = Configuration["NetatmoClientSecret"]
+                NetatmoClientId = Configuration["NetatmoClientId"],
+                NetatmoClientSecret = Configuration["NetatmoClientSecret"]
              });
             ConcurrentDictionary<string, IClimateSource> sources = new ConcurrentDictionary<string, IClimateSource>();
             sources["Nibe"] = nibeMock.Object;
@@ -60,8 +61,8 @@ namespace ClivisTests
             {
                 UserName = Configuration["NetatmoUserName"],
                 Password = Configuration["NetatmoPassword"],
-                ClientId = Configuration["NetatmoClientId"],
-                ClientSecret = Configuration["NetatmoClientSecret"]
+                NetatmoClientId = Configuration["NetatmoClientId"],
+                NetatmoClientSecret = Configuration["NetatmoClientSecret"]
             });
 
             ConcurrentDictionary<string, IClimateSource> sources = new ConcurrentDictionary<string, IClimateSource>();
@@ -76,11 +77,13 @@ namespace ClivisTests
         [Fact]
         public void ClimateController_GetClimateSetsCodeAndReturnNotNull()
         {
+            
+
             IActionResult res = _climateController.GetClimate("code","state");
             nibeMock.VerifySet(foo => foo.code = "code");
 
             Assert.NotNull(res);
-            Assert.IsType<EmptyResult>(res);
+            Assert.IsType<RedirectResult>(res);
         }
 
         [Fact]
@@ -90,21 +93,12 @@ namespace ClivisTests
             nibeMock.Setup<ClimateItem>(x => x.CurrentReading(It.IsAny<AppKeyConfig>())).Returns(item);
             
 
-            ClimateItem res = _climateController.GetById("Nibe", "clientid", "clientSecret", "redirect_uri", "username", "password");
+            IActionResult res = _climateController.GetById("Nibe");
             nibeMock.Verify(x => x.CurrentReading(It.IsAny<AppKeyConfig>()), Times.AtLeastOnce());
-            Assert.Equal(item, res);
+            
         }
 
-        [Fact]
-        public void ClimateController_GetById_WithNibeLogin_As_Source_Calls_init_WithConfigs()
-        {
-            ClimateItem item = new ClimateItem();
-            nibeMock.Setup(x => x.init(It.IsAny<AppKeyConfig>()));
-
-
-            ClimateItem res = _climateController.GetById("NibeLogin", "clientid", "clientSecret", "redirect_uri", "username", "password");
-            nibeMock.Verify(x => x.init(It.IsAny<AppKeyConfig>()), Times.AtLeastOnce());            
-        }
+    
 
         [Fact]
         public void ClimateController_GetById_With_Netatmo_As_Source_Calls_CurrentReading_WithConfigs()
@@ -113,16 +107,15 @@ namespace ClivisTests
             netatmoMock.Setup<ClimateItem>(x => x.CurrentReading(It.IsAny<AppKeyConfig>())).Returns(item);
 
 
-            ClimateItem res = _climateController.GetById("Netatmo", "clientid", "clientSecret", "redirect_uri", "username", "password");
+            IActionResult res = _climateController.GetById("Netatmo");
             netatmoMock.Verify(x => x.CurrentReading(It.IsAny<AppKeyConfig>()), Times.AtLeastOnce());
-            Assert.Equal(item, res);
         }
 
         [Fact]
         public void ClimateController_GetById_With_Wrong_SourceName_Returns_null()
         {           
-            ClimateItem res = _climateController.GetById("Nonexisting", "clientid", "clientSecret", "redirect_uri", "username", "password");            
-            Assert.Null(res);
+            IActionResult res = _climateController.GetById("Nonexisting");            
+            Assert.NotNull(res);
         }
     }
 }
