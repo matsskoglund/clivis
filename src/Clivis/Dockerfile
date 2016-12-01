@@ -1,4 +1,4 @@
-FROM microsoft/1.0.1-sdk-projectjson
+FROM microsoft/dotnet:1.0.1-sdk-projectjson
 WORKDIR /app
 ENV ASPNETCORE_URLS http://*:5050
 EXPOSE 5050
