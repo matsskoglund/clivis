@@ -22,10 +22,11 @@ namespace Clivis
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile("secrets.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
                 try
                 {
-                 builder.AddUserSecrets();                    
+                // builder.AddUserSecrets();                    
                 }
                 catch (System.Exception)
                 {
