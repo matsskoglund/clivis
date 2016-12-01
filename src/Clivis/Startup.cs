@@ -24,14 +24,9 @@ namespace Clivis
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddJsonFile("secrets.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
-                try
-                {
-                // builder.AddUserSecrets();                    
-                }
-                catch (System.Exception)
-                {
-                    // This need to be fixed
-                    
+
+            if (env.IsDevelopment()) { 
+                     builder.AddUserSecrets();                    
                 }
                
                 Configuration = builder.Build();
