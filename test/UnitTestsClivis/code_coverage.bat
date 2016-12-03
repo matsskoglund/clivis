@@ -19,4 +19,4 @@ REM Generate the report
 %reportgenerator% -targetdir:%coveragedir% -reporttypes:Html;Badges -reports:%coveragefile% -verbosity:Verbose
 
 REM Open the report  
-start "report" "%coveragedir%\index.htm"  
+REM start "report" "%coveragedir%\index.htm"  
