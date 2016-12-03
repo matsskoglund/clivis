@@ -36,8 +36,7 @@
   },
   "buildOptions": {
     "emitEntryPoint": true,
-    "preserveCompilationContext": true,
-    "debugType": "portable"
+    "preserveCompilationContext": true
   },
   "runtimeOptions": {
     "configProperties": {

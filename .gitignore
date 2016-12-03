@@ -236,3 +236,5 @@ _Pvt_Extensions
 # Code files with auth data
 src/Clivis/nibeauth.json
 src/Clivis/code.txt
+/test/UnitTestsClivis/Cobertura.xml
+/test/UnitTestsClivis/Coverage.xml

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Clivis.Models.Nibe;
 using System.IO;
 
-namespace UnitTestsClivis
+namespace ClivisTests
 {
     public class NibeUnitTests
     {
