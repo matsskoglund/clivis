@@ -238,3 +238,6 @@ src/Clivis/nibeauth.json
 src/Clivis/code.txt
 /test/UnitTestsClivis/Cobertura.xml
 /test/UnitTestsClivis/Coverage.xml
+/test/UnitTestsClivis/Coverage
+/test/UnitTestsClivis/code.txt
+/test/UnitTestsClivis/testresults.xml
