@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Clivis.Models.Nibe;
 using System.IO;
+using Clivis.Models;
+using Stubbery;
 
 namespace ClivisTests
 {
@@ -101,6 +103,40 @@ namespace ClivisTests
         }
 
 
+        [Fact]
+        public void NibeUnit_Call_Init_When_code_Is_NULL_Throws_Exception()
+        {
+            // Create a file with unique content
+            //DateTime codestamp = DateTime.Now;
+            //File.WriteAllText(codeFilePath, codestamp.ToString());
+
+            //AppKeyConfig configs = new AppKeyConfig();
+            Assert.Throws<Exception>(() => nibeUnit.init(null));           
+        }
+
+        [Fact]
+        public void NibeUnit_Call_Init_When_code_Is_NotNull()
+        {
+            ApiStub apiNibeStub = new ApiStub();
+            apiNibeStub.Get(
+                "/oauth/token",
+                (request, args) =>
+                {
+                    return "{ \"status\": 500 }";
+                }
+                );
+            apiNibeStub.Start();
+            // Create a file with unique content
+            DateTime codestamp = DateTime.Now;
+            File.WriteAllText(codeFilePath, codestamp.ToString());
+
+            AppKeyConfig configs = new AppKeyConfig();
+
+            //nibeUnit.init(configs);
+
+            //Assert.Throws<Exception>(() => );
+
+        }
 
     }
 }

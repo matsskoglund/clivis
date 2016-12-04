@@ -3,17 +3,19 @@
     "version": "1.0.0-*",
     "testRunner": "xunit",
     "userSecretsId": "abc123",
-    "dependencies": {   
-        "dotnet-test-xunit": "2.2.0-preview2-build1029",
-        "xunit": "2.2.0-beta2-build3300",
-        "Clivis": {
-            "target": "project"
-        },
-      "OpenCover": "4.6.519",
-      "OpenCoverToCoberturaConverter": "0.2.4",
-      "ReportGenerator": "2.4.5",
-    "Microsoft.Extensions.Configuration.UserSecrets":"1.0.0"
+  "dependencies": {
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "xunit": "2.2.0-beta2-build3300",
+    "Clivis": {
+      "target": "project"
     },
+    "OpenCover": "4.6.519",
+    "OpenCoverToCoberturaConverter": "0.2.4",
+    "ReportGenerator": "2.4.5",
+    "coveralls.io": "1.3.2.0",
+    "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0",
+    "Stubbery": "1.2.3"
+  },
     
     "frameworks": {
         "netcoreapp1.0": {

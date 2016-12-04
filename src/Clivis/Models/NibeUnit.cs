@@ -11,6 +11,8 @@ namespace Clivis.Models.Nibe
 
     public class NibeUnit : IClimateSource
     {
+        private string host { get; set; } = "https://api.nibeuplink.com/";
+
         private NibeAuth nibeAuth = new NibeAuth();
 
         public string clientId { get; set; }
@@ -82,7 +84,7 @@ namespace Clivis.Models.Nibe
             HttpClient client = new HttpClient();
             var outcontent = new FormUrlEncodedContent(pairs);
             
-            HttpResponseMessage response = client.PostAsync("https://api.nibeuplink.com/oauth/token", outcontent).Result;
+            HttpResponseMessage response = client.PostAsync(host + "/oauth/token", outcontent).Result;
             if (!response.IsSuccessStatusCode)
             {
                 int statusCode = (int)response.StatusCode;
@@ -116,7 +118,7 @@ namespace Clivis.Models.Nibe
             HttpClient client = new HttpClient();
             var outcontent = new FormUrlEncodedContent(pairs);
 
-            var response = client.PostAsync("https://api.nibeuplink.com/oauth/token", outcontent).Result;
+            var response = client.PostAsync(host + "/oauth/token", outcontent).Result;
 
             // If we could not refresh
             if (!response.IsSuccessStatusCode)
@@ -154,7 +156,7 @@ namespace Clivis.Models.Nibe
             HttpClient client = new HttpClient();
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessCode);
-            var response = client.GetAsync("https://api.nibeuplink.com/api/v1/systems/27401/parameters?parameterIds=outdoor_temperature&parameterIds=indoor_temperature").Result;
+            var response = client.GetAsync(host + "/api/v1/systems/27401/parameters?parameterIds=outdoor_temperature&parameterIds=indoor_temperature").Result;
             if (!response.IsSuccessStatusCode)
             {
                 // If it didn't work, return null

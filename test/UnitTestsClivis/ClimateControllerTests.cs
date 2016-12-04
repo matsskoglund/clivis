@@ -98,7 +98,33 @@ namespace ClivisTests
             
         }
 
-    
+        [Fact]
+        public void ClimateController_GetById_WithReading_As_Source_Calls_CurrentReading_WithConfigs()
+        {
+            ClimateItem nibeitem = new ClimateItem() { IndoorValue = "20", OutdoorValue = "10" };
+            nibeMock.Setup<ClimateItem>(x => x.CurrentReading(It.IsAny<AppKeyConfig>())).Returns(nibeitem);
+
+            ClimateItem netatmoitem = new ClimateItem() { IndoorValue = "20", OutdoorValue = "10" };
+            netatmoMock.Setup<ClimateItem>(x => x.CurrentReading(It.IsAny<AppKeyConfig>())).Returns(netatmoitem);
+
+            IActionResult res = _climateController.GetById("Reading");
+            nibeMock.Verify(x => x.CurrentReading(It.IsAny<AppKeyConfig>()), Times.AtLeastOnce());
+            netatmoMock.Verify(x => x.CurrentReading(It.IsAny<AppKeyConfig>()), Times.AtLeastOnce());
+        }
+
+        [Fact]
+        public void ClimateController_GetById_WithNibe_As_Source_Calls_CurrentReading_ThatReturnsNull()
+        {
+            ClimateItem item = null;
+            nibeMock.Setup<ClimateItem>(x => x.CurrentReading(It.IsAny<AppKeyConfig>())).Returns(item);
+
+
+            IActionResult res = _climateController.GetById("Nibe");
+            nibeMock.Verify(x => x.CurrentReading(It.IsAny<AppKeyConfig>()), Times.AtLeastOnce());
+
+            Assert.IsType<RedirectResult>(res);
+        }
+
 
         [Fact]
         public void ClimateController_GetById_With_Netatmo_As_Source_Calls_CurrentReading_WithConfigs()
