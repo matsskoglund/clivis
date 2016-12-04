@@ -36,7 +36,8 @@ namespace ClivisTests
                 UserName = Configuration["NetatmoUserName"],
                 Password = Configuration["NetatmoPassword"],
                 NetatmoClientId = Configuration["NetatmoClientId"],
-                NetatmoClientSecret = Configuration["NetatmoClientSecret"]
+                NetatmoClientSecret = Configuration["NetatmoClientSecret"],
+                NibeHost = Configuration["NibeHost"]
              });
             ConcurrentDictionary<string, IClimateSource> sources = new ConcurrentDictionary<string, IClimateSource>();
             sources["Nibe"] = nibeMock.Object;

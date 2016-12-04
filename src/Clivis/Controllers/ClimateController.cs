@@ -58,8 +58,19 @@ namespace Clivis.Controllers
             {
                 // Read data from Nibe, if reading works we get data, if not we get null and try to do a login
                 item = nibe.CurrentReading(AppConfigs);
-                if (item == null)                    
-                    return Redirect("https://api.nibeuplink.com/oauth/authorize?response_type=code&client_id=" + AppConfigs.NibeClientId + "&scope=READSYSTEM&redirect_uri=" + AppConfigs.NibeRedirectURI + "&state=12345");
+
+
+                if (item == null)
+                {
+                    var uri = new UriBuilder(AppConfigs.NibeHost)
+                    {
+                        Path = $"/oauth/authorize",
+                        Query = "response_type=code&client_id=" + AppConfigs.NibeClientId + "&scope=READSYSTEM&redirect_uri=" + AppConfigs.NibeRedirectURI + "&state=12345"
+                    }.Uri;
+                 
+                    //  return Redirect("https://api.nibeuplink.com/oauth/authorize?response_type=code&client_id=" + AppConfigs.NibeClientId + "&scope=READSYSTEM&redirect_uri=" + AppConfigs.NibeRedirectURI + "&state=12345");
+                    return Redirect(uri.AbsoluteUri);
+                }
             }
               
             if (source.Equals("Netatmo"))
@@ -72,8 +83,15 @@ namespace Clivis.Controllers
                 ClimateItem nibeItem = null;
                 nibeItem = nibe.CurrentReading(AppConfigs);
                 if (nibeItem == null)
-                    return Redirect("https://api.nibeuplink.com/oauth/authorize?response_type=code&client_id=" + AppConfigs.NibeClientId + "&scope=READSYSTEM&redirect_uri=" + AppConfigs.NibeRedirectURI + "&state=12345");
-
+                {
+                    var uri = new UriBuilder(AppConfigs.NibeHost)
+                    {
+                        Path = $"/oauth/authorize",
+                        Query = "response_type=code&client_id=" + AppConfigs.NibeClientId + "&scope=READSYSTEM&redirect_uri=" + AppConfigs.NibeRedirectURI + "&state=12345"
+                    }.Uri;
+                    //   return Redirect("https://api.nibeuplink.com/oauth/authorize?response_type=code&client_id=" + AppConfigs.NibeClientId + "&scope=READSYSTEM&redirect_uri=" + AppConfigs.NibeRedirectURI + "&state=12345");
+                    return Redirect(uri.AbsoluteUri);
+                }
                 item = ClimateItem.ClimateMeanValues(netatmoItem, nibeItem);
             }
             return Json(item);            

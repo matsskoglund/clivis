@@ -10,9 +10,7 @@ namespace Clivis.Models.Nibe
 
 
     public class NibeUnit : IClimateSource
-    {
-        private string host { get; set; } = "https://api.nibeuplink.com/";
-
+    {       
         private NibeAuth nibeAuth = new NibeAuth();
 
         public string clientId { get; set; }
@@ -83,8 +81,13 @@ namespace Clivis.Models.Nibe
 
             HttpClient client = new HttpClient();
             var outcontent = new FormUrlEncodedContent(pairs);
-            
-            HttpResponseMessage response = client.PostAsync(host + "/oauth/token", outcontent).Result;
+            var uri = new UriBuilder(config.NibeHost)
+            {
+                Path = "/oauth/token",
+                Query = "parameterIds=outdoor_temperature&parameterIds=indoor_temperature"
+            }.Uri;
+
+            HttpResponseMessage response = client.PostAsync(uri, outcontent).Result;
             if (!response.IsSuccessStatusCode)
             {
                 int statusCode = (int)response.StatusCode;
@@ -117,8 +120,13 @@ namespace Clivis.Models.Nibe
             };
             HttpClient client = new HttpClient();
             var outcontent = new FormUrlEncodedContent(pairs);
+            var uri = new UriBuilder(AppConfig.NibeHost)
+            {
+                Path = "/oauth/token",
+                Query = "parameterIds=outdoor_temperature&parameterIds=indoor_temperature"
+            }.Uri;
 
-            var response = client.PostAsync(host + "/oauth/token", outcontent).Result;
+            var response = client.PostAsync(uri, outcontent).Result;
 
             // If we could not refresh
             if (!response.IsSuccessStatusCode)
@@ -151,12 +159,20 @@ namespace Clivis.Models.Nibe
                 return null;            
         }
 
-        public ClimateItem GetReadingWithAccessCode(string accessCode)
+        public ClimateItem GetReadingWithAccessCode(string accessCode, AppKeyConfig config)
         {
             HttpClient client = new HttpClient();
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessCode);
-            var response = client.GetAsync(host + "/api/v1/systems/27401/parameters?parameterIds=outdoor_temperature&parameterIds=indoor_temperature").Result;
+
+            var uri = new UriBuilder(config.NibeHost)
+            {
+                Path = $"/api/v1/systems/27401/parameters",
+                Query = "parameterIds=outdoor_temperature&parameterIds=indoor_temperature"
+            }.Uri;
+
+           
+            var response =  client.GetAsync(uri).Result;
             if (!response.IsSuccessStatusCode)
             {
                 // If it didn't work, return null
@@ -187,18 +203,22 @@ namespace Clivis.Models.Nibe
                 return null;
 
             // Access and refresh token exist,  try to access using the access token
-            item = GetReadingWithAccessCode(auth.access_token);
+            item = GetReadingWithAccessCode(auth.access_token, AppConfig);
 
             // If we get null back, it didn't work and we try to refresh with the refresh token
             if (item == null)
+            {
 
                 // If it didn't work to get a new access token we bail out and return null
                 auth = Refresh(AppConfig);
-            if (auth == null)
-                return null;
 
-            // It worked to get a new access token, try agin to get data using the new access token
-            item = GetReadingWithAccessCode(auth.access_token);
+
+                if (auth == null)
+                    return null;
+
+                // It worked to get a new access token, try agin to get data using the new access token
+                item = GetReadingWithAccessCode(auth.access_token, AppConfig);
+            }
 
             // If get an item back we return it, it we get null back we can't still access data and return null        
             return item;

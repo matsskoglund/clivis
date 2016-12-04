@@ -44,11 +44,10 @@ namespace Clivis
                   configs.Password = Configuration["NetatmoPassword"];
                   configs.NetatmoClientId = Configuration["NetatmoClientId"];
                   configs.NetatmoClientSecret = Configuration["NetatmoClientSecret"];
-
                   configs.NibeClientId = Configuration["NibeClientId"];
                   configs.NibeClientSecret = Configuration["NibeClientSecret"];
                   configs.NibeRedirectURI = Configuration["NibeRedirectURI"];
-
+                  configs.NibeHost = Configuration["NibeHost"];
               });
 
             // Add framework services.
@@ -57,9 +56,7 @@ namespace Clivis
 
             ConcurrentDictionary<string, IClimateSource> sources = new ConcurrentDictionary<string, IClimateSource>();
             sources["Nibe"] = new NibeUnit();
-            sources["Netatmo"] = new NetatmoUnit();
-
-            //services.AddSingleton<IDictionary<string, IClimateSource>, ConcurrentDictionary<string, IClimateSource>> ();  
+            sources["Netatmo"] = new NetatmoUnit();           
             services.AddSingleton<IDictionary<string, IClimateSource>> (sources);                        
         }
 
