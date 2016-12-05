@@ -11,6 +11,16 @@ using Clivis.Models.Netatmo;
 using Clivis.Models.Nibe;
 using System.Collections.Concurrent;
 using Newtonsoft.Json;
+using Stubbery;
+using System.Net.Http;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Internal;
+using Microsoft.Extensions.PlatformAbstractions;
+using Clivis;
+using System.Reflection;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Logging;
+
 
 namespace ClivisTests
 {
@@ -87,7 +97,63 @@ namespace ClivisTests
             Assert.IsType<RedirectResult>(res);
         }
 
+        private  TestServer server;
+
+        private  ApiStub nibeApiStub;
+
+        private IHostingEnvironment CreateHostingEnvironment()
+        {
+            var hostingEnvironment = new HostingEnvironment();
+
+            var appEnvironment = PlatformServices.Default.Application;
+
+            var applicationName = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+
+            hostingEnvironment.Initialize(applicationName, appEnvironment.ApplicationBasePath, new WebHostOptions());
+
+            return hostingEnvironment;
+        }
+
         [Fact]
+        public void MyStub()
+        {
+            nibeApiStub = new ApiStub();
+
+        
+
+            nibeApiStub.Get(
+        "/api/climate/Nibe",
+        (req, args) => "testresponse");
+
+            
+            nibeApiStub.Start();
+            var hostingEnv = CreateHostingEnvironment();
+            var startup = new Startup(hostingEnv);
+          
+            var loggerFactory = new LoggerFactory();
+
+            HttpClient httpClient = new HttpClient();
+            server = new TestServer(new WebHostBuilder()
+                .Configure(app => startup.Configure(app, hostingEnv, loggerFactory))
+                .ConfigureServices(
+                    services =>
+                    {
+                        startup.ConfigureServices(services);
+
+                        // Replace the real api URL with the stub.
+                        startup.Configuration["NibeHost"] = nibeApiStub.Address;
+                        
+                    }));
+
+          //  var result = httpClient.GetAsync(new UriBuilder(new Uri(nibeApiStub.Address)) { Path = "/api/climate/Nibe" }.Uri).Result;
+           // ActionResult result = (ActionResult) _climateController.GetById("Nibe");
+
+                // resultString will contain "testresponse"
+                //var resultString = result.Content.ReadAsStringAsync().Result;
+
+        }
+
+[Fact]
         public void ClimateController_GetById_WithNibe_As_Source_Calls_CurrentReading_WithConfigs()
         {
             ClimateItem item = new ClimateItem();
