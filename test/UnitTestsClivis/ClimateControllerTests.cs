@@ -122,7 +122,7 @@ namespace ClivisTests
         
 
             nibeApiStub.Get(
-        "/api/climate/Nibe",
+        "/oauth/authorize",
         (req, args) => "testresponse");
 
             
