@@ -30,6 +30,7 @@ namespace Clivis
                 }
                
                 Configuration = builder.Build();
+        
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -50,9 +51,10 @@ namespace Clivis
                   configs.NibeHost = Configuration["NibeHost"];
               });
 
+
+           
             // Add framework services.
             services.AddMvc();
-
 
             ConcurrentDictionary<string, IClimateSource> sources = new ConcurrentDictionary<string, IClimateSource>();
             sources["Nibe"] = new NibeUnit();

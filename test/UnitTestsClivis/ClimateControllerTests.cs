@@ -115,45 +115,6 @@ namespace ClivisTests
         }
 
         [Fact]
-        public void MyStub()
-        {
-            nibeApiStub = new ApiStub();
-
-        
-
-            nibeApiStub.Get(
-        "/oauth/authorize",
-        (req, args) => "testresponse");
-
-            
-            nibeApiStub.Start();
-            var hostingEnv = CreateHostingEnvironment();
-            var startup = new Startup(hostingEnv);
-          
-            var loggerFactory = new LoggerFactory();
-
-            HttpClient httpClient = new HttpClient();
-            server = new TestServer(new WebHostBuilder()
-                .Configure(app => startup.Configure(app, hostingEnv, loggerFactory))
-                .ConfigureServices(
-                    services =>
-                    {
-                        startup.ConfigureServices(services);
-
-                        // Replace the real api URL with the stub.
-                        startup.Configuration["NibeHost"] = nibeApiStub.Address;
-                        
-                    }));
-
-          //  var result = httpClient.GetAsync(new UriBuilder(new Uri(nibeApiStub.Address)) { Path = "/api/climate/Nibe" }.Uri).Result;
-           // ActionResult result = (ActionResult) _climateController.GetById("Nibe");
-
-                // resultString will contain "testresponse"
-                //var resultString = result.Content.ReadAsStringAsync().Result;
-
-        }
-
-[Fact]
         public void ClimateController_GetById_WithNibe_As_Source_Calls_CurrentReading_WithConfigs()
         {
             ClimateItem item = new ClimateItem();
