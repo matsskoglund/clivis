@@ -179,7 +179,7 @@ namespace Clivis.Models.Nibe
                 return null;
             }
             string contentResult = response.Content.ReadAsStringAsync().Result;
-
+            File.WriteAllText("areading.json",contentResult);
             NibeTemp nibeOutdoorTemp = JsonConvert.DeserializeObject<List<NibeTemp>>(contentResult)[0];
             NibeTemp nibeIndoorTemp = JsonConvert.DeserializeObject<List<NibeTemp>>(contentResult)[1];
 

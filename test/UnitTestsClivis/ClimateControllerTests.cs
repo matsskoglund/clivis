@@ -11,6 +11,16 @@ using Clivis.Models.Netatmo;
 using Clivis.Models.Nibe;
 using System.Collections.Concurrent;
 using Newtonsoft.Json;
+using Stubbery;
+using System.Net.Http;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Internal;
+using Microsoft.Extensions.PlatformAbstractions;
+using Clivis;
+using System.Reflection;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Logging;
+
 
 namespace ClivisTests
 {
@@ -85,6 +95,23 @@ namespace ClivisTests
 
             Assert.NotNull(res);
             Assert.IsType<RedirectResult>(res);
+        }
+
+        private  TestServer server;
+
+        private  ApiStub nibeApiStub;
+
+        private IHostingEnvironment CreateHostingEnvironment()
+        {
+            var hostingEnvironment = new HostingEnvironment();
+
+            var appEnvironment = PlatformServices.Default.Application;
+
+            var applicationName = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+
+            hostingEnvironment.Initialize(applicationName, appEnvironment.ApplicationBasePath, new WebHostOptions());
+
+            return hostingEnvironment;
         }
 
         [Fact]
