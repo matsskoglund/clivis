@@ -330,7 +330,7 @@ namespace ClivisTests
             configs.NibeHost = apiNibeStub.Address;
 
             ClimateItem item = nibeUnit.CurrentReading(configs);
-            Assert.NotNull(item);
+            Assert.Null(item);
             /*Assert.Equal(item.IndoorValue, "22.7");
             Assert.Equal(item.OutdoorValue, "2.7");*/
         }
