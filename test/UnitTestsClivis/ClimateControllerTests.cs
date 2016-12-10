@@ -97,10 +97,6 @@ namespace ClivisTests
             Assert.IsType<RedirectResult>(res);
         }
 
-        private  TestServer server;
-
-        private  ApiStub nibeApiStub;
-
         private IHostingEnvironment CreateHostingEnvironment()
         {
             var hostingEnvironment = new HostingEnvironment();
