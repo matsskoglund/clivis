@@ -299,7 +299,7 @@ namespace ClivisTests
         public void NibeUnit_CurrentReading_Is_SuccessfulWithRefresh()
         {
             Assert.True(File.Exists("nibeauth.json"));
-            string reading = "[{\"parameterId\":40004,\"name\":\"outdoor_temperature\",\"title\":\"outdoor temp.\",\"designation\":\"BT1\",\"unit\":\"°C\",\"displayValue\":\"2.7°C\",\"rawValue\":27},{\"parameterId\":40033,\"name\":\"indoor_temperature\",\"title\":\"room temperature\",\"designation\":\"BT50\",\"unit\":\"°C\",\"displayValue\":\"22.7°C\",\"rawValue\":227}]";
+
             string fileContentExp = "{\"access_token\":\"AAEAAI3RKfqMqpUT6gPct8J4ysi2MvAITg9iJ - fydXOLDEP1DZ_9DbX3hh2Nw3DOydyc_IvBzNJW - k9uon0I4cxNuhhJJ5Z5OQEAUuB6er10aWLS7QnHAxvyAJFgsRUA9BBvmmA21MdBexw4JaKHaIswuxQwsOe3tBefPg8S_eEm44noPJIj_Zge4tgTZyTU1pIj5NksAm0T6i - tnf - wdrPg6AfWZHn1mNBBQnEosPNnq8OatCKK3CUunbCyNspB2v3p175WWSad2stb8Bo1nfvP8ZWebKIQFSYXNYLhYDd3T6EmxqVdIIj_Z6IFeqM4pTRndaIXrPdBCGRvNYCeA5puW2SkAQAAAAEAAB_Tqc5_JXDTzgaTS0amjWGCVvLo5ZV_5lIUMOxBfc7YlrLw0y2qhvUz3GwaMRx5WQdGdHhMkZpxzQPjiN - Zm2KGeyrTwFHj_fXFfxML3Gd_mQF5jrKmRcWwBXqTUDPwdOmPqXR94b6P4PqPzIXuoKvz_MRlrNfA1XmMCKagB8QsAdDmThu7QIR2gV5ENmJUcRHRY09XAAii4kYh6tyhvs8Zec7wgPRZ1Sq6aSOPYwdI3Ux3CRXUPgWxkGBbvCKPIu3keHJoZI - k1U81ha1AD5qj6RqMuM3m72VNXYuzSya62GfNP57BPupfgO_Igv9yWqf7jxPqy_XuAEYF0cNn5hAHDz3Kp9sRieCWW7fiiZwNghVp1 - jo_mdgyd1dPwqsh6UjOJqSuqWSEGWptpxZJ2bnB1akCmqpfKvgJgiV8Ilr68Tjw2uiMPGOlZF3b5T_uRszpTNFIfz4QpWdbbaHabeiBfit4oI3AqsCLEL3MU0W8Sk1QbxikEgON6v - 2lmkJ2t_iUGa3RXh3124QltUujywVVfeEJJupJjs1vRHZmD8\",\"token_type\":\"bearer\",\"expires_in\":1800,\"refresh_token\":\"8_Ln!IAAAAGQC4_hJShmgj10Be6CXXj6SJEJCobqeQMmvBdFp - flssQAAAAGiydTTibPGsB_03OYi - ASktAwRonG9sj0vHJpewUGGmGDxawAXVE4G5mpLHNcpezmDEFg2o3sXIRrdOlymY47itMwqTJyGCSxcoUw3OOVFiMA29VZWSTLjB_hCqMUhTTgxDAo1ykF - kjG - Q84X9xpdx1VEbyBK7LCMYR2h0fcrl0 - qV7MRAhJvKcy7YJ62CXfKm5Nq1PWJ4qTONFYRtL1Z5X8rJ_jLzLYFy3I4EykDqw\",\"scope\":\"READSYSTEM\"}";
             ApiStub apiNibeStub = new ApiStub();
             apiNibeStub.Post(   
@@ -309,21 +309,7 @@ namespace ClivisTests
                     return fileContentExp;
                 }
                 );
-
-                      
-         /*   apiNibeStub.Get(
-                "/api/v1/systems/27401/parameters",
-                (request, args) =>
-                {
-                    return reading;
-                }
-                );*/
-
-            //  string refreshToken = "8_Ln!IAAAAEvNGW1MzKQh8toJ6TV5WdVKuxJonjN61Z5EAo-KiAjasQAAAAGHs3grS10tACRrl8OiGRrCizwJga5ILsEoqVOluvCkb92Dp_s_KuSAtUSIOpgNgWdQGBB5z_1outPSbbZfEJHp7QZRgT2aLI1rOgYNvBAvMATjUat75SYq0ODCrXpkLZVZQB7PwCEypSWW5WBRoARxmvXwhHXtavrAb1ab5H6ASvjSapjuRzURGmVTku8-kOgw8yBl2P994EDvaL5DE1OSfePv6DElVj8OvxjayTTenA";
-            
-
-
-            //.IfHeader("refresh_token", refreshToken);
+                                  
             apiNibeStub.Start();
 
             AppKeyConfig configs = new AppKeyConfig();

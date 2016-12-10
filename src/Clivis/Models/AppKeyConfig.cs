@@ -12,5 +12,7 @@ namespace Clivis.Models
         public string NibeRedirectURI { get; set; }
 
         public string NibeHost { get; set;  }
+
+        public string NetatmoHost { get; set; }
     }
 }

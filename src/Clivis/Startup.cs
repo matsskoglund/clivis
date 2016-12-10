@@ -49,6 +49,7 @@ namespace Clivis
                   configs.NibeClientSecret = Configuration["NibeClientSecret"];
                   configs.NibeRedirectURI = Configuration["NibeRedirectURI"];
                   configs.NibeHost = Configuration["NibeHost"];
+                  configs.NetatmoHost = Configuration["NetatmoHost"];
               });
 
 
