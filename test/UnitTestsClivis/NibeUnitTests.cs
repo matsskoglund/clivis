@@ -317,9 +317,8 @@ namespace ClivisTests
 
             ClimateItem item = nibeUnit.CurrentReading(configs);
             Assert.Null(item);
-            /*Assert.Equal(item.IndoorValue, "22.7");
-            Assert.Equal(item.OutdoorValue, "2.7");*/
-        }
-        
+            
+        }      
+
     }
 }
