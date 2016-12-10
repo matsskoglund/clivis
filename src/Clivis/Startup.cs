@@ -51,8 +51,6 @@ namespace Clivis
                   configs.NibeHost = Configuration["NibeHost"];
                   configs.NetatmoHost = Configuration["NetatmoHost"];
               });
-
-
            
             // Add framework services.
             services.AddMvc();
