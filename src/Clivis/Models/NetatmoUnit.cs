@@ -19,10 +19,10 @@ namespace Clivis.Models.Netatmo
         private string deviceId { get; set; }
 
         private string moduleId { get; set; }
-        public string CodeFilePath { get; set;  }
+        public string CodeFilePath { get; set; }
 
         private NetatmoAuth netatmoAuth = new NetatmoAuth();
-       
+
         public void init(AppKeyConfig config)
         {
             login(config);
@@ -53,7 +53,7 @@ namespace Clivis.Models.Netatmo
             var response = client.PostAsync(uri, outcontent).Result;
             if (!response.IsSuccessStatusCode)
                 throw new Exception("Could not login");
-            
+
             string contentResult = response.Content.ReadAsStringAsync().Result;
             netatmoAuth = JsonConvert.DeserializeObject<NetatmoAuth>(contentResult);
         }
@@ -76,27 +76,28 @@ namespace Clivis.Models.Netatmo
 
             response = resp.Content.ReadAsStringAsync().Result;
 
-           
+
             dynamic data = JsonConvert.DeserializeObject(response);
-          
+
             deviceId = data.body.devices[0]._id;
             moduleId = data.body.modules[0]._id;
-         }
+        }
 
 
-        public string outDoorTemperature(AppKeyConfig configs) {
-                    HttpClient client = new HttpClient();
+        public string outDoorTemperature(AppKeyConfig configs)
+        {
+            HttpClient client = new HttpClient();
             var uri = new UriBuilder(configs.NetatmoHost)
             {
                 Path = "/api/getmeasure",
-                Query = "access_token=" +netatmoAuth.access_token + "&device_id=" + deviceId + "&module_id=" + moduleId + "&type=Temperature&limit=1&date_end=last&scale=30min"
-            }.Uri;          
+                Query = "access_token=" + netatmoAuth.access_token + "&device_id=" + deviceId + "&module_id=" + moduleId + "&type=Temperature&limit=1&date_end=last&scale=max"
+            }.Uri;
 
             var resp = client.GetAsync(uri).Result;
             var response = resp.Content.ReadAsStringAsync().Result;
 
             dynamic data = JsonConvert.DeserializeObject(response);
-            
+
             string temperature = data.body[0].value[0][0]; // temperature
 
             return temperature;
@@ -104,18 +105,18 @@ namespace Clivis.Models.Netatmo
 
         public string inDoorTemperature(AppKeyConfig configs)
         {
-              
-                        HttpClient client = new HttpClient();
+
+            HttpClient client = new HttpClient();
             var uri = new UriBuilder(configs.NetatmoHost)
             {
                 Path = "/api/getmeasure",
-                Query = "access_token=" + netatmoAuth.access_token + "&device_id=" + deviceId + "&type=Temperature&limit=1&date_end=last&scale=30min"
+                Query = "access_token=" + netatmoAuth.access_token + "&device_id=" + deviceId + "&type=Temperature&limit=1&date_end=last&scale=max"
             }.Uri;
 
             var resp = client.GetAsync(uri).Result;
             string response = resp.Content.ReadAsStringAsync().Result;
             dynamic data = JsonConvert.DeserializeObject(response);
-                        
+
             string temperature = data.body[0].value[0][0]; // temperature
 
             return temperature;
@@ -125,10 +126,19 @@ namespace Clivis.Models.Netatmo
             login(AppConfigs);
             setDeviceAndModuleID(AppConfigs);
             ClimateItem reading = new ClimateItem();
-            reading.IndoorValue = this.inDoorTemperature(AppConfigs);
-            reading.OutdoorValue = this.outDoorTemperature(AppConfigs);
-            reading.TimeStamp = DateTime.Now;
-            return reading;
+            try
+            {
+                reading.IndoorValue = this.inDoorTemperature(AppConfigs);
+                reading.OutdoorValue = this.outDoorTemperature(AppConfigs);
+                reading.TimeStamp = DateTime.Now;
+                return reading;
+            }
+
+            // Somehow we could not get the data.
+            catch
+            {
+                return null;
+            }
         }
     }
 }
