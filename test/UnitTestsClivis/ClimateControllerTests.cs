@@ -24,7 +24,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ClivisTests
 {
-
+    
 
     // see example explanation on xUnit.net website:
     // https://xunit.github.io/docs/getting-started-dotnet-core.html
@@ -36,26 +36,26 @@ namespace ClivisTests
         public IConfigurationRoot Configuration { get; }
         private readonly ClimateController _climateController;
         public ClimateControllerTests()
-        {
-            ConfigurationBuilder builder = new ConfigurationBuilder();
-            builder.AddUserSecrets();
-
+        {           
+             ConfigurationBuilder builder = new ConfigurationBuilder();
+             builder.AddUserSecrets();            
+           
             Configuration = builder.Build();
             IOptions<AppKeyConfig> options = Options.Create(new AppKeyConfig()
-            {
+            {    
                 UserName = Configuration["NetatmoUserName"],
                 Password = Configuration["NetatmoPassword"],
                 NetatmoClientId = Configuration["NetatmoClientId"],
                 NetatmoClientSecret = Configuration["NetatmoClientSecret"],
                 NibeHost = Configuration["NibeHost"]
-            });
+             });
             ConcurrentDictionary<string, IClimateSource> sources = new ConcurrentDictionary<string, IClimateSource>();
             sources["Nibe"] = nibeMock.Object;
             sources["Netatmo"] = netatmoMock.Object;
             _climateController = new ClimateController(options, sources);
         }
 
-        [Fact]
+         [Fact]
         public void ClimateController_NotNull()
         {
             Assert.NotNull(_climateController);
@@ -88,9 +88,9 @@ namespace ClivisTests
         [Fact]
         public void ClimateController_GetClimateSetsCodeAndReturnNotNull()
         {
+            
 
-
-            IActionResult res = _climateController.GetClimate("code", "state");
+            IActionResult res = _climateController.GetClimate("code","state");
             nibeMock.VerifySet(foo => foo.code = "code");
 
             Assert.NotNull(res);
@@ -115,11 +115,11 @@ namespace ClivisTests
         {
             ClimateItem item = new ClimateItem();
             nibeMock.Setup<ClimateItem>(x => x.CurrentReading(It.IsAny<AppKeyConfig>())).Returns(item);
-
+            
 
             IActionResult res = _climateController.GetById("Nibe");
             nibeMock.Verify(x => x.CurrentReading(It.IsAny<AppKeyConfig>()), Times.AtLeastOnce());
-
+            
         }
 
         [Fact]
@@ -162,23 +162,10 @@ namespace ClivisTests
         }
 
         [Fact]
-        public void ClimateController_GetById_With_Netatmo_As_Source_Calls_CurrentReading_IsNullReturnNocontentResult()
-        {
-            ClimateItem item = null;
-            netatmoMock.Setup<ClimateItem>(x => x.CurrentReading(It.IsAny<AppKeyConfig>())).Returns(item);
-
-
-            IActionResult res = _climateController.GetById("Netatmo");
-            Assert.IsType<Microsoft.AspNetCore.Mvc.NoContentResult>(res);
-            netatmoMock.Verify(x => x.CurrentReading(It.IsAny<AppKeyConfig>()), Times.AtLeastOnce());
-        }
-
-        [Fact]
         public void ClimateController_GetById_With_Wrong_SourceName_Returns_null()
-        {
-            IActionResult res = _climateController.GetById("Nonexisting");
+        {           
+            IActionResult res = _climateController.GetById("Nonexisting");            
             Assert.NotNull(res);
-            Assert.IsType<Microsoft.AspNetCore.Mvc.NoContentResult>(res);
         }
     }
 }
