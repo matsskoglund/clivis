@@ -26,10 +26,11 @@ namespace Clivis
                 .AddEnvironmentVariables();
 
             if (env.IsDevelopment()) { 
-                     builder.AddUserSecrets();                    
+                    builder.AddUserSecrets();                    
                 }
                
                 Configuration = builder.Build();
+
         
         }
 
@@ -52,6 +53,7 @@ namespace Clivis
                   configs.NetatmoHost = Configuration["NetatmoHost"];
               });
            
+
             // Add framework services.
             services.AddMvc();
 

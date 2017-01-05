@@ -68,8 +68,7 @@ namespace Clivis.Controllers
                         Path = $"/oauth/authorize",
                         Query = "response_type=code&client_id=" + AppConfigs.NibeClientId + "&scope=READSYSTEM&redirect_uri=" + AppConfigs.NibeRedirectURI + "&state=12345"
                     }.Uri;
-
-                    //  return Redirect("https://api.nibeuplink.com/oauth/authorize?response_type=code&client_id=" + AppConfigs.NibeClientId + "&scope=READSYSTEM&redirect_uri=" + AppConfigs.NibeRedirectURI + "&state=12345");
+                   
                     return Redirect(uri.AbsoluteUri);
                 }
             }
