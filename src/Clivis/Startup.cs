@@ -26,11 +26,11 @@ namespace Clivis
                 .AddEnvironmentVariables();
 
             if (env.IsDevelopment()) { 
-                    builder.AddUserSecrets();                    
+                    builder.AddUserSecrets(); 
+                                      
                 }
                
                 Configuration = builder.Build();
-
         
         }
 
@@ -39,6 +39,7 @@ namespace Clivis
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
             services.AddOptions();
             services.Configure<AppKeyConfig>(configs =>
               {
@@ -49,8 +50,8 @@ namespace Clivis
                   configs.NibeClientId = Configuration["NibeClientId"];
                   configs.NibeClientSecret = Configuration["NibeClientSecret"];
                   configs.NibeRedirectURI = Configuration["NibeRedirectURI"];
-                  configs.NibeHost = Configuration["NibeHost"];
-                  configs.NetatmoHost = Configuration["NetatmoHost"];
+                  configs.NibeHost = Configuration["AppKeys:NibeHost"];
+                  configs.NetatmoHost = Configuration["AppKeys:NetatmoHost"];
               });
            
 

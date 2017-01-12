@@ -31,6 +31,7 @@ namespace Clivis.Models.Netatmo
 
         private void login(AppKeyConfig configs)
         {
+           
             //Login  
             var pairs = new List<KeyValuePair<string, string>>
             {
