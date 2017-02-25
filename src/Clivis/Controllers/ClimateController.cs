@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace Clivis.Controllers
 {
@@ -18,17 +19,19 @@ namespace Clivis.Controllers
     [Route("api/[controller]")]
     public class ClimateController : Controller
     {
+        IDataProtector _protector;
         public AppKeyConfig AppConfigs { get; }
 
         public IClimateSource nibe { get; }
         public IClimateSource netatmo { get; }
 
-        public ClimateController(IOptions<AppKeyConfig> configs, IDictionary<string, IClimateSource> climateSources)
+        public ClimateController(IOptions<AppKeyConfig> configs, IDictionary<string, IClimateSource> climateSources, IDataProtectionProvider provider)
         {
 
             AppConfigs = configs.Value;
             nibe = climateSources["Nibe"];
             netatmo = climateSources["Netatmo"];
+            _protector = provider.CreateProtector(GetType().FullName);
         }
 
         // /api/climate
@@ -41,7 +44,8 @@ namespace Clivis.Controllers
                 host = Request.Host;
             if (code != null)
             {
-                nibe.CodeFilePath = "code.txt";
+                nibe.CodeFilePath = "data/code.txt";
+                
                 nibe.code = code;
                 nibe.init(AppConfigs);
             }
@@ -57,6 +61,8 @@ namespace Clivis.Controllers
             ClimateItem item = null;
             if (source.Equals("Nibe"))
             {
+                string encryped = _protector.Protect(AppConfigs.NetatmoClientSecret);
+                string clear = _protector.Unprotect(encryped);
                 // Read data from Nibe, if reading works we get data, if not we get null and try to do a login
                 item = nibe.CurrentReading(AppConfigs);
 

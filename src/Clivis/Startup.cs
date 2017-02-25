@@ -11,6 +11,7 @@ using Clivis.Models;
 using Clivis.Models.Nibe;
 using Clivis.Models.Netatmo;
 using System.Collections.Concurrent;
+using Clivis.Util;
 
 namespace Clivis
 {
@@ -22,11 +23,11 @@ namespace Clivis
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddJsonFile("secrets.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("data/secretsenc.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
             if (env.IsDevelopment()) { 
-                    builder.AddUserSecrets(); 
+            //        builder.AddUserSecrets(); 
                                       
                 }
                
@@ -43,12 +44,13 @@ namespace Clivis
             services.AddOptions();
             services.Configure<AppKeyConfig>(configs =>
               {
-                  configs.UserName = Configuration["NetatmoUserName"];
-                  configs.Password = Configuration["NetatmoPassword"];
-                  configs.NetatmoClientId = Configuration["NetatmoClientId"];
-                  configs.NetatmoClientSecret = Configuration["NetatmoClientSecret"];
-                  configs.NibeClientId = Configuration["NibeClientId"];
-                  configs.NibeClientSecret = Configuration["NibeClientSecret"];
+                  string key = Configuration["Cliviskey"];
+                  configs.UserName = Protector.DecryptString(Configuration["NetatmoUserName"], key);
+                  configs.Password = Protector.DecryptString(Configuration["NetatmoPassword"], key);
+                  configs.NetatmoClientId = Protector.DecryptString(Configuration["NetatmoClientId"], key);
+                  configs.NetatmoClientSecret = Protector.DecryptString(Configuration["NetatmoClientSecret"], key);
+                  configs.NibeClientId = Protector.DecryptString(Configuration["NibeClientId"], key);
+                  configs.NibeClientSecret = Protector.DecryptString(Configuration["NibeClientSecret"], key);
                   configs.NibeRedirectURI = Configuration["NibeRedirectURI"];
                   configs.NibeHost = Configuration["AppKeys:NibeHost"];
                   configs.NetatmoHost = Configuration["AppKeys:NetatmoHost"];
