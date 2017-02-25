@@ -44,15 +44,17 @@ namespace Clivis
             services.AddOptions();
             string key = Configuration["Cliviskey"];
             services.Configure<AppKeyConfig>(configs =>
-              {
-                  
+              {                  
                   configs.UserName = Protector.DecryptString(Configuration["NetatmoUserName"], key);
                   configs.Password = Protector.DecryptString(Configuration["NetatmoPassword"], key);
                   configs.NetatmoClientId = Protector.DecryptString(Configuration["NetatmoClientId"], key);
                   configs.NetatmoClientSecret = Protector.DecryptString(Configuration["NetatmoClientSecret"], key);
-                  configs.NibeClientId = Protector.DecryptString(Configuration["NibeClientId"], key);
-                  configs.NibeClientSecret = Protector.DecryptString(Configuration["NibeClientSecret"], key);
-                  configs.NibeRedirectURI = Configuration["NibeRedirectURI"];
+                  //configs.NibeClientId = Protector.DecryptString(Configuration["NibeClientId"], key);
+                  configs.NibeClientId = Configuration["NIBE_ID"];
+                  //configs.NibeClientSecret = Protector.DecryptString(Configuration["NibeClientSecret"], key);
+                  configs.NibeClientSecret = Configuration["NIBE_SECRET"];
+                  //configs.NibeRedirectURI = Configuration["NibeRedirectURI"];
+                  configs.NibeRedirectURI = Configuration["NIBE_REDIRECTURL"];
                   configs.NibeHost = Configuration["AppKeys:NibeHost"];
                   configs.NetatmoHost = Configuration["AppKeys:NetatmoHost"];
               });
