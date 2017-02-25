@@ -45,10 +45,11 @@ namespace Clivis
             string key = Configuration["Cliviskey"];
             services.Configure<AppKeyConfig>(configs =>
               {                  
-                  configs.UserName = Protector.DecryptString(Configuration["NetatmoUserName"], key);
-                  configs.Password = Protector.DecryptString(Configuration["NetatmoPassword"], key);
-                  configs.NetatmoClientId = Protector.DecryptString(Configuration["NetatmoClientId"], key);
-                  configs.NetatmoClientSecret = Protector.DecryptString(Configuration["NetatmoClientSecret"], key);
+                  configs.UserName = Configuration["NETATMO_USERNAME"];
+                  configs.Password = Configuration["NETAMO_PASSWORD"];
+                  //configs.NetatmoClientId = Protector.DecryptString(Configuration["NetatmoClientId"], key);
+                  configs.NetatmoClientId = Configuration["NETATMO_CLIENTID"];
+                  configs.NetatmoClientSecret = Configuration["NETATMO_CLIENTSECRET"];
                   //configs.NibeClientId = Protector.DecryptString(Configuration["NibeClientId"], key);
                   configs.NibeClientId = Configuration["NIBE_ID"];
                   //configs.NibeClientSecret = Protector.DecryptString(Configuration["NibeClientSecret"], key);
