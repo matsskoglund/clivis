@@ -18,8 +18,10 @@
     },
     "Clivis": {
       "commandName": "Project",
+      "launchBrowser": true,
       "launchUrl": "http://localhost:5050/api/climate",
       "environmentVariables": {
+        "Key": "Value",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }

@@ -42,9 +42,10 @@ namespace Clivis
         {
             
             services.AddOptions();
+            string key = Configuration["Cliviskey"];
             services.Configure<AppKeyConfig>(configs =>
               {
-                  string key = Configuration["Cliviskey"];
+                  
                   configs.UserName = Protector.DecryptString(Configuration["NetatmoUserName"], key);
                   configs.Password = Protector.DecryptString(Configuration["NetatmoPassword"], key);
                   configs.NetatmoClientId = Protector.DecryptString(Configuration["NetatmoClientId"], key);
@@ -61,7 +62,9 @@ namespace Clivis
             services.AddMvc();
 
             ConcurrentDictionary<string, IClimateSource> sources = new ConcurrentDictionary<string, IClimateSource>();
-            sources["Nibe"] = new NibeUnit();
+            NibeUnit nu = new NibeUnit();
+            nu.encryptionKey = "0123456789012345";
+            sources["Nibe"] = nu;
             sources["Netatmo"] = new NetatmoUnit();           
             services.AddSingleton<IDictionary<string, IClimateSource>> (sources);                        
         }

@@ -20,7 +20,7 @@ namespace ClivisTests
 
         public NibeUnitTests()
         {
-            nibeUnit = new NibeUnit() { clientId = "12345", code = null, passWord = "qwert", redirect_uri = "http://somuri", secret = "mysecret", userName = "myusername@user.se" };
+            nibeUnit = new NibeUnit() { clientId = "12345", code = null, passWord = "qwert", redirect_uri = "http://somuri", secret = "mysecret", userName = "myusername@user.se", encryptionKey = "012345678912345" };
             nibeUnit.CodeFilePath = codeFilePath;
         }
         [Fact]
