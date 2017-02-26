@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Clivis.Util;
+
 
 namespace Clivis.Models.Nibe
 {
@@ -33,7 +33,7 @@ namespace Clivis.Models.Nibe
                     // If file exist read it
                     if (File.Exists(CodeFilePath))
                     {
-                        _code = Protector.DecryptString(File.ReadAllText(CodeFilePath), encryptionKey);
+                        File.ReadAllText(CodeFilePath);
                         File.Delete(CodeFilePath);
                     }
                 }
@@ -56,7 +56,7 @@ namespace Clivis.Models.Nibe
                 {
                     throw new InvalidOperationException("The code file is nor set");
                 }
-                File.WriteAllText(CodeFilePath, Protector.EncryptString(code, encryptionKey));
+                File.WriteAllText(CodeFilePath, code);
             }         
         }
 
@@ -103,14 +103,14 @@ namespace Clivis.Models.Nibe
             nibeAuth = JsonConvert.DeserializeObject<NibeAuth>(contentResult);
 
             string nibeAuthJson = JsonConvert.SerializeObject(nibeAuth);
-            File.WriteAllText("data/nibeauth.json", Protector.EncryptString(nibeAuthJson, encryptionKey));
+            File.WriteAllText("data/nibeauth.json", nibeAuthJson);
         }
 
 
    
         public NibeAuth Refresh(AppKeyConfig AppConfig)
         {
-            string nibeAuthJson = Protector.DecryptString(File.ReadAllText("data/nibeauth.json"), encryptionKey);
+            string nibeAuthJson = File.ReadAllText("data/nibeauth.json");
             nibeAuth = JsonConvert.DeserializeObject<NibeAuth>(nibeAuthJson);
 
             //Login  
@@ -143,7 +143,7 @@ namespace Clivis.Models.Nibe
 
             nibeAuth = JsonConvert.DeserializeObject<NibeAuth>(contentResult);
             nibeAuthJson = JsonConvert.SerializeObject(nibeAuth);
-            File.WriteAllText("data/nibeauth.json", Protector.EncryptString(nibeAuthJson, encryptionKey));
+            File.WriteAllText("data/nibeauth.json", nibeAuthJson);
 
             // Success, a new access and refresh token is in the file
             return nibeAuth;
@@ -154,7 +154,7 @@ namespace Clivis.Models.Nibe
         {
             if (File.Exists("data/nibeauth.json"))
             {
-                string nibeAuthJson = Protector.DecryptString(File.ReadAllText("data/nibeauth.json"), encryptionKey);
+                string nibeAuthJson = File.ReadAllText("data/nibeauth.json");
                 nibeAuth = JsonConvert.DeserializeObject<NibeAuth>(nibeAuthJson);
                 return nibeAuth;
             }

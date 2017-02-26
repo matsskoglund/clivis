@@ -11,7 +11,7 @@ using Clivis.Models;
 using Clivis.Models.Nibe;
 using Clivis.Models.Netatmo;
 using System.Collections.Concurrent;
-using Clivis.Util;
+
 
 namespace Clivis
 {
