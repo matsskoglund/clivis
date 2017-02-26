@@ -4,7 +4,7 @@ provider "aws" {
 
 resource "aws_key_pair" "auth" {
    key_name   = "${var.key_name}"
-   public_key = "${file(var.ssh_pubkey_file)}"
+ #  public_key = "${file(var.ssh_pubkey_file)}"
 }
 
 resource "aws_security_group" "clivis-load_balancers" {
