@@ -9,7 +9,7 @@ resource "aws_alb_target_group" "clivis-tg" {
     path = "/api/climate/Ping"
     timeout = "5"
     interval = "120"
-    matcher = "204"
+    matcher = "200,204"
   }
 }
 

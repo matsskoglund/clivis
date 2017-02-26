@@ -101,7 +101,7 @@ namespace Clivis.Controllers
             {
                 item = new ClimateItem() { IndoorValue = "20.5", OutdoorValue = "11.1", TimeStamp = DateTime.Now };
             }
-                if (item == null)
+            if (item == null)
                 return new Microsoft.AspNetCore.Mvc.NoContentResult();
             else
                 return Json(item);
