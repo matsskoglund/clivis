@@ -23,7 +23,7 @@ namespace Clivis
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddJsonFile("data/secretsenc.json", optional: true, reloadOnChange: true)
+               // .AddJsonFile("data/secretsenc.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
             if (env.IsDevelopment()) { 
@@ -56,8 +56,8 @@ namespace Clivis
                   configs.NibeClientSecret = Configuration["NIBE_SECRET"];
                   //configs.NibeRedirectURI = Configuration["NibeRedirectURI"];
                   configs.NibeRedirectURI = Configuration["NIBE_REDIRECTURL"];
-                  configs.NibeHost = Configuration["AppKeys:NibeHost"];
-                  configs.NetatmoHost = Configuration["AppKeys:NetatmoHost"];
+                  configs.NibeHost = Configuration["NIBE_HOST"];
+                  configs.NetatmoHost = Configuration["NETATMO_HOST"];
               });
            
 
