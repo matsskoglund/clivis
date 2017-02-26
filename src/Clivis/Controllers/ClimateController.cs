@@ -30,8 +30,7 @@ namespace Clivis.Controllers
 
             AppConfigs = configs.Value;
             nibe = climateSources["Nibe"];
-            netatmo = climateSources["Netatmo"];
-            
+            netatmo = climateSources["Netatmo"];            
         }
 
         // /api/climate
@@ -39,7 +38,7 @@ namespace Clivis.Controllers
         public IActionResult GetClimate([FromQuery] string code, [FromQuery] string state)
         {
 
-            HostString host = new HostString("localhost", 5050);
+            HostString host = new HostString(AppConfigs.NibeRedirectURI);
             if (Request != null)
                 host = Request.Host;
             if (code != null)
