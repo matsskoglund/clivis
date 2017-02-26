@@ -33,7 +33,7 @@ namespace Clivis.Models.Nibe
                     // If file exist read it
                     if (File.Exists(CodeFilePath))
                     {
-                        File.ReadAllText(CodeFilePath);
+                        _code  = File.ReadAllText(CodeFilePath);
                         File.Delete(CodeFilePath);
                     }
                 }

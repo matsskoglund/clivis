@@ -46,7 +46,7 @@ namespace Clivis
             services.Configure<AppKeyConfig>(configs =>
               {                  
                   configs.UserName = Configuration["NETATMO_USERNAME"];
-                  configs.Password = Configuration["NETAMO_PASSWORD"];
+                  configs.Password = Configuration["NETATMO_PASSWORD"];
                   //configs.NetatmoClientId = Protector.DecryptString(Configuration["NetatmoClientId"], key);
                   configs.NetatmoClientId = Configuration["NETATMO_CLIENTID"];
                   configs.NetatmoClientSecret = Configuration["NETATMO_CLIENTSECRET"];

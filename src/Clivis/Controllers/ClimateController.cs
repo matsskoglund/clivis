@@ -51,7 +51,7 @@ namespace Clivis.Controllers
             return Redirect("http://" + host + "/api/climate/Nibe");
         }
 
-
+        // /api/climate/Ping
         // /api/climate/Netatmo
         // /api/climate/Nibe
         [HttpGet("{source}")]
@@ -97,7 +97,11 @@ namespace Clivis.Controllers
                 }
                 item = ClimateItem.ClimateMeanValues(netatmoItem, nibeItem);
             }
-            if (item == null)
+            if (source.Equals("Ping"))
+            {
+                item = new ClimateItem() { IndoorValue = "20.5", OutdoorValue = "11.1", TimeStamp = DateTime.Now };
+            }
+                if (item == null)
                 return new Microsoft.AspNetCore.Mvc.NoContentResult();
             else
                 return Json(item);
