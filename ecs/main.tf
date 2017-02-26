@@ -154,6 +154,8 @@ resource "template_file" "clivis-task-template" {
     env_nibe_clientid = "${var.env_nibe_clientid}"
     env_nibe_clientsecret = "${var.env_nibe_clientsecret}"
     env_nibe_redirecturl = "${var.env_nibe_redirecturl}" 
+	env_nibe_host = "${var.env_nibe_host}" 
+	env_netatmo_host = "${var.env_netatmo_host}" 
     image_id = "${var.image_id}"
   }
 }
