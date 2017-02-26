@@ -22,8 +22,8 @@
           "readOnly": null
         }
       ],
-        "volumesFrom": [],        
-        "environment": [
+        "volumesFrom": [],
+      "environment": [
         {
           "name": "NETATMO_CLIENTSECRET",
           "value": "${env_netatmo_clientsecret}"
@@ -47,6 +47,14 @@
         {
           "name": "NIBE_REDIRECTURL",
           "value": "${env_nibe_redirecturl}"
+        },
+        {
+          "name": "NIBE_HOST",
+          "value": "${env_nibe_host}"
+        },
+        {
+          "name": "NETATMO_HOST",
+          "value": "${env_netatmo_host}"
         },
         {
           "name": "NIBE_SECRET",

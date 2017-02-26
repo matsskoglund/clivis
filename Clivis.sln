@@ -20,6 +20,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ecs", "ecs", "{9FAAD3AF-A1A8-4182-A109-6F0712F982AB}"
 	ProjectSection(SolutionItems) = preProject
 		deploy_ecs.sh = deploy_ecs.sh
+		ecs\deploy_ecs.sh = ecs\deploy_ecs.sh
 		ecs\main.tf = ecs\main.tf
 		ecs\services.tf = ecs\services.tf
 		ecs\variables.tf = ecs\variables.tf

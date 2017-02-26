@@ -104,6 +104,16 @@ variable "env_nibe_redirecturl" {
     description = "The redirect url for Nibe api"
 }
 
+variable "env_nibe_host" {
+    description = "The Nibe api host"
+	default = "https://api.nibeuplink.com"
+}
+
+variable "env_netatmo_host" {
+    description = "The Netatmo api host"
+	default = "https://api.netatmo.com"
+}
+
 variable "image_id" {
     description = "The docker image id use"
     default = "latest"
