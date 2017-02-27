@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace Clivis.Controllers
 {
@@ -18,6 +19,7 @@ namespace Clivis.Controllers
     [Route("api/[controller]")]
     public class ClimateController : Controller
     {
+        
         public AppKeyConfig AppConfigs { get; }
 
         public IClimateSource nibe { get; }
@@ -28,7 +30,7 @@ namespace Clivis.Controllers
 
             AppConfigs = configs.Value;
             nibe = climateSources["Nibe"];
-            netatmo = climateSources["Netatmo"];
+            netatmo = climateSources["Netatmo"];            
         }
 
         // /api/climate
@@ -36,19 +38,20 @@ namespace Clivis.Controllers
         public IActionResult GetClimate([FromQuery] string code, [FromQuery] string state)
         {
 
-            HostString host = new HostString("localhost", 5050);
+            HostString host = new HostString(AppConfigs.NibeRedirectURI);
             if (Request != null)
                 host = Request.Host;
             if (code != null)
             {
-                nibe.CodeFilePath = "code.txt";
+                nibe.CodeFilePath = "data/code.txt";
+                
                 nibe.code = code;
                 nibe.init(AppConfigs);
             }
             return Redirect("http://" + host + "/api/climate/Nibe");
         }
 
-
+        // /api/climate/Ping
         // /api/climate/Netatmo
         // /api/climate/Nibe
         [HttpGet("{source}")]
@@ -93,6 +96,10 @@ namespace Clivis.Controllers
                     return Redirect(uri.AbsoluteUri);
                 }
                 item = ClimateItem.ClimateMeanValues(netatmoItem, nibeItem);
+            }
+            if (source.Equals("Ping"))
+            {
+                item = new ClimateItem() { IndoorValue = "20.5", OutdoorValue = "11.1", TimeStamp = DateTime.Now };
             }
             if (item == null)
                 return new Microsoft.AspNetCore.Mvc.NoContentResult();

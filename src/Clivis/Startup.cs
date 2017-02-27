@@ -12,6 +12,7 @@ using Clivis.Models.Nibe;
 using Clivis.Models.Netatmo;
 using System.Collections.Concurrent;
 
+
 namespace Clivis
 {
     public class Startup
@@ -22,11 +23,11 @@ namespace Clivis
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddJsonFile("secrets.json", optional: true, reloadOnChange: true)
+               // .AddJsonFile("data/secretsenc.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
             if (env.IsDevelopment()) { 
-                    builder.AddUserSecrets(); 
+            //        builder.AddUserSecrets(); 
                                       
                 }
                
@@ -41,17 +42,22 @@ namespace Clivis
         {
             
             services.AddOptions();
+            string key = Configuration["Cliviskey"];
             services.Configure<AppKeyConfig>(configs =>
-              {
-                  configs.UserName = Configuration["NetatmoUserName"];
-                  configs.Password = Configuration["NetatmoPassword"];
-                  configs.NetatmoClientId = Configuration["NetatmoClientId"];
-                  configs.NetatmoClientSecret = Configuration["NetatmoClientSecret"];
-                  configs.NibeClientId = Configuration["NibeClientId"];
-                  configs.NibeClientSecret = Configuration["NibeClientSecret"];
-                  configs.NibeRedirectURI = Configuration["NibeRedirectURI"];
-                  configs.NibeHost = Configuration["AppKeys:NibeHost"];
-                  configs.NetatmoHost = Configuration["AppKeys:NetatmoHost"];
+              {                  
+                  configs.UserName = Configuration["NETATMO_USERNAME"];
+                  configs.Password = Configuration["NETATMO_PASSWORD"];
+                  //configs.NetatmoClientId = Protector.DecryptString(Configuration["NetatmoClientId"], key);
+                  configs.NetatmoClientId = Configuration["NETATMO_CLIENTID"];
+                  configs.NetatmoClientSecret = Configuration["NETATMO_CLIENTSECRET"];
+                  //configs.NibeClientId = Protector.DecryptString(Configuration["NibeClientId"], key);
+                  configs.NibeClientId = Configuration["NIBE_ID"];
+                  //configs.NibeClientSecret = Protector.DecryptString(Configuration["NibeClientSecret"], key);
+                  configs.NibeClientSecret = Configuration["NIBE_SECRET"];
+                  //configs.NibeRedirectURI = Configuration["NibeRedirectURI"];
+                  configs.NibeRedirectURI = Configuration["NIBE_REDIRECTURL"];
+                  configs.NibeHost = Configuration["NIBE_HOST"];
+                  configs.NetatmoHost = Configuration["NETATMO_HOST"];
               });
            
 
@@ -59,7 +65,9 @@ namespace Clivis
             services.AddMvc();
 
             ConcurrentDictionary<string, IClimateSource> sources = new ConcurrentDictionary<string, IClimateSource>();
-            sources["Nibe"] = new NibeUnit();
+            NibeUnit nu = new NibeUnit();
+            nu.encryptionKey = "0123456789012345";
+            sources["Nibe"] = nu;
             sources["Netatmo"] = new NetatmoUnit();           
             services.AddSingleton<IDictionary<string, IClimateSource>> (sources);                        
         }

@@ -77,7 +77,9 @@ namespace ClivisTests
             });
 
             ConcurrentDictionary<string, IClimateSource> sources = new ConcurrentDictionary<string, IClimateSource>();
-            sources["Nibe"] = new NibeUnit();
+            NibeUnit nibeUnit = new NibeUnit();
+            nibeUnit.encryptionKey = "012345678912345";
+            sources["Nibe"] = nibeUnit;
             sources["Netatmo"] = new NetatmoUnit();
             ClimateController climateController = new ClimateController(options, sources);
 
