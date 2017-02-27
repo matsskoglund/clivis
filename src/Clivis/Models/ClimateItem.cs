@@ -33,6 +33,12 @@ namespace Clivis.Models
             return ClimateItem.Meanvalue(left.OutdoorValue, right.OutdoorValue);
         }
 
+         public override string  ToString()
+        {
+           // {"timeStamp":"2017-02-27T15:55:05.982112+01:00","outdoorValue":"11.1","indoorValue":"20.5"}
+            return "{\"timeStamp\":" + this.TimeStamp.ToString() + "\",\"outdoorValue\":\"" + this.OutdoorValue.ToString() + "\",\"indoorValue\":\"" + this.IndoorValue.ToString() + "\"}";
+        }
+
         public static string MeanIndoorValue(ClimateItem left, ClimateItem right)
         {
             return ClimateItem.Meanvalue(left.IndoorValue, right.IndoorValue);

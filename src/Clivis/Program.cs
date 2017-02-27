@@ -26,7 +26,6 @@ namespace Clivis
                 .UseStartup<Startup>()
                 .UseUrls("http://*:5050/")
                 .Build();
-
             host.Run();
         }
     }

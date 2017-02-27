@@ -19,7 +19,8 @@
                     "args": "/C start ${auto-detect-url}"
                 },
                 "osx": {
-                    "command": "open"
+                    "command": "open",
+                    "args": "http://localhost:5050/api/climate/Ping"
                 },
                 "linux": {
                     "command": "xdg-open"

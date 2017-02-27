@@ -52,7 +52,11 @@ namespace ClivisTests
             ConcurrentDictionary<string, IClimateSource> sources = new ConcurrentDictionary<string, IClimateSource>();
             sources["Nibe"] = nibeMock.Object;
             sources["Netatmo"] = netatmoMock.Object;
-            _climateController = new ClimateController(options, sources);
+            LoggerFactory loggerFactory = new LoggerFactory();
+            loggerFactory.AddConsole();
+            ILogger<ClimateController> logger = new Logger<ClimateController>(loggerFactory);
+
+            _climateController = new ClimateController(options, sources,logger);
         }
 
         [Fact]
@@ -81,7 +85,10 @@ namespace ClivisTests
             nibeUnit.encryptionKey = "012345678912345";
             sources["Nibe"] = nibeUnit;
             sources["Netatmo"] = new NetatmoUnit();
-            ClimateController climateController = new ClimateController(options, sources);
+            LoggerFactory loggerFactory = new LoggerFactory();
+            loggerFactory.AddConsole();
+            ILogger<ClimateController> logger = new Logger<ClimateController>(loggerFactory);
+            ClimateController climateController = new ClimateController(options, sources, logger);
 
             Assert.IsType<NetatmoUnit>(climateController.netatmo);
             Assert.IsType<NibeUnit>(climateController.nibe);
@@ -119,7 +126,7 @@ namespace ClivisTests
             nibeMock.Setup<ClimateItem>(x => x.CurrentReading(It.IsAny<AppKeyConfig>())).Returns(item);
 
 
-            IActionResult res = _climateController.GetById("Nibe");
+            IActionResult res = _climateController.GetBySource("Nibe");
             nibeMock.Verify(x => x.CurrentReading(It.IsAny<AppKeyConfig>()), Times.AtLeastOnce());
 
         }
@@ -133,7 +140,7 @@ namespace ClivisTests
             ClimateItem netatmoitem = new ClimateItem() { IndoorValue = "20", OutdoorValue = "10" };
             netatmoMock.Setup<ClimateItem>(x => x.CurrentReading(It.IsAny<AppKeyConfig>())).Returns(netatmoitem);
 
-            IActionResult res = _climateController.GetById("Reading");
+            IActionResult res = _climateController.GetBySource("Reading");
             nibeMock.Verify(x => x.CurrentReading(It.IsAny<AppKeyConfig>()), Times.AtLeastOnce());
             netatmoMock.Verify(x => x.CurrentReading(It.IsAny<AppKeyConfig>()), Times.AtLeastOnce());
         }
@@ -145,7 +152,7 @@ namespace ClivisTests
             nibeMock.Setup<ClimateItem>(x => x.CurrentReading(It.IsAny<AppKeyConfig>())).Returns(item);
 
 
-            IActionResult res = _climateController.GetById("Nibe");
+            IActionResult res = _climateController.GetBySource("Nibe");
             nibeMock.Verify(x => x.CurrentReading(It.IsAny<AppKeyConfig>()), Times.AtLeastOnce());
 
             Assert.IsType<RedirectResult>(res);
@@ -159,7 +166,7 @@ namespace ClivisTests
             netatmoMock.Setup<ClimateItem>(x => x.CurrentReading(It.IsAny<AppKeyConfig>())).Returns(item);
 
 
-            IActionResult res = _climateController.GetById("Netatmo");
+            IActionResult res = _climateController.GetBySource("Netatmo");
             netatmoMock.Verify(x => x.CurrentReading(It.IsAny<AppKeyConfig>()), Times.AtLeastOnce());
         }
 
@@ -170,7 +177,7 @@ namespace ClivisTests
             netatmoMock.Setup<ClimateItem>(x => x.CurrentReading(It.IsAny<AppKeyConfig>())).Returns(item);
 
 
-            IActionResult res = _climateController.GetById("Netatmo");
+            IActionResult res = _climateController.GetBySource("Netatmo");
             Assert.IsType<Microsoft.AspNetCore.Mvc.NoContentResult>(res);
             netatmoMock.Verify(x => x.CurrentReading(It.IsAny<AppKeyConfig>()), Times.AtLeastOnce());
         }
@@ -178,7 +185,7 @@ namespace ClivisTests
         [Fact]
         public void ClimateController_GetById_With_Wrong_SourceName_Returns_null()
         {
-            IActionResult res = _climateController.GetById("Nonexisting");
+            IActionResult res = _climateController.GetBySource("Nonexisting");
             Assert.NotNull(res);
             Assert.IsType<Microsoft.AspNetCore.Mvc.NoContentResult>(res);
         }

@@ -16,22 +16,22 @@ using Microsoft.Extensions.Logging;
 
 namespace Clivis.Controllers
 {
-public class LoggingEvents
-{
-    public const int GENERATE_ITEMS = 1000;
-    public const int LIST_ITEMS = 1001;
-    public const int GET_ITEM = 1002;
-    public const int INSERT_ITEM = 1003;
-    public const int UPDATE_ITEM = 1004;
-    public const int DELETE_ITEM = 1005;
+    public class LoggingEvents
+    {
+        public const int GENERATE_ITEMS = 1000;
+        public const int LIST_ITEMS = 1001;
+        public const int GET_ITEM = 1002;
+        public const int INSERT_ITEM = 1003;
+        public const int UPDATE_ITEM = 1004;
+        public const int DELETE_ITEM = 1005;
 
-    public const int GET_ITEM_NOTFOUND = 4000;
-    public const int UPDATE_ITEM_NOTFOUND = 4001;
-}
+        public const int GET_ITEM_NOTFOUND = 4000;
+        public const int UPDATE_ITEM_NOTFOUND = 4001;
+    }
     [Route("api/[controller]")]
     public class ClimateController : Controller
     {
-        
+
         public AppKeyConfig AppConfigs { get; }
         private readonly ILogger _logger;
         public IClimateSource nibe { get; }
@@ -42,15 +42,15 @@ public class LoggingEvents
 
             AppConfigs = configs.Value;
             nibe = climateSources["Nibe"];
-            netatmo = climateSources["Netatmo"];    
-            _logger = logger;        
+            netatmo = climateSources["Netatmo"];
+            _logger = logger;
         }
 
         // /api/climate
         [HttpGet]
         public IActionResult GetClimate([FromQuery] string code, [FromQuery] string state)
         {
-            _logger.LogInformation(LoggingEvents.GET_ITEM, "Getting item {code}",code);
+            _logger.LogInformation(LoggingEvents.GET_ITEM, "Getting item {code}", code);
 
             HostString host = new HostString(AppConfigs.NibeRedirectURI);
             if (Request != null)
@@ -58,7 +58,7 @@ public class LoggingEvents
             if (code != null)
             {
                 nibe.CodeFilePath = "data/code.txt";
-                
+
                 nibe.code = code;
                 nibe.init(AppConfigs);
             }
@@ -69,24 +69,26 @@ public class LoggingEvents
         // /api/climate/Netatmo
         // /api/climate/Nibe
         [HttpGet("{source}")]
-        public IActionResult GetById(string source)
+        public IActionResult GetBySource (string source)
         {
-            _logger.LogInformation(LoggingEvents.GET_ITEM, "The source if {Source}", source);
+            _logger.LogInformation("The source is {Source}", source);
+
             ClimateItem item = null;
             if (source.Equals("Nibe"))
             {
                 // Read data from Nibe, if reading works we get data, if not we get null and try to do a login
                 item = nibe.CurrentReading(AppConfigs);
 
-
                 if (item == null)
                 {
+                    _logger.LogInformation("Logging in to Nibe");
                     var uri = new UriBuilder(AppConfigs.NibeHost)
                     {
                         Path = $"/oauth/authorize",
                         Query = "response_type=code&client_id=" + AppConfigs.NibeClientId + "&scope=READSYSTEM&redirect_uri=" + AppConfigs.NibeRedirectURI + "&state=12345"
                     }.Uri;
-                   
+                    _logger.LogInformation("Connecting to {uri}", uri);
+
                     return Redirect(uri.AbsoluteUri);
                 }
             }
@@ -115,6 +117,8 @@ public class LoggingEvents
             if (source.Equals("Ping"))
             {
                 item = new ClimateItem() { IndoorValue = "20.5", OutdoorValue = "11.1", TimeStamp = DateTime.Now };
+                _logger.LogInformation("Ping returning {item}", item.ToString());
+
             }
             if (item == null)
                 return new Microsoft.AspNetCore.Mvc.NoContentResult();

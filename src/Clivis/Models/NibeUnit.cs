@@ -11,7 +11,7 @@ namespace Clivis.Models.Nibe
 
 
     public class NibeUnit : IClimateSource
-    {       
+    {
         private NibeAuth nibeAuth = new NibeAuth();
         public string encryptionKey { get; set; }
         public string clientId { get; set; }
@@ -24,16 +24,18 @@ namespace Clivis.Models.Nibe
         public string redirect_uri { get; set; }
 
         private string _code = null;
-        public string code {
+        public string code
+        {
             get
             {
                 // If no code set, try to read one from file
-                if(_code == null)
+                if (_code == null)
                 {
                     // If file exist read it
                     if (File.Exists(CodeFilePath))
                     {
-                        _code  = File.ReadAllText(CodeFilePath);
+                        _code = File.ReadAllText(CodeFilePath);
+
                         File.Delete(CodeFilePath);
                     }
                 }
@@ -54,10 +56,10 @@ namespace Clivis.Models.Nibe
                 }
                 catch (ArgumentNullException)
                 {
-                    throw new InvalidOperationException("The code file is nor set");
+                    throw new InvalidOperationException("The code file is not set");
                 }
                 File.WriteAllText(CodeFilePath, code);
-            }         
+            }
         }
 
 
@@ -70,7 +72,7 @@ namespace Clivis.Models.Nibe
             // Check to see if we have a code
             if (code == null)
                 throw new Exception("Code is null");
-                        
+
             //Login  
             var pairs = new List<KeyValuePair<string, string>>
             {
@@ -96,7 +98,7 @@ namespace Clivis.Models.Nibe
                 int statusCode = (int)response.StatusCode;
                 throw new Exception(statusCode + " " + response.ReasonPhrase);
             }
-            
+
 
             string contentResult = response.Content.ReadAsStringAsync().Result;
 
@@ -107,7 +109,7 @@ namespace Clivis.Models.Nibe
         }
 
 
-   
+
         public NibeAuth Refresh(AppKeyConfig AppConfig)
         {
             string nibeAuthJson = File.ReadAllText("data/nibeauth.json");
@@ -149,7 +151,7 @@ namespace Clivis.Models.Nibe
             return nibeAuth;
         }
 
-       
+
         private NibeAuth getNibeAuthJson()
         {
             if (File.Exists("data/nibeauth.json"))
@@ -159,7 +161,7 @@ namespace Clivis.Models.Nibe
                 return nibeAuth;
             }
             else
-                return null;            
+                return null;
         }
 
         public ClimateItem GetReadingWithAccessCode(string accessCode, AppKeyConfig config)
@@ -174,15 +176,15 @@ namespace Clivis.Models.Nibe
                 Query = "parameterIds=outdoor_temperature&parameterIds=indoor_temperature"
             }.Uri;
 
-           
-            var response =  client.GetAsync(uri).Result;
+
+            var response = client.GetAsync(uri).Result;
             if (!response.IsSuccessStatusCode)
             {
                 // If it didn't work, return null
                 return null;
             }
             string contentResult = response.Content.ReadAsStringAsync().Result;
-            
+
             NibeTemp nibeOutdoorTemp = JsonConvert.DeserializeObject<List<NibeTemp>>(contentResult)[0];
             NibeTemp nibeIndoorTemp = JsonConvert.DeserializeObject<List<NibeTemp>>(contentResult)[1];
 
@@ -194,7 +196,7 @@ namespace Clivis.Models.Nibe
         }
 
         ClimateItem reading = new ClimateItem();
-  
+
         public ClimateItem CurrentReading(AppKeyConfig AppConfig)
         {
             ClimateItem item = null;
