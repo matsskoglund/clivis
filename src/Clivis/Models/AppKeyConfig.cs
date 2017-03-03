@@ -14,5 +14,7 @@ namespace Clivis.Models
         public string NibeHost { get; set;  }
 
         public string NetatmoHost { get; set; }
+
+        public string BuildVersion { get; set; }
     }
 }

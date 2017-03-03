@@ -52,6 +52,7 @@ namespace Clivis.Controllers
         // /api/climate/Ping
         // /api/climate/Netatmo
         // /api/climate/Nibe
+        // /api/climate/Version
         [HttpGet("{source}")]
         public IActionResult GetBySource (string source)
         {
@@ -104,8 +105,12 @@ _logger.LogInformation("The host is {Source}", AppConfigs.NibeHost);
                 item = new ClimateItem() { IndoorValue = "20.5", OutdoorValue = "11.1", TimeStamp = DateTime.Now };
                 _logger.LogInformation("Ping returning {item}", item.ToString());
             }
+            if (source.Equals("Version"))
+            {
+                item = new ClimateItem() { IndoorValue = AppConfigs.BuildVersion, OutdoorValue = AppConfigs.BuildVersion, TimeStamp = DateTime.Now };
+                _logger.LogInformation("Version returning {item}", AppConfigs.BuildVersion);
+            }
 
-            
             if (item == null)
                 return new Microsoft.AspNetCore.Mvc.NoContentResult();
             else

@@ -29,7 +29,7 @@
           "value": "${env_netatmo_clientsecret}"
         },
         {
-          "name": "NETAMO_PASSWORD",
+          "name": "NETATMO_PASSWORD",
           "value": "${env_netatmo_password}"
         },
         {

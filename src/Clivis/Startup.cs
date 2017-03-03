@@ -47,6 +47,7 @@ namespace Clivis
                   configs.NibeRedirectURI = Configuration["NIBE_REDIRECTURL"];
                   configs.NibeHost = Configuration["NIBE_HOST"];
                   configs.NetatmoHost = Configuration["NETATMO_HOST"];
+                  configs.BuildVersion = Configuration["BUILD_VERSION"];
               });
            
 
