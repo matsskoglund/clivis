@@ -54,9 +54,9 @@ namespace Clivis
             services.AddMvc();
 
             ConcurrentDictionary<string, IClimateSource> sources = new ConcurrentDictionary<string, IClimateSource>();
-            NibeUnit nibe = new NibeUnit() { CodeFilePath = "data/code.txt"};
+            //NibeUnit nibe = new NibeUnit() { CodeFilePath = "data/code.txt"};
             
-            sources["Nibe"] = new NibeUnit();
+            sources["Nibe"] = new NibeUnit() { CodeFilePath = "data/code.txt" };
             sources["Netatmo"] = new NetatmoUnit();           
             services.AddSingleton<IDictionary<string, IClimateSource>> (sources);                        
         }
