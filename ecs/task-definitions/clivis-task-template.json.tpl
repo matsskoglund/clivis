@@ -57,6 +57,10 @@
           "value": "${env_netatmo_host}"
         },
         {
+          "name": "BUILD_VERSION",
+          "value": "${image_id}"
+        },
+        {
           "name": "NIBE_SECRET",
           "value": "${env_nibe_clientsecret}"
         }
