@@ -13,7 +13,7 @@ namespace Clivis.Models.Nibe
     public class NibeUnit : IClimateSource
     {
         private NibeAuth nibeAuth = new NibeAuth();
-        public string encryptionKey { get; set; }
+
         public string clientId { get; set; }
         public string secret { get; set; }
         public string userName { get; set; }

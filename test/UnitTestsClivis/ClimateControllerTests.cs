@@ -38,7 +38,7 @@ namespace ClivisTests
         public ClimateControllerTests()
         {
             ConfigurationBuilder builder = new ConfigurationBuilder();
-            builder.AddUserSecrets();
+            builder.AddEnvironmentVariables();
 
             Configuration = builder.Build();
             IOptions<AppKeyConfig> options = Options.Create(new AppKeyConfig()
@@ -82,7 +82,7 @@ namespace ClivisTests
 
             ConcurrentDictionary<string, IClimateSource> sources = new ConcurrentDictionary<string, IClimateSource>();
             NibeUnit nibeUnit = new NibeUnit();
-            nibeUnit.encryptionKey = "012345678912345";
+    
             sources["Nibe"] = nibeUnit;
             sources["Netatmo"] = new NetatmoUnit();
             LoggerFactory loggerFactory = new LoggerFactory();
@@ -150,7 +150,6 @@ namespace ClivisTests
         {
             ClimateItem item = null;
             nibeMock.Setup<ClimateItem>(x => x.CurrentReading(It.IsAny<AppKeyConfig>())).Returns(item);
-
 
             IActionResult res = _climateController.GetBySource("Nibe");
             nibeMock.Verify(x => x.CurrentReading(It.IsAny<AppKeyConfig>()), Times.AtLeastOnce());

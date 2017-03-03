@@ -62,7 +62,7 @@ namespace Clivis.Controllers
             {
                 // Read data from Nibe, if reading works we get data, if not we get null and try to do a login
                 item = nibe.CurrentReading(AppConfigs);
-
+_logger.LogInformation("The host is {Source}", AppConfigs.NibeHost);
                 if (item == null)
                 {
                     _logger.LogInformation("Logging in to Nibe");

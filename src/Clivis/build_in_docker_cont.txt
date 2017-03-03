@@ -1,5 +1,10 @@
 docker run -it -v $(PWD):/app --workdir /app microsoft/aspnetcore-build bash -c "dotnet restore && dotnet publish -c Release -o ./bin/Release/PublishOutput"
 
-docker run -it -v $(PWD):/app --workdir /app microsoft/dotnet:1.1-sdk-projectjson bash -c "dotnet restore && dotnet publish -c Release -o ./bin/Release/PublishOutput"
+docker run -it -v $(PWD):/app --workdir /app microsoft/dotnet:1.1-sdk-projectjson bash -c "dotnet restore && dotnet test && dotnet publish -c Release -o ./bin/Release/PublishOutput"
+
+docker run -it -v $(PWD):/app --workdir /app microsoft/aspnetcore-build bash -c "dotnet restore && dotnet test && dotnet publish -c Release -o ./bin/Release/PublishOutput"
+
+docker run -it -v $(PWD):/app --workdir /app microsoft/dotnet:1.1-sdk-projectjson bash -c "dotnet restore && dotnet build src/Clivis && cd test/UnitTestsClivis && dotnet test && cd .. && cd .. && dotnet publish -c Release -o ./bin/Release/PublishOutput"
+
 
 microsoft/dotnet:1.1-sdk-projectjson

@@ -20,7 +20,7 @@ namespace ClivisTests
 
         public NibeUnitTests()
         {
-            nibeUnit = new NibeUnit() { clientId = "12345", code = null, passWord = "qwert", redirect_uri = "http://somuri", secret = "mysecret", userName = "myusername@user.se", encryptionKey = "012345678912345" };
+            nibeUnit = new NibeUnit() { clientId = "12345", code = null, passWord = "qwert", redirect_uri = "http://somuri", secret = "mysecret", userName = "myusername@user.se"};
             nibeUnit.CodeFilePath = codeFilePath;
         }
         [Fact]
@@ -75,7 +75,7 @@ namespace ClivisTests
             // Throws Exception
             Exception ex = Assert.Throws<InvalidOperationException>(() => nibeUnit.code = "newcode");
 
-            Assert.Equal("The code file is nor set", ex.Message);
+            Assert.Equal("The code file is not set", ex.Message);
             // Restore
             nibeUnit.CodeFilePath = saveCodePath;
         }
