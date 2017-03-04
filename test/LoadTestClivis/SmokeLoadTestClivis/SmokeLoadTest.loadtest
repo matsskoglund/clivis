@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<LoadTest Name="SmokeLoadTest" Description="" Owner="" storage="d:\utv\clivis\test\loadtestclivis\smokeloadtestclivis\smokeloadtest.loadtest" Priority="2147483647" Enabled="true" CssProjectStructure="" CssIteration="" DeploymentItemsEditable="" WorkItemIds="" TraceLevel="None" CurrentRunConfig="Run Settings1" Id="11e7daf8-b85d-4e1e-baa0-bacc0a82acd6" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+<LoadTest Name="SmokeLoadTest" Description="" Owner="" storage="c:\users\mats\cloudstation\utv\clivis\test\loadtestclivis\smokeloadtestclivis\smokeloadtest.loadtest" Priority="2147483647" Enabled="true" CssProjectStructure="" CssIteration="" DeploymentItemsEditable="" WorkItemIds="" TraceLevel="None" CurrentRunConfig="Run Settings1" Id="11e7daf8-b85d-4e1e-baa0-bacc0a82acd6" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
   <Scenarios>
     <Scenario Name="Smoke" DelayBetweenIterations="0" PercentNewUsers="0" IPSwitching="false" TestMixType="PercentageOfTestsStarted" ApplyDistributionToPacingDelay="true" MaxTestIterations="0" DisableDuringWarmup="false" DelayStartTime="0" AllowedAgents="">
       <ThinkProfile Value="0.2" Pattern="NormalDistribution" />
-      <LoadProfile Pattern="Step" InitialUsers="10" MaxUsers="200" StepUsers="10" StepDuration="10" StepRampTime="0" />
+      <LoadProfile Pattern="Step" InitialUsers="10" MaxUsers="20" StepUsers="10" StepDuration="10" StepRampTime="0" />
       <TestMix>
         <TestProfile Name="SmokeTest" Path="smoketest.webtest" Id="46d95981-c0f0-4eac-b689-7e4f4acf37e5" Percentage="100" Type="Microsoft.VisualStudio.TestTools.WebStress.DeclarativeWebTestElement, Microsoft.VisualStudio.QualityTools.LoadTest, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
       </TestMix>

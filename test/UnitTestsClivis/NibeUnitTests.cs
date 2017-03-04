@@ -198,6 +198,7 @@ namespace ClivisTests
             apiNibeStub.Start();
             AppKeyConfig configs = new AppKeyConfig();
             configs.NibeHost = apiNibeStub.Address;
+            
             NibeAuth res = nibeUnit.Refresh(configs);
             Assert.Null(res);
         }
