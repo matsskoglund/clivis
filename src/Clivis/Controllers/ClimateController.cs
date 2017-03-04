@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
+
 namespace Clivis.Controllers
 {
     
@@ -33,15 +34,21 @@ namespace Clivis.Controllers
         public IActionResult GetClimate([FromQuery] string code, [FromQuery] string state)
         {
             _logger.LogInformation("Getting item {code}", code);
-
-            // Since the server is different depending on environment we 
-            // get it from the environment unless we can get it from the Reuquest
             HostString host = new HostString(AppConfigs.NibeRedirectURI);
             if (Request != null)
                 host = Request.Host;
 
+            if (code == null)
+            {
+                string redirectString = "http://" + host + "/api/climate/Reading";               
+                return Redirect(redirectString);
+            }
+            // Since the server is different depending on environment we 
+            // get it from the environment unless we can get it from the Request
             
-            if (code != null)
+
+            
+            if ((code != null) && (state.Equals("12345")))
             {
                 nibe.code = code;
                 nibe.init(AppConfigs);
@@ -63,7 +70,7 @@ namespace Clivis.Controllers
             {
                 // Read data from Nibe, if reading works we get data, if not we get null and try to do a login
                 item = nibe.CurrentReading(AppConfigs);
-_logger.LogInformation("The host is {Source}", AppConfigs.NibeHost);
+                
                 if (item == null)
                 {
                     _logger.LogInformation("Logging in to Nibe");

@@ -74,7 +74,7 @@ namespace ClivisTests
             configs.NetatmoHost = apiNetatmoStub.Address;
 
             Exception ex = Assert.Throws<Exception>(() => netatmoUnit.init(configs));
-            Assert.Equal("Could not login", ex.Message);
+            Assert.Equal("Could not login, response: ", ex.Message);
         }
 
         [Fact]

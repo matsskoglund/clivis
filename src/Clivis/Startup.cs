@@ -9,11 +9,12 @@ using Clivis.Models.Nibe;
 using Clivis.Models.Netatmo;
 using System.Collections.Concurrent;
 
-
 namespace Clivis
 {
     public class Startup
     {
+        
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -24,7 +25,7 @@ namespace Clivis
             if (env.IsDevelopment()) { 
                        
             }
-               
+            
             Configuration = builder.Build();
         }
 
@@ -35,15 +36,15 @@ namespace Clivis
         {
             
             services.AddOptions();
-            string key = Configuration["Cliviskey"];
+            
             services.Configure<AppKeyConfig>(configs =>
               {                  
                   configs.UserName = Configuration["NETATMO_USERNAME"];
                   configs.Password = Configuration["NETATMO_PASSWORD"];
                   configs.NetatmoClientId = Configuration["NETATMO_CLIENTID"];
                   configs.NetatmoClientSecret = Configuration["NETATMO_CLIENTSECRET"];
-                  configs.NibeClientId = Configuration["NIBE_ID"];
-                  configs.NibeClientSecret = Configuration["NIBE_SECRET"];
+                  configs.NibeClientId = Configuration["NIBE_CLIENTID"];
+                  configs.NibeClientSecret = Configuration["NIBE_CLIENTSECRET"];
                   configs.NibeRedirectURI = Configuration["NIBE_REDIRECTURL"];
                   configs.NibeHost = Configuration["NIBE_HOST"];
                   configs.NetatmoHost = Configuration["NETATMO_HOST"];

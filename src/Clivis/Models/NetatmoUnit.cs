@@ -52,7 +52,7 @@ namespace Clivis.Models.Netatmo
 
             var response = client.PostAsync(uri, outcontent).Result;
             if (!response.IsSuccessStatusCode)
-                throw new Exception("Could not login with ID:" + configs.NetatmoClientId + " Secret: " + configs.NetatmoClientSecret + " UserName: " + configs.UserName + " Password: " + configs.Password + " Response: " + response.Content.ReadAsStringAsync().Result);
+                throw new Exception("Could not login, response: " + response.Content.ReadAsStringAsync().Result);
 
             string contentResult = response.Content.ReadAsStringAsync().Result;
             netatmoAuth = JsonConvert.DeserializeObject<NetatmoAuth>(contentResult);

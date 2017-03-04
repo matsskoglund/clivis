@@ -43,11 +43,16 @@ namespace ClivisTests
             Configuration = builder.Build();
             IOptions<AppKeyConfig> options = Options.Create(new AppKeyConfig()
             {
-                UserName = Configuration["NetatmoUserName"],
-                Password = Configuration["NetatmoPassword"],
-                NetatmoClientId = Configuration["NetatmoClientId"],
-                NetatmoClientSecret = Configuration["NetatmoClientSecret"],
-                NibeHost = Configuration["NibeHost"]
+                UserName = Configuration["NETATMO_USERNAME"],
+                Password = Configuration["NETATMO_PASSWORD"],
+                NetatmoClientId = Configuration["NETATMO_CLIENTID"],
+                NetatmoClientSecret = Configuration["NETATMO_CLIENTSECRET"],
+                NibeClientId = Configuration["NIBE_ID"],
+                NibeClientSecret = Configuration["NIBE_SECRET"],
+                NibeRedirectURI = Configuration["NIBE_REDIRECTURL"],
+                NibeHost = Configuration["NIBE_HOST"],
+                NetatmoHost = Configuration["NETATMO_HOST"],
+                BuildVersion = Configuration["BUILD_VERSION"]
             });
             ConcurrentDictionary<string, IClimateSource> sources = new ConcurrentDictionary<string, IClimateSource>();
             sources["Nibe"] = nibeMock.Object;
@@ -56,7 +61,7 @@ namespace ClivisTests
             loggerFactory.AddConsole();
             ILogger<ClimateController> logger = new Logger<ClimateController>(loggerFactory);
 
-            _climateController = new ClimateController(options, sources,logger);
+            _climateController = new ClimateController(options, sources, logger);
         }
 
         [Fact]
@@ -69,16 +74,22 @@ namespace ClivisTests
         public void ClimateController_IClimateSources_are_of_correct_type()
         {
             ConfigurationBuilder builder = new ConfigurationBuilder();
-            builder.AddUserSecrets();
+            builder.AddEnvironmentVariables();
 
             IConfigurationRoot Configuration = builder.Build();
             IOptions<AppKeyConfig> options = Options.Create(new AppKeyConfig()
             {
-                UserName = Configuration["NetatmoUserName"],
-                Password = Configuration["NetatmoPassword"],
-                NetatmoClientId = Configuration["NetatmoClientId"],
-                NetatmoClientSecret = Configuration["NetatmoClientSecret"]
-            });
+                UserName = Configuration["NETATMO_USERNAME"],
+                Password = Configuration["NETATMO_PASSWORD"],
+                NetatmoClientId = Configuration["NETATMO_CLIENTID"],
+                NetatmoClientSecret = Configuration["NETATMO_CLIENTSECRET"],
+                NibeClientId = Configuration["NIBE_ID"],
+                NibeClientSecret = Configuration["NIBE_SECRET"],
+                NibeRedirectURI = Configuration["NIBE_REDIRECTURL"],
+                NibeHost = Configuration["NIBE_HOST"],
+                NetatmoHost = Configuration["NETATMO_HOST"],
+                BuildVersion = Configuration["BUILD_VERSION"]
+        });
 
             ConcurrentDictionary<string, IClimateSource> sources = new ConcurrentDictionary<string, IClimateSource>();
             NibeUnit nibeUnit = new NibeUnit();
@@ -99,7 +110,7 @@ namespace ClivisTests
         {
 
 
-            IActionResult res = _climateController.GetClimate("code", "state");
+            IActionResult res = _climateController.GetClimate("code", "12345");
             nibeMock.VerifySet(foo => foo.code = "code");
 
             Assert.NotNull(res);
@@ -149,7 +160,22 @@ namespace ClivisTests
         public void ClimateController_GetById_WithNibe_As_Source_Calls_CurrentReading_ThatReturnsNull()
         {
             ClimateItem item = null;
-            nibeMock.Setup<ClimateItem>(x => x.CurrentReading(It.IsAny<AppKeyConfig>())).Returns(item);
+
+            // nibeMock.Setup<ClimateItem>(x => x.CurrentReading(It.IsAny<AppKeyConfig>())).Returns(item);
+            AppKeyConfig ac = new AppKeyConfig()
+            {
+                UserName = Configuration["NETATMO_USERNAME"],
+                Password = Configuration["NETATMO_PASSWORD"],
+                NetatmoClientId = Configuration["NETATMO_CLIENTID"],
+                NetatmoClientSecret = Configuration["NETATMO_CLIENTSECRET"],
+                NibeClientId = Configuration["NIBE_CLIENTID"],
+                NibeClientSecret = Configuration["NIBE_CLIENTSECRET"],
+                NibeRedirectURI = Configuration["NIBE_REDIRECTURL"],
+                NibeHost = Configuration["NIBE_HOST"],
+                NetatmoHost = Configuration["NETATMO_HOST"],
+                BuildVersion = Configuration["BUILD_VERSION"]
+            };
+            nibeMock.Setup<ClimateItem>(x => x.CurrentReading(ac)).Returns(item);
 
             IActionResult res = _climateController.GetBySource("Nibe");
             nibeMock.Verify(x => x.CurrentReading(It.IsAny<AppKeyConfig>()), Times.AtLeastOnce());
