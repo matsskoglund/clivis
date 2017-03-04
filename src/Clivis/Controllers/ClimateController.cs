@@ -94,7 +94,7 @@ namespace Clivis.Controllers
             {
                 
                 ClimateItem netatmoItem = netatmo.CurrentReading(AppConfigs);
-
+               
                 ClimateItem nibeItem = null;
                 nibeItem = nibe.CurrentReading(AppConfigs);
                 if (nibeItem == null)
@@ -104,6 +104,8 @@ namespace Clivis.Controllers
                         Path = $"/oauth/authorize",
                         Query = "response_type=code&client_id=" + AppConfigs.NibeClientId + "&scope=READSYSTEM&redirect_uri=" + AppConfigs.NibeRedirectURI + "&state=12345"
                     }.Uri;
+
+                    _logger.LogInformation("redirecting to {redirect}", uri.AbsoluteUri);
                     return Redirect(uri.AbsoluteUri);
                 }
                 item = ClimateItem.ClimateMeanValues(netatmoItem, nibeItem);

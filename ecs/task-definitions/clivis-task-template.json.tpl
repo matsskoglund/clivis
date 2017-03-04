@@ -41,7 +41,7 @@
           "value": "${env_netatmo_username}"
         },
         {
-          "name": "NIBE_ID",
+          "name": "NIBE_CLIENTID",
           "value": "${env_nibe_clientid}"
         },
         {
@@ -61,7 +61,7 @@
           "value": "${image_id}"
         },
         {
-          "name": "NIBE_SECRET",
+          "name": "NIBE_CLIENTSECRET",
           "value": "${env_nibe_clientsecret}"
         }
       ],
