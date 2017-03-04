@@ -37,11 +37,12 @@ namespace Clivis.Controllers
             HostString host = new HostString(AppConfigs.NibeRedirectURI);
             if (Request != null)
                 host = Request.Host;
-
+            _logger.LogInformation("Host is {host}", host);
             if (code == null)
             {
-                string redirectString = "http://" + host + "/api/climate/Reading";               
-                return Redirect(redirectString);
+                string redirectUrl = "http://" + host + "/api/climate/Reading";
+                _logger.LogInformation("redirecting to {redirect}", redirectUrl);
+                return Redirect(redirectUrl);
             }
             // Since the server is different depending on environment we 
             // get it from the environment unless we can get it from the Request
@@ -53,7 +54,10 @@ namespace Clivis.Controllers
                 nibe.code = code;
                 nibe.init(AppConfigs);
             }
-            return Redirect("http://" + host + "/api/climate/Nibe");
+            
+             string redirectString = "http://" + host + "/api/climate/Nibe";
+            _logger.LogInformation("redirecting to {redirect}", redirectString);
+            return Redirect(redirectString);
         }
 
         // /api/climate/Ping

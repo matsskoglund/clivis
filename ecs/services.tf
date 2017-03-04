@@ -5,7 +5,6 @@ resource "aws_alb_target_group" "clivis-tg" {
   vpc_id   = "${var.sandbox_vpc}"
 
   health_check {
-    interval = "30"
     path = "/api/climate/Ping"
     timeout = "5"
     interval = "120"
