@@ -14,7 +14,7 @@ resource "aws_alb_target_group" "clivis-tg" {
 
 resource "aws_alb" "clivis-alb" {
   name            = "clivis-alb"
-  security_groups = ["${aws_security_group.clivis-load_balancers.id}"]
+  security_groups = ["${aws_security_group.clivis_load_balancers.id}"]
   subnets         = ["${var.public_subnet_id1}", "${var.public_subnet_id2}"]
 }
 
