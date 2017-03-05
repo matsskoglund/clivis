@@ -7,8 +7,8 @@ provider "aws" {
 #  public_key = "${file(var.ssh_pubkey_file)}"
 #}
 
-resource "aws_security_group" "clivis-load_balancers" {
-  name        = "clivis-load_balancers"
+resource "aws_security_group" "clivis_load_balancers" {
+  name        = "clivis_load_balancers"
   description = "Allows all traffic"
 
   vpc_id = "${var.sandbox_vpc}"
@@ -48,7 +48,7 @@ resource "aws_security_group" "clivis-sg" {
     from_port       = 0
     to_port         = 0
     protocol        = "-1"
-    security_groups = ["${aws_security_group.clivis-load_balancers.id}"]
+    security_groups = ["${aws_security_group.clivis_load_balancers.id}"]
   }
 
   egress {
