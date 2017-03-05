@@ -67,10 +67,10 @@
       ],
          "logConfiguration": {
         "logDriver": "awslogs",
-        "options": {
-          "awslogs-group": "clivis-lg",
-          "awslogs-region": "eu-west-1",
-          "awslogs-stream-prefix": "clivis-log-stream"
+       "options": {
+        "awslogs-group": "${log-group}",
+        "awslogs-region": "eu-west-1",
+        "awslogs-stream-prefix": "${log-stream}"
         }
       }
     }
