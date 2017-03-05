@@ -77,7 +77,7 @@ resource "aws_autoscaling_group" "clivis-ag" {
 }
 
 resource "aws_launch_configuration" "clivis-lc" {
-  name                 = "${var.ecs_cluster_name}"
+  name                 = "clivis-${var.ecs_cluster_name}"
   image_id             = "${lookup(var.amis, var.region)}"
   instance_type        = "${var.instance_type}"
   security_groups      = ["${aws_security_group.clivis-sg.id}"]
