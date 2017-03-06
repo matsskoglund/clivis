@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_key_pair" "auth" {
-   key_name   = "${var.key_name}"
+  key_name   = "${var.key_name}"
   public_key = "${file(var.ssh_pubkey_file)}"
 }
 
@@ -71,7 +71,8 @@ resource "aws_autoscaling_group" "clivis-ag" {
   desired_capacity     = "${var.autoscale_desired}"
   health_check_type    = "EC2"
   launch_configuration = "${aws_launch_configuration.clivis-lc.name}"
-  key_name = "${aws_key_pair.auth.key_name}"
+
+  #key_name = "${aws_key_pair.auth.key_name}"
   #vpc_zone_identifier = ["${aws_subnet.main.id}"]
   vpc_zone_identifier = ["${var.public_subnet_id1}", "${var.public_subnet_id2}"]
 }
@@ -83,7 +84,7 @@ resource "aws_launch_configuration" "clivis-lc" {
   security_groups      = ["${aws_security_group.clivis-sg.id}"]
   iam_instance_profile = "${aws_iam_instance_profile.clivis-ip.name}"
 
-  # key_name = "${aws_key_pair.auth.key_name}"
+  key_name                    = "${aws_key_pair.auth.key_name}"
   associate_public_ip_address = true
   user_data                   = "#!/bin/bash\necho ECS_CLUSTER='${var.ecs_cluster_name}' > /etc/ecs/ecs.config"
 }
