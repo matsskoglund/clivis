@@ -8,7 +8,7 @@ variable "aws_secret_key" {
 
 variable "key_name" {
   description = "name of the ssh key"
-  default     = "clivis-key"
+  default     = "mskvb0-key"
 }
 
 variable "sandbox_vpc" {
