@@ -70,10 +70,10 @@ variable "instance_type" {
   default = "t2.micro"
 }
 
-#variable "ssh_pubkey_file" {
-#    description = "Path to an SSH public key"
-#    default = "C:\\Users\\mats\\.ssh\\id_rsa.pub"
-#}
+variable "ssh_pubkey_file" {
+  description = "Path to an SSH public key"
+  default     = "/home/ubuntu/.ssh/id_rsa.pub"
+}
 
 variable "env_netatmo_password" {
   description = "The password to Netamo api"

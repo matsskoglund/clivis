@@ -8,3 +8,5 @@ docker run -it -v $(PWD):/app --workdir /app microsoft/dotnet:1.1-sdk-projectjso
 
 
 microsoft/dotnet:1.1-sdk-projectjson
+
+docker run -it -v $(PWD):/app --workdir /app microsoft/dotnet:1.1-sdk-projectjson bash -c ./build_proj.sh

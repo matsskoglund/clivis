@@ -2,10 +2,10 @@ provider "aws" {
   region = "${var.region}"
 }
 
-#resource "aws_key_pair" "auth" {
-#   key_name   = "${var.key_name}"
-#  public_key = "${file(var.ssh_pubkey_file)}"
-#}
+resource "aws_key_pair" "auth" {
+   key_name   = "${var.key_name}"
+  public_key = "${file(var.ssh_pubkey_file)}"
+}
 
 resource "aws_security_group" "clivis_load_balancers" {
   name        = "clivis_load_balancers"
@@ -71,7 +71,7 @@ resource "aws_autoscaling_group" "clivis-ag" {
   desired_capacity     = "${var.autoscale_desired}"
   health_check_type    = "EC2"
   launch_configuration = "${aws_launch_configuration.clivis-lc.name}"
-
+  key_name = "${aws_key_pair.auth.key_name}"
   #vpc_zone_identifier = ["${aws_subnet.main.id}"]
   vpc_zone_identifier = ["${var.public_subnet_id1}", "${var.public_subnet_id2}"]
 }
