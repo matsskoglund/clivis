@@ -2,10 +2,10 @@ provider "aws" {
   region = "${var.region}"
 }
 
-resource "aws_key_pair" "auth" {
-  key_name   = "${var.key_name}"
-  public_key = "${file(var.ssh_pubkey_file)}"
-}
+#resource "aws_key_pair" "auth" {
+#  key_name   = "${var.key_name}"
+#  public_key = "${file(var.ssh_pubkey_file)}"
+#}
 
 resource "aws_security_group" "clivis_load_balancers" {
   name        = "clivis_load_balancers"
@@ -84,7 +84,7 @@ resource "aws_launch_configuration" "clivis-lc" {
   security_groups      = ["${aws_security_group.clivis-sg.id}"]
   iam_instance_profile = "${aws_iam_instance_profile.clivis-ip.name}"
 
-  key_name                    = "${aws_key_pair.auth.key_name}"
+  key_name                    = "${var.key_name}"
   associate_public_ip_address = true
   user_data                   = "#!/bin/bash\necho ECS_CLUSTER='${var.ecs_cluster_name}' > /etc/ecs/ecs.config"
 }
