@@ -6,4 +6,4 @@ ENV ASPNETCORE_URLS http://*:5050
 EXPOSE 5050
 ENTRYPOINT ["dotnet", "Clivis.dll"]
 # OLD - COPY . /app
-COPY bin/Debug/netcoreapp1.1/publish /app
+COPY bin/Release/netcoreapp1.1/publish /app
