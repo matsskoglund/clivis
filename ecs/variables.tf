@@ -8,20 +8,20 @@ variable "aws_secret_key" {
 
 variable "key_name" {
   description = "name of the ssh key"
-  default     = "mskvb0-keypair"
+  default     = "mskvb0-key"
 }
 
-variable "sandbox_vpc" {
-  default = "vpc-957749f1"
-}
+#variable "cluster_vpc" {
+#  default = "vpc-957749f1"
+#}
 
-variable "public_subnet_id1" {
-  default = "subnet-4bbfbe3d"
-}
+#variable "public_subnet_id1" {
+#  default = "subnet-4bbfbe3d"
+#}
 
-variable "public_subnet_id2" {
-  default = "subnet-496a682d"
-}
+#variable "public_subnet_id2" {
+#  default = "subnet-496a682d"
+#}
 
 variable "region" {
   default = "eu-west-1"
