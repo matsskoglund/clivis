@@ -160,7 +160,7 @@ data "template_file" "clivis-task-template" {
     env_netatmo_host         = "${var.env_netatmo_host}"
     image_id                 = "${var.image_id}"
     log-group                = "${aws_cloudwatch_log_group.clivis-lg.name}"
-    log-stream               = "${aws_cloudwatch_log_stream.clivis-log-stream.name}"
+    log-stream               = "clivis-log"
   }
 }
 
