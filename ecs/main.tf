@@ -14,9 +14,9 @@ resource "aws_security_group" "clivis_load_balancers" {
   vpc_id = "${aws_vpc.cluster_vpc.id}"
 
   ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
+    from_port   = 5050
+    to_port     = 5050
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -72,14 +72,11 @@ resource "aws_autoscaling_group" "clivis-ag" {
   health_check_type    = "EC2"
   launch_configuration = "${aws_launch_configuration.clivis-lc.name}"
 
-  #key_name = "${aws_key_pair.auth.key_name}"
-  #vpc_zone_identifier = ["${aws_subnet.main.id}"]
-  # vpc_zone_identifier = ["${var.public_subnet_id1}", "${var.public_subnet_id2}"]
   vpc_zone_identifier = ["${aws_subnet.clivis_subnet1.id}", "${aws_subnet.clivis_subnet2.id}"]
 }
 
 resource "aws_launch_configuration" "clivis-lc" {
-  name                 = "${var.ecs_cluster_name}"
+  #name                 = "${var.ecs_cluster_name}"
   image_id             = "${lookup(var.amis, var.region)}"
   instance_type        = "${var.instance_type}"
   security_groups      = ["${aws_security_group.clivis-sg.id}"]
@@ -88,6 +85,10 @@ resource "aws_launch_configuration" "clivis-lc" {
   key_name                    = "${var.key_name}"
   associate_public_ip_address = true
   user_data                   = "#!/bin/bash\necho ECS_CLUSTER='${var.ecs_cluster_name}' > /etc/ecs/ecs.config"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_iam_role" "clivis_ecs_host_role" {
@@ -223,25 +224,11 @@ resource "aws_route_table_association" "clivis-eu-west-1c-public" {
   route_table_id = "${aws_route_table.clivis-eu-west-public.id}"
 }
 
-# Using the same routing table for both subnet at the moment
-#resource "aws_route_table" "clivis-eu-west-1a-public" {
-#  vpc_id = "${var.cluster_vpc}"
-
-#  route {
-#    cidr_block = "0.0.0.0/0"
-#    gateway_id = "${aws_internet_gateway.gw.id}"
-#  }
-
-#  tags {
-#    Name = "Public Subnet"
-#  }
-#}
-
 resource "aws_route_table_association" "clivis-eu-west-1a-public" {
   subnet_id      = "${aws_subnet.clivis_subnet2.id}"
   route_table_id = "${aws_route_table.clivis-eu-west-public.id}"
 }
 
-output "ip" {
+output "alb-dns-name" {
   value = "${aws_alb.clivis-alb.dns_name}"
 }
