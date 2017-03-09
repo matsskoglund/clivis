@@ -11,17 +11,17 @@ variable "key_name" {
   default     = "mskvb0-keypair"
 }
 
-variable "sandbox_vpc" {
+variable "cluster_vpc" {
   default = "vpc-957749f1"
 }
 
-variable "public_subnet_id1" {
-  default = "subnet-4bbfbe3d"
-}
+#variable "public_subnet_id1" {
+#  default = "subnet-4bbfbe3d"
+#}
 
-variable "public_subnet_id2" {
-  default = "subnet-496a682d"
-}
+#variable "public_subnet_id2" {
+#  default = "subnet-496a682d"
+#}
 
 variable "region" {
   default = "eu-west-1"
