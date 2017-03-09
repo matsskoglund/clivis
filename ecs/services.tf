@@ -2,7 +2,7 @@ resource "aws_alb_target_group" "clivis-tg" {
   name     = "clivis-tg"
   port     = 5050
   protocol = "HTTP"
-  vpc_id   = "${var.cluster_vpc}"
+  vpc_id   = "${aws_vpc.cluster_vpc.id}"
 
   health_check {
     path     = "/api/climate/Ping"
@@ -17,7 +17,7 @@ resource "aws_alb" "clivis-alb" {
   security_groups = ["${aws_security_group.clivis_load_balancers.id}"]
 
   #subnets         = ["${var.public_subnet_id1}", "${var.public_subnet_id2}"]
-  subnets = ["${aws_subnet.public_subnet1.id}", "${aws_subnet.public_subnet2.id}"]
+  subnets = ["${aws_subnet.clivis_subnet1.id}", "${aws_subnet.clivis_subnet2.id}"]
 }
 
 resource "aws_alb_listener" "clivis-al" {
