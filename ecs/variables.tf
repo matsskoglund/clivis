@@ -8,7 +8,7 @@ variable "aws_secret_key" {
 
 variable "key_name" {
   description = "name of the ssh key"
-  default     = "libyrantkeypair"
+  default     = "mskvb0-key"
 }
 
 #variable "cluster_vpc" {
