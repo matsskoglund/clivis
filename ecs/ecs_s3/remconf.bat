@@ -1,0 +1,1 @@
+terraform remote config -backend=S3 -backend-config="bucket=mskvb0-clivis-state" -backend-config="key=terraform.tfstate" -backend-config="region=eu-west-1"
