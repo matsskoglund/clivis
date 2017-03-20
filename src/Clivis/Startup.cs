@@ -36,7 +36,7 @@ namespace Clivis
         {
             
             services.AddOptions();
-            
+            services.AddCors();
             services.Configure<AppKeyConfig>(configs =>
               {                  
                   configs.UserName = Configuration["NETATMO_USERNAME"];
@@ -72,6 +72,10 @@ namespace Clivis
             {
                 app.UseDeveloperExceptionPage();  
             }
+            app.UseCors(builder =>
+                 builder.WithOrigins("*")
+                 .AllowAnyHeader());
+
             app.UseMvc();
         }
     }
