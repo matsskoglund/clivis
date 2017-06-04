@@ -1,21 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Clivis", "src\Clivis\Clivis.xproj", "{D1E8F233-34AA-4CF8-A6E0-25FD322D946D}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "UnitTestsClivis", "test\UnitTestsClivis\UnitTestsClivis.xproj", "{6171A5A2-5C5C-40FA-9B33-27759F0A696D}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "IntTestsClivis", "test\IntTestsClivis\IntTestsClivis.xproj", "{7A3A7731-D0BD-47E5-AC99-B60217B72C3D}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{450E4952-733F-42FA-8762-5DCF68F106C2}"
 	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
 		Local.testsettings = Local.testsettings
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmokeLoadTestClivis", "test\LoadTestClivis\SmokeLoadTestClivis\SmokeLoadTestClivis.csproj", "{0D5D1575-5ED9-4C8C-BB11-65FAAA025EF8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ecs", "ecs", "{9FAAD3AF-A1A8-4182-A109-6F0712F982AB}"
 	ProjectSection(SolutionItems) = preProject
@@ -38,6 +29,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "task-definitions", "task-de
 	ProjectSection(SolutionItems) = preProject
 		ecs\task-definitions\clivis-task-template.json.tpl = ecs\task-definitions\clivis-task-template.json.tpl
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clivis", "src\Clivis\Clivis.csproj", "{D1E8F233-34AA-4CF8-A6E0-25FD322D946D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTestsClivis", "test\UnitTestsClivis\UnitTestsClivis.csproj", "{6171A5A2-5C5C-40FA-9B33-27759F0A696D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntTestsClivis", "test\IntTestsClivis\IntTestsClivis.csproj", "{7A3A7731-D0BD-47E5-AC99-B60217B72C3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmokeLoadTestClivis", "test\LoadTestClivis\SmokeLoadTestClivis\SmokeLoadTestClivis.csproj", "{0D5D1575-5ED9-4C8C-BB11-65FAAA025EF8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

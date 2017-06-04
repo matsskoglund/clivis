@@ -22,7 +22,7 @@ namespace Clivis
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddUserSecrets<Startup>()
-                .AddEnvironmentVariables();
+                .AddEnvironmentVariables();                
             if (env.IsDevelopment()) { 
                        
             }
