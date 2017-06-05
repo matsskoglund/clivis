@@ -1,5 +1,5 @@
 # OLD - FROM microsoft/dotnet:1.0.1-core
-FROM microsoft/dotnet:1.1.2-sdk
+FROM microsoft/dotnet:1.1.2-runtime
 
 WORKDIR /app
 ENV ASPNETCORE_URLS http://*:5050
