@@ -90,6 +90,7 @@ namespace Clivis.Controllers
             {
                 item = netatmo.CurrentReading(AppConfigs);
             }
+
             if (source.Equals("Reading"))
             {
                 
