@@ -1,5 +1,5 @@
 #!/bin/bash
 ls -l
-cd src/Clivis
+cd clivis/src/Clivis
 dotnet restore
 dotnet build
