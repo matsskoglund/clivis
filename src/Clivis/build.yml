@@ -1,0 +1,13 @@
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: microsoft/dotnet
+
+inputs:
+- name: Clivis
+
+run:
+  path: sh
+  args: ["src/Clivis/build.sh"]

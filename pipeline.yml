@@ -1,0 +1,15 @@
+resources:
+- name: Clivis
+  type: git
+  source:
+    uri: 
+    branch: master
+
+jobs:
+- name: Clivis
+  plan:
+  - get: Clivis
+    trigger: true
+  - task: tests
+    file: src/Clivis/build.yml
+    
