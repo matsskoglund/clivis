@@ -1,4 +1,4 @@
 #!/bin/bash
-ls -l gitrepo/src
+ls -l gitrepo/src/Clivis
 dotnet restore 
-dotnet build src/Clivis/Clivis.csproj
+dotnet build gitrepo/src/Clivis/Clivis.csproj
