@@ -2,13 +2,13 @@ resources:
 - name: Clivis
   type: git
   source:
-    uri: http://www.github.com/matsskoglund/clivis
+    uri: https://github.com/matsskoglund/clivis.git
     branch: master
 
 jobs:
-- name: Clivis
+- name: build-clivis
   plan:
   - get: Clivis
     trigger: true
-  - task: tests
-    file: src/Clivis/build.yml
+  - task: compile
+    file: "src/Clivis/build.yml"

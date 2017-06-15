@@ -10,4 +10,4 @@ inputs:
 
 run:
   path: sh
-  args: ["src/Clivis/build.sh"]
+  args: [src/Clivis/build.sh]
