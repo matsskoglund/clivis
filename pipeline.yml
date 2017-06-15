@@ -11,4 +11,4 @@ jobs:
   - get: Clivis
     trigger: true
   - task: compile
-    file: "src/Clivis/build.yml"
+    file: src/Clivis/build.yml
