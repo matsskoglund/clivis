@@ -6,8 +6,8 @@ image_resource:
     repository: microsoft/dotnet
 
 inputs:
-- name: git-repo
+- name: gitrepo
 
 run:
   path: sh
-  args: [git-repo/src/Clivis/build.sh]
+  args: [gitrepo/src/Clivis/build.sh]
