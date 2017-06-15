@@ -17,4 +17,4 @@ jobs:
       trigger: true
     - get: time
   - task: build-clivis
-    file: src/Clivis/build.yml
+    file: gitrepo/src/Clivis/build.yml
