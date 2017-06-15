@@ -1,20 +1,20 @@
 resources:
-- name: git-repo
+- name: gitrepo
   type: git
   source:
     uri: https://github.com/matsskoglund/clivis.git
     branch: master
--name: time
+- name: time
   type: time
   source:
     interval: 60s
-
+    
 jobs:
 - name: build-clivis
   plan:
-  -aggregate:
-    - get: git-repo
+  - aggregate:
+    - get: gitrepo
       trigger: true
-    -get: time
+    - get: time
   - task: build-clivis
-    file: git-repo/src/Clivis/build.yml
+    file: gitrepo/src/Clivis/build.yml
