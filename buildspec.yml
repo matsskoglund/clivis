@@ -1,0 +1,21 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Updating
+  pre_build:
+    commands:
+      - echo Restoring dependencies...
+      - dotnet restore
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Compiling the Clivis code
+      - dotnet build  
+  post_build:
+    commands:
+      - echo Build completed on `date`
+artifacts:
+  files:
+    - **/*
